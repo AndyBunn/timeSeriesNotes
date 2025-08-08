@@ -1,13 +1,27 @@
-# OS files
-.DS_Store
-Thumbs.db
-
-# R history files
-.Rhistory
-.Rapp.history
-
-# RStudio files
+# RStudio junk
 .Rproj.user/
-.Rproj.user
+.Rhistory
 .RData
 .Ruserdata
+
+# bookdown build artifacts
+_book/
+_bookdown_files/
+
+# knitr cache
+_cache/
+*.utf8.md
+*.knit.md
+
+# intermediate files
+*.log
+*.aux
+*.toc
+*.out
+
+# misc
+todo.txt
+*.rds
+.DS_Store
+# docs is kept for GitHub Pages
+# build via bookdown::render_book("index.Rmd", "bookdown::gitbook")

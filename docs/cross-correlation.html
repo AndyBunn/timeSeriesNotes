@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>9 Cross Correlation | A collection of note for ESCI 504</title>
+  <meta name="description" content="Helpful materials for ESCI 504" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="9 Cross Correlation | A collection of note for ESCI 504" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Helpful materials for ESCI 504" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="9 Cross Correlation | A collection of note for ESCI 504" />
+  
+  <meta name="twitter:description" content="Helpful materials for ESCI 504" />
+  
+
+<meta name="author" content="Andy Bunn" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="forecasting.html"/>
+<link rel="next" href="regression.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.33/datatables.js"></script>
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+<script>
+/* ========================================================================
+ * Bootstrap: transition.js v3.3.7
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
+
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
+
+    var transEndEventNames = {
+      WebkitTransition : 'webkitTransitionEnd',
+      MozTransition    : 'transitionend',
+      OTransition      : 'oTransitionEnd otransitionend',
+      transition       : 'transitionend'
+    }
+
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
+
+    return false // explicit for ie8 (  ._.)
+  }
+
+  // http://blog.alexmaccaw.com/css-transitions
+  $.fn.emulateTransitionEnd = function (duration) {
+    var called = false
+    var $el = this
+    $(this).one('bsTransitionEnd', function () { called = true })
+    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+    setTimeout(callback, duration)
+    return this
+  }
+
+  $(function () {
+    $.support.transition = transitionEnd()
+
+    if (!$.support.transition) return
+
+    $.event.special.bsTransitionEnd = {
+      bindType: $.support.transition.end,
+      delegateType: $.support.transition.end,
+      handle: function (e) {
+        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+      }
+    }
+  })
+
+}(jQuery);
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: collapse.js v3.3.7
+ * http://getbootstrap.com/javascript/#collapse
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+/* jshint latedef: false */
+
++function ($) {
+  'use strict';
+
+  // COLLAPSE PUBLIC CLASS DEFINITION
+  // ================================
+
+  var Collapse = function (element, options) {
+    this.$element      = $(element)
+    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+    this.$trigger      = $('[data-toggle="collapse"][href="#' + element.id + '"],' +
+                           '[data-toggle="collapse"][data-target="#' + element.id + '"]')
+    this.transitioning = null
+
+    if (this.options.parent) {
+      this.$parent = this.getParent()
+    } else {
+      this.addAriaAndCollapsedClass(this.$element, this.$trigger)
+    }
+
+    if (this.options.toggle) this.toggle()
+  }
+
+  Collapse.VERSION  = '3.3.7'
+
+  Collapse.TRANSITION_DURATION = 350
+
+  Collapse.DEFAULTS = {
+    toggle: true
+  }
+
+  Collapse.prototype.dimension = function () {
+    var hasWidth = this.$element.hasClass('width')
+    return hasWidth ? 'width' : 'height'
+  }
+
+  Collapse.prototype.show = function () {
+    if (this.transitioning || this.$element.hasClass('in')) return
+
+    var activesData
+    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+
+    if (actives && actives.length) {
+      activesData = actives.data('bs.collapse')
+      if (activesData && activesData.transitioning) return
+    }
+
+    var startEvent = $.Event('show.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    if (actives && actives.length) {
+      Plugin.call(actives, 'hide')
+      activesData || actives.data('bs.collapse', null)
+    }
+
+    var dimension = this.dimension()
+
+    this.$element
+      .removeClass('collapse')
+      .addClass('collapsing')[dimension](0)
+      .attr('aria-expanded', true)
+
+    this.$trigger
+      .removeClass('collapsed')
+      .attr('aria-expanded', true)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse in')[dimension]('')
+      this.transitioning = 0
+      this.$element
+        .trigger('shown.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+    this.$element
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
+  }
+
+  Collapse.prototype.hide = function () {
+    if (this.transitioning || !this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('hide.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var dimension = this.dimension()
+
+    this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+
+    this.$element
+      .addClass('collapsing')
+      .removeClass('collapse in')
+      .attr('aria-expanded', false)
+
+    this.$trigger
+      .addClass('collapsed')
+      .attr('aria-expanded', false)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.transitioning = 0
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse')
+        .trigger('hidden.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    this.$element
+      [dimension](0)
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
+  }
+
+  Collapse.prototype.toggle = function () {
+    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+  }
+
+  Collapse.prototype.getParent = function () {
+    return $(this.options.parent)
+      .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
+      .each($.proxy(function (i, element) {
+        var $element = $(element)
+        this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
+      }, this))
+      .end()
+  }
+
+  Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
+    var isOpen = $element.hasClass('in')
+
+    $element.attr('aria-expanded', isOpen)
+    $trigger
+      .toggleClass('collapsed', !isOpen)
+      .attr('aria-expanded', isOpen)
+  }
+
+  function getTargetFromTrigger($trigger) {
+    var href
+    var target = $trigger.attr('data-target')
+      || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+
+    return $(target)
+  }
+
+
+  // COLLAPSE PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.collapse')
+      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data && options.toggle && /show|hide/.test(option)) options.toggle = false
+      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  var old = $.fn.collapse
+
+  $.fn.collapse             = Plugin
+  $.fn.collapse.Constructor = Collapse
+
+
+  // COLLAPSE NO CONFLICT
+  // ====================
+
+  $.fn.collapse.noConflict = function () {
+    $.fn.collapse = old
+    return this
+  }
+
+
+  // COLLAPSE DATA-API
+  // =================
+
+  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
+    var $this   = $(this)
+
+    if (!$this.attr('data-target')) e.preventDefault()
+
+    var $target = getTargetFromTrigger($this)
+    var data    = $target.data('bs.collapse')
+    var option  = data ? 'toggle' : $this.data()
+
+    Plugin.call($target, option)
+  })
+
+}(jQuery);
+</script>
+<script>
+window.initializeCodeFolding = function(show) {
+
+  // handlers for show-all and hide all
+  $("#rmd-show-all-code").click(function() {
+    // close the dropdown menu when an option is clicked
+    $("#allCodeButton").dropdown("toggle");
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('show');
+    });
+  });
+  $("#rmd-hide-all-code").click(function() {
+    // close the dropdown menu when an option is clicked
+    $("#allCodeButton").dropdown("toggle");
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('hide');
+    });
+  });
+
+  // index for unique code element ids
+  var currentIndex = 1;
+
+  // select all R code blocks
+  var rCodeBlocks = $('pre.sourceCode, pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan');
+  rCodeBlocks.each(function() {
+
+    // if code block has been labeled with class `fold-show`, show the code on init!
+    var classList = $(this).attr('class').split(/\s+/);
+    for (var i = 0; i < classList.length; i++) {
+    if (classList[i] === 'fold-show') {
+        show = true;
+      }
+      // AGB add fold-hide
+    if (classList[i] === 'fold-hide') {
+        show = false;
+      }
+    }
+    // AGB
+    // if code block has been labeled with class `fold-hide`, hide the code on init!
+//    var classList = $(this).attr('class').split(/\s+/);
+//    for (var i = 0; i < classList.length; i++) {
+//    if (classList[i] === 'fold-hide') {
+//        show = false;
+//      }
+//    }
+
+    // create a collapsable div to wrap the code in
+    var div = $('<div class="collapse r-code-collapse"></div>');
+    if (show)
+      div.addClass('in');
+    var id = 'rcode-643E0F36' + currentIndex++;
+    div.attr('id', id);
+    $(this).before(div);
+    $(this).detach().appendTo(div);
+
+    // add a show code button right above
+    var showCodeText = $('<span>' + (show ? 'Hide' : 'Code') + '</span>');
+    var showCodeButton = $('<button type="button" class="btn btn-default btn-xs code-folding-btn pull-right"></button>');
+    showCodeButton.append(showCodeText);
+    showCodeButton
+        .attr('data-toggle', 'collapse')
+        .attr('data-target', '#' + id)
+        .attr('aria-expanded', show)
+        .attr('aria-controls', id);
+
+    var buttonRow = $('<div class="row"></div>');
+    var buttonCol = $('<div class="col-md-12"></div>');
+
+    buttonCol.append(showCodeButton);
+    buttonRow.append(buttonCol);
+
+    div.before(buttonRow);
+
+    // hack: return show to false, otherwise all next codeBlocks will be shown!
+    show = true;
+
+    // update state of button on show/hide
+    div.on('hidden.bs.collapse', function () {
+      showCodeText.text('Code');
+    });
+    div.on('show.bs.collapse', function () {
+      showCodeText.text('Hide');
+    });
+  });
+
+}
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: dropdown.js v3.3.7
+ * http://getbootstrap.com/javascript/#dropdowns
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // DROPDOWN CLASS DEFINITION
+  // =========================
+
+  var backdrop = '.dropdown-backdrop'
+  var toggle   = '[data-toggle="dropdown"]'
+  var Dropdown = function (element) {
+    $(element).on('click.bs.dropdown', this.toggle)
+  }
+
+  Dropdown.VERSION = '3.3.7'
+
+  function getParent($this) {
+    var selector = $this.attr('data-target')
+
+    if (!selector) {
+      selector = $this.attr('href')
+      selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
+    }
+
+    var $parent = selector && $(selector)
+
+    return $parent && $parent.length ? $parent : $this.parent()
+  }
+
+  function clearMenus(e) {
+    if (e && e.which === 3) return
+    $(backdrop).remove()
+    $(toggle).each(function () {
+      var $this         = $(this)
+      var $parent       = getParent($this)
+      var relatedTarget = { relatedTarget: this }
+
+      if (!$parent.hasClass('open')) return
+
+      if (e && e.type == 'click' && /input|textarea/i.test(e.target.tagName) && $.contains($parent[0], e.target)) return
+
+      $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
+
+      if (e.isDefaultPrevented()) return
+
+      $this.attr('aria-expanded', 'false')
+      $parent.removeClass('open').trigger($.Event('hidden.bs.dropdown', relatedTarget))
+    })
+  }
+
+  Dropdown.prototype.toggle = function (e) {
+    var $this = $(this)
+
+    if ($this.is('.disabled, :disabled')) return
+
+    var $parent  = getParent($this)
+    var isActive = $parent.hasClass('open')
+
+    clearMenus()
+
+    if (!isActive) {
+      if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
+        // if mobile we use a backdrop because click events don't delegate
+        $(document.createElement('div'))
+          .addClass('dropdown-backdrop')
+          .insertAfter($(this))
+          .on('click', clearMenus)
+      }
+
+      var relatedTarget = { relatedTarget: this }
+      $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget))
+
+      if (e.isDefaultPrevented()) return
+
+      $this
+        .trigger('focus')
+        .attr('aria-expanded', 'true')
+
+      $parent
+        .toggleClass('open')
+        .trigger($.Event('shown.bs.dropdown', relatedTarget))
+    }
+
+    return false
+  }
+
+  Dropdown.prototype.keydown = function (e) {
+    if (!/(38|40|27|32)/.test(e.which) || /input|textarea/i.test(e.target.tagName)) return
+
+    var $this = $(this)
+
+    e.preventDefault()
+    e.stopPropagation()
+
+    if ($this.is('.disabled, :disabled')) return
+
+    var $parent  = getParent($this)
+    var isActive = $parent.hasClass('open')
+
+    if (!isActive && e.which != 27 || isActive && e.which == 27) {
+      if (e.which == 27) $parent.find(toggle).trigger('focus')
+      return $this.trigger('click')
+    }
+
+    var desc = ' li:not(.disabled):visible a'
+    var $items = $parent.find('.dropdown-menu' + desc)
+
+    if (!$items.length) return
+
+    var index = $items.index(e.target)
+
+    if (e.which == 38 && index > 0)                 index--         // up
+    if (e.which == 40 && index < $items.length - 1) index++         // down
+    if (!~index)                                    index = 0
+
+    $items.eq(index).trigger('focus')
+  }
+
+
+  // DROPDOWN PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this = $(this)
+      var data  = $this.data('bs.dropdown')
+
+      if (!data) $this.data('bs.dropdown', (data = new Dropdown(this)))
+      if (typeof option == 'string') data[option].call($this)
+    })
+  }
+
+  var old = $.fn.dropdown
+
+  $.fn.dropdown             = Plugin
+  $.fn.dropdown.Constructor = Dropdown
+
+
+  // DROPDOWN NO CONFLICT
+  // ====================
+
+  $.fn.dropdown.noConflict = function () {
+    $.fn.dropdown = old
+    return this
+  }
+
+
+  // APPLY TO STANDARD DROPDOWN ELEMENTS
+  // ===================================
+
+  $(document)
+    .on('click.bs.dropdown.data-api', clearMenus)
+    .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
+    .on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle)
+    .on('keydown.bs.dropdown.data-api', toggle, Dropdown.prototype.keydown)
+    .on('keydown.bs.dropdown.data-api', '.dropdown-menu', Dropdown.prototype.keydown)
+
+}(jQuery);
+</script>
+<style type="text/css">
+.code-folding-btn {
+  margin-bottom: 4px;
+}
+
+.row { display: flex; }
+.collapse { display: none; }
+.in { display:block }
+.pull-right > .dropdown-menu {
+    right: 0;
+    left: auto;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.open > .dropdown-menu {
+    display: block;
+    color: #ffffff;
+    background-color: #ffffff;
+    background-image: none;
+    border-color: #92897e;
+}
+
+.dropdown-menu > li > a {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #e95420;
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #e95420;
+  outline: 0;
+}
+.dropdown-menu > .disabled > a,
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  color: #aea79f;
+}
+
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  text-decoration: none;
+  cursor: not-allowed;
+  background-color: transparent;
+  background-image: none;
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+
+.btn {
+  display: inline-block;
+  margin-bottom: 1;
+  font-weight: normal;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  padding: 4px 8px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.btn:hover,
+.btn:focus,
+.btn.focus {
+  color: #ffffff;
+  text-decoration: none;
+}
+.btn:active,
+.btn.active {
+  background-image: none;
+  outline: 0;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.btn.disabled,
+.btn[disabled],
+fieldset[disabled] .btn {
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  opacity: 0.65;
+  box-shadow: none;
+}
+a.btn.disabled,
+fieldset[disabled] a.btn {
+  pointer-events: none;
+}
+.btn-default {
+  color: #ffffff;
+  background-color: #aea79f; #important
+  border-color: #aea79f;
+}
+
+.btn-default:focus,
+.btn-default.focus {
+  color: #ffffff;
+  background-color: #978e83;
+  border-color: #6f675e;
+}
+
+.btn-default:hover {
+  color: #ffffff;
+  background-color: #978e83;
+  border-color: #92897e;
+}
+.btn-default:active,
+.btn-default.active,
+.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+  border-radius: 0;
+}
+.btn-group > .btn:first-child {
+  margin-left: 0;
+}
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btn-group > .btn:last-child:not(:first-child),
+.btn-group > .dropdown-toggle:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btn-group > .btn-group {
+  float: left;
+}
+.btn-group > .btn-group:not(:first-child):not(:last-child) > .btn {
+  border-radius: 0;
+}
+.btn-group > .btn-group:first-child:not(:last-child) > .btn:last-child,
+.btn-group > .btn-group:first-child:not(:last-child) > .dropdown-toggle {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btn-group > .btn-group:last-child:not(:first-child) > .btn:first-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btn-group .dropdown-toggle:active,
+.btn-group.open .dropdown-toggle {
+  outline: 0;
+}
+.btn-group > .btn + .dropdown-toggle {
+  padding-right: 8px;
+  padding-left: 8px;
+}
+.btn-group > .btn-lg + .dropdown-toggle {
+  padding-right: 12px;
+  padding-left: 12px;
+}
+.btn-group.open .dropdown-toggle {
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.btn-group.open .dropdown-toggle.btn-link {
+  box-shadow: none;
+}
+
+</style>
+<script>
+var str = '<div class="btn-group pull-right" style="position: fixed; right: 50px; top: 10px; z-index: 200"><button type="button" class="btn btn-default btn-xs dropdown-toggle" id="allCodeButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" data-_extension-text-contrast=""><span>Code</span> <span class="caret"></span></button><ul class="dropdown-menu" style="min-width: 50px;"><li><a id="rmd-show-all-code" href="#">Show All Code</a></li><li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li></ul></div>';
+document.write(str);
+</script>
+<script>
+$(document).ready(function () {
+  // AGB add fold-hide changed === to !== to default to showing code
+  window.initializeCodeFolding("show" !== "hide");
+});
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preamble</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#technical-setup"><i class="fa fa-check"></i><b>1.1</b> Technical Setup</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#project-structure"><i class="fa fa-check"></i><b>1.1.1</b> Project Structure</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#why-use-projects-in-r"><i class="fa fa-check"></i><b>1.1.2</b> Why Use Projects in R?</a></li>
+<li class="chapter" data-level="1.1.3" data-path="index.html"><a href="index.html#why-reproducibility-matters"><i class="fa fa-check"></i><b>1.1.3</b> Why Reproducibility Matters</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html"><i class="fa fa-check"></i><b>2</b> The Measure of Time</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#big-idea"><i class="fa fa-check"></i><b>2.1</b> Big Idea</a></li>
+<li class="chapter" data-level="2.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#reading"><i class="fa fa-check"></i><b>2.2</b> Reading</a></li>
+<li class="chapter" data-level="2.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#packages"><i class="fa fa-check"></i><b>2.3</b> Packages</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#load"><i class="fa fa-check"></i><b>2.3.1</b> Load</a></li>
+<li class="chapter" data-level="2.3.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#keep-up-to-date"><i class="fa fa-check"></i><b>2.3.2</b> Keep Up to Date</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#what-kinds-of-data"><i class="fa fa-check"></i><b>2.4</b> What Kinds of Data?</a></li>
+<li class="chapter" data-level="2.5" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#the-ts-class"><i class="fa fa-check"></i><b>2.5</b> The <code>ts</code> Class</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#a-very-useful-class"><i class="fa fa-check"></i><b>2.5.1</b> A Very Useful Class</a></li>
+<li class="chapter" data-level="2.5.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#digression-describing-a-time-series"><i class="fa fa-check"></i><b>2.5.2</b> Digression: Describing a Time Series</a></li>
+<li class="chapter" data-level="2.5.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#more-on-the-ts-index"><i class="fa fa-check"></i><b>2.5.3</b> More on the <code>ts</code> Index</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#trend-in-time"><i class="fa fa-check"></i><b>2.6</b> Trend in time</a></li>
+<li class="chapter" data-level="2.7" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#the-zoo-class"><i class="fa fa-check"></i><b>2.7</b> The <code>zoo</code> Class</a></li>
+<li class="chapter" data-level="2.8" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#lubricate-the-dates"><i class="fa fa-check"></i><b>2.8</b> Lubricate the Dates</a></li>
+<li class="chapter" data-level="2.9" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#tidy-it-up"><i class="fa fa-check"></i><b>2.9</b> Tidy it Up</a></li>
+<li class="chapter" data-level="2.10" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#your-work"><i class="fa fa-check"></i><b>2.10</b> Your Work</a>
+<ul>
+<li class="chapter" data-level="2.10.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#berkeley-earth-temperature-data"><i class="fa fa-check"></i><b>2.10.1</b> Berkeley Earth Temperature Data</a></li>
+<li class="chapter" data-level="2.10.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#your-turn"><i class="fa fa-check"></i><b>2.10.2</b> Your Turn</a></li>
+<li class="chapter" data-level="2.10.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#write-up-and-reflect"><i class="fa fa-check"></i><b>2.10.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html"><i class="fa fa-check"></i><b>3</b> An Aside: Understanding Methods and Generics in R</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#youve-come-a-long-way-in-r"><i class="fa fa-check"></i><b>3.1</b> You’ve Come a Long Way in R</a></li>
+<li class="chapter" data-level="3.2" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#why-use-generics"><i class="fa fa-check"></i><b>3.2</b> Why Use Generics?</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#same-function-different-behavior-what-gives"><i class="fa fa-check"></i><b>3.2.1</b> Same Function, Different Behavior — What Gives?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#how-this-works"><i class="fa fa-check"></i><b>3.3</b> How This Works</a></li>
+<li class="chapter" data-level="3.4" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#whats-the-difference-between-a-generic-and-a-method"><i class="fa fa-check"></i><b>3.4</b> What’s the Difference Between a Generic and a Method?</a></li>
+<li class="chapter" data-level="3.5" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#common-generic-functions"><i class="fa fa-check"></i><b>3.5</b> Common Generic Functions</a></li>
+<li class="chapter" data-level="3.6" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#how-to-explore-and-understand-methods"><i class="fa fa-check"></i><b>3.6</b> How to Explore and Understand Methods</a></li>
+<li class="chapter" data-level="3.7" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#why-this-matters"><i class="fa fa-check"></i><b>3.7</b> Why This Matters</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="decomposition.html"><a href="decomposition.html"><i class="fa fa-check"></i><b>4</b> Decomposition</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="decomposition.html"><a href="decomposition.html#big-idea-1"><i class="fa fa-check"></i><b>4.1</b> Big Idea</a></li>
+<li class="chapter" data-level="4.2" data-path="decomposition.html"><a href="decomposition.html#reading-1"><i class="fa fa-check"></i><b>4.2</b> Reading</a></li>
+<li class="chapter" data-level="4.3" data-path="decomposition.html"><a href="decomposition.html#packages-1"><i class="fa fa-check"></i><b>4.3</b> Packages</a></li>
+<li class="chapter" data-level="4.4" data-path="decomposition.html"><a href="decomposition.html#seasonality-and-decomposition"><i class="fa fa-check"></i><b>4.4</b> Seasonality and decomposition</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="decomposition.html"><a href="decomposition.html#breaking-down-a-series-the-tedious-way"><i class="fa fa-check"></i><b>4.4.1</b> Breaking down a series the tedious way</a></li>
+<li class="chapter" data-level="4.4.2" data-path="decomposition.html"><a href="decomposition.html#breaking-down-a-series-the-easy-way"><i class="fa fa-check"></i><b>4.4.2</b> Breaking down a series the easy way</a></li>
+<li class="chapter" data-level="4.4.3" data-path="decomposition.html"><a href="decomposition.html#how-does-m-differ-from-the-slope-in-a-lm"><i class="fa fa-check"></i><b>4.4.3</b> How does <code>m</code> differ from the slope in a <code>lm</code>?</a></li>
+<li class="chapter" data-level="4.4.4" data-path="decomposition.html"><a href="decomposition.html#warning"><i class="fa fa-check"></i><b>4.4.4</b> Warning</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="decomposition.html"><a href="decomposition.html#stationarity"><i class="fa fa-check"></i><b>4.5</b> Stationarity</a></li>
+<li class="chapter" data-level="4.6" data-path="decomposition.html"><a href="decomposition.html#your-work-1"><i class="fa fa-check"></i><b>4.6</b> Your Work</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="decomposition.html"><a href="decomposition.html#air-passengers"><i class="fa fa-check"></i><b>4.6.1</b> Air Passengers</a></li>
+<li class="chapter" data-level="4.6.2" data-path="decomposition.html"><a href="decomposition.html#kbli"><i class="fa fa-check"></i><b>4.6.2</b> KBLI</a></li>
+<li class="chapter" data-level="4.6.3" data-path="decomposition.html"><a href="decomposition.html#write-up-and-reflect-1"><i class="fa fa-check"></i><b>4.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html"><i class="fa fa-check"></i><b>5</b> AR(p), ACF, PACF, etc.</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#big-idea-2"><i class="fa fa-check"></i><b>5.1</b> Big Idea</a></li>
+<li class="chapter" data-level="5.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#reading-2"><i class="fa fa-check"></i><b>5.2</b> Reading</a></li>
+<li class="chapter" data-level="5.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#packages-2"><i class="fa fa-check"></i><b>5.3</b> Packages</a></li>
+<li class="chapter" data-level="5.4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#correlation-and-covariance"><i class="fa fa-check"></i><b>5.4</b> Correlation and Covariance</a></li>
+<li class="chapter" data-level="5.5" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation"><i class="fa fa-check"></i><b>5.5</b> Autocorrelation</a></li>
+<li class="chapter" data-level="5.6" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation-function"><i class="fa fa-check"></i><b>5.6</b> Autocorrelation Function</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#the-very-fun-presentation"><i class="fa fa-check"></i><b>5.6.1</b> The Very Fun Presentation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#the-boring-presentation"><i class="fa fa-check"></i><b>5.7</b> The Boring Presentation</a>
+<ul>
+<li class="chapter" data-level="5.7.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#tidy"><i class="fa fa-check"></i><b>5.7.1</b> Tidy</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#partial-autocorrelation-function"><i class="fa fa-check"></i><b>5.8</b> Partial Autocorrelation Function</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#pacf"><i class="fa fa-check"></i><b>5.8.1</b> PACF</a></li>
+<li class="chapter" data-level="5.8.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#underneath-the-hood-of-pacf"><i class="fa fa-check"></i><b>5.8.2</b> Underneath the Hood of PACF</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#ar1-to-arp"><i class="fa fa-check"></i><b>5.9</b> AR(1) to AR(p)</a></li>
+<li class="chapter" data-level="5.10" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#random-walks"><i class="fa fa-check"></i><b>5.10</b> Random walks</a>
+<ul>
+<li class="chapter" data-level="5.10.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#stationarity-is-dead"><i class="fa fa-check"></i><b>5.10.1</b> Stationarity is dead</a></li>
+</ul></li>
+<li class="chapter" data-level="5.11" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation-examples-with-real-data"><i class="fa fa-check"></i><b>5.11</b> Autocorrelation examples with real data</a>
+<ul>
+<li class="chapter" data-level="5.11.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#nile"><i class="fa fa-check"></i><b>5.11.1</b> Nile</a></li>
+<li class="chapter" data-level="5.11.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#air-temperature"><i class="fa fa-check"></i><b>5.11.2</b> Air Temperature</a></li>
+<li class="chapter" data-level="5.11.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#sunspots"><i class="fa fa-check"></i><b>5.11.3</b> Sunspots</a></li>
+</ul></li>
+<li class="chapter" data-level="5.12" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#choosing-the-order-of-an-arp-model-by-aic"><i class="fa fa-check"></i><b>5.12</b> Choosing the Order of an AR(p) Model by AIC</a></li>
+<li class="chapter" data-level="5.13" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#your-work-2"><i class="fa fa-check"></i><b>5.13</b> Your work</a>
+<ul>
+<li class="chapter" data-level="5.13.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#acf-and-pacf-with-different-values-of-phi."><i class="fa fa-check"></i><b>5.13.1</b> ACF and PACF with different values of <span class="math inline">\(\phi\)</span>.</a></li>
+<li class="chapter" data-level="5.13.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#roll-your-own-ar2"><i class="fa fa-check"></i><b>5.13.2</b> Roll your own AR(2)</a></li>
+<li class="chapter" data-level="5.13.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#sockeye"><i class="fa fa-check"></i><b>5.13.3</b> Sockeye</a></li>
+<li class="chapter" data-level="5.13.4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#write-up-and-reflect-2"><i class="fa fa-check"></i><b>5.13.4</b> Write Up and Reflect</a></li>
+</ul></li>
+<li class="chapter" data-level="5.14" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#postscript-a-helpful-plotting-chunk"><i class="fa fa-check"></i><b>5.14</b> Postscript: A Helpful Plotting Chunk</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><i class="fa fa-check"></i><b>6</b> Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#introduction"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#acf-and-pacf-of-a-single-ma1-simulation"><i class="fa fa-check"></i><b>6.2</b> ACF and PACF of a Single MA(1) Simulation</a></li>
+<li class="chapter" data-level="6.3" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#simulation-study-across-many-ma1-coefficients"><i class="fa fa-check"></i><b>6.3</b> Simulation Study Across Many MA(1) Coefficients</a></li>
+<li class="chapter" data-level="6.4" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-1-pacf-lag-1-underestimates-theta"><i class="fa fa-check"></i><b>6.4</b> Insight 1: PACF Lag 1 Underestimates <span class="math inline">\(\theta\)</span></a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens"><i class="fa fa-check"></i><b>6.4.1</b> Why This Happens</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-2-pacf-lag-2-is-consistently-negative"><i class="fa fa-check"></i><b>6.5</b> Insight 2: PACF Lag 2 is Consistently Negative</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens-1"><i class="fa fa-check"></i><b>6.5.1</b> Why This Happens</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#conclusion"><i class="fa fa-check"></i><b>6.6</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="armapq.html"><a href="armapq.html"><i class="fa fa-check"></i><b>7</b> ARMA(p,q)</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="armapq.html"><a href="armapq.html#big-idea-3"><i class="fa fa-check"></i><b>7.1</b> Big Idea</a></li>
+<li class="chapter" data-level="7.2" data-path="armapq.html"><a href="armapq.html#reading-3"><i class="fa fa-check"></i><b>7.2</b> Reading</a></li>
+<li class="chapter" data-level="7.3" data-path="armapq.html"><a href="armapq.html#packages-3"><i class="fa fa-check"></i><b>7.3</b> Packages</a></li>
+<li class="chapter" data-level="7.4" data-path="armapq.html"><a href="armapq.html#arp-to-maq"><i class="fa fa-check"></i><b>7.4</b> AR(p) to MA(q)</a></li>
+<li class="chapter" data-level="7.5" data-path="armapq.html"><a href="armapq.html#armapq-1"><i class="fa fa-check"></i><b>7.5</b> ARMA(p,q)</a></li>
+<li class="chapter" data-level="7.6" data-path="armapq.html"><a href="armapq.html#what-about-arimap-d-q"><i class="fa fa-check"></i><b>7.6</b> What about ARIMA(p, d, q)?</a>
+<ul>
+<li class="chapter" data-level="7.6.1" data-path="armapq.html"><a href="armapq.html#why-do-arma-models-require-stationarity"><i class="fa fa-check"></i><b>7.6.1</b> Why Do ARMA Models Require Stationarity?</a></li>
+<li class="chapter" data-level="7.6.2" data-path="armapq.html"><a href="armapq.html#simulated-data"><i class="fa fa-check"></i><b>7.6.2</b> Simulated Data</a></li>
+</ul></li>
+<li class="chapter" data-level="7.7" data-path="armapq.html"><a href="armapq.html#evaluating-arma-models"><i class="fa fa-check"></i><b>7.7</b> Evaluating ARMA models</a>
+<ul>
+<li class="chapter" data-level="7.7.1" data-path="armapq.html"><a href="armapq.html#simulated-data-1"><i class="fa fa-check"></i><b>7.7.1</b> Simulated Data</a></li>
+<li class="chapter" data-level="7.7.2" data-path="armapq.html"><a href="armapq.html#sst-data"><i class="fa fa-check"></i><b>7.7.2</b> SST Data</a></li>
+<li class="chapter" data-level="7.7.3" data-path="armapq.html"><a href="armapq.html#how-do-you-decide-which-information-criterion-to-use"><i class="fa fa-check"></i><b>7.7.3</b> How Do You Decide Which Information Criterion to Use?</a></li>
+</ul></li>
+<li class="chapter" data-level="7.8" data-path="armapq.html"><a href="armapq.html#your-work-3"><i class="fa fa-check"></i><b>7.8</b> Your work</a>
+<ul>
+<li class="chapter" data-level="7.8.1" data-path="armapq.html"><a href="armapq.html#bunnies-and-kitties"><i class="fa fa-check"></i><b>7.8.1</b> Bunnies and Kitties</a></li>
+<li class="chapter" data-level="7.8.2" data-path="armapq.html"><a href="armapq.html#write-up-and-reflect-3"><i class="fa fa-check"></i><b>7.8.2</b> Write up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i><b>8</b> Forecasting</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="forecasting.html"><a href="forecasting.html#big-idea-4"><i class="fa fa-check"></i><b>8.1</b> Big Idea</a></li>
+<li class="chapter" data-level="8.2" data-path="forecasting.html"><a href="forecasting.html#reading-4"><i class="fa fa-check"></i><b>8.2</b> Reading</a></li>
+<li class="chapter" data-level="8.3" data-path="forecasting.html"><a href="forecasting.html#packages-4"><i class="fa fa-check"></i><b>8.3</b> Packages</a></li>
+<li class="chapter" data-level="8.4" data-path="forecasting.html"><a href="forecasting.html#introduction-1"><i class="fa fa-check"></i><b>8.4</b> Introduction</a></li>
+<li class="chapter" data-level="8.5" data-path="forecasting.html"><a href="forecasting.html#a-simple-forecast"><i class="fa fa-check"></i><b>8.5</b> A simple forecast</a>
+<ul>
+<li class="chapter" data-level="8.5.1" data-path="forecasting.html"><a href="forecasting.html#two-step-ahead-forecast"><i class="fa fa-check"></i><b>8.5.1</b> Two-step-ahead forecast</a></li>
+<li class="chapter" data-level="8.5.2" data-path="forecasting.html"><a href="forecasting.html#example"><i class="fa fa-check"></i><b>8.5.2</b> Example</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="forecasting.html"><a href="forecasting.html#using-arma-coefficients-to-forecast"><i class="fa fa-check"></i><b>8.6</b> Using ARMA coefficients to forecast</a></li>
+<li class="chapter" data-level="8.7" data-path="forecasting.html"><a href="forecasting.html#holt-winters"><i class="fa fa-check"></i><b>8.7</b> Holt-Winters</a></li>
+<li class="chapter" data-level="8.8" data-path="forecasting.html"><a href="forecasting.html#your-work-4"><i class="fa fa-check"></i><b>8.8</b> Your work</a>
+<ul>
+<li class="chapter" data-level="8.8.1" data-path="forecasting.html"><a href="forecasting.html#a-silly-prediction"><i class="fa fa-check"></i><b>8.8.1</b> A silly prediction</a></li>
+<li class="chapter" data-level="8.8.2" data-path="forecasting.html"><a href="forecasting.html#write-up-and-reflect-4"><i class="fa fa-check"></i><b>8.8.2</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="cross-correlation.html"><a href="cross-correlation.html"><i class="fa fa-check"></i><b>9</b> Cross Correlation</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="cross-correlation.html"><a href="cross-correlation.html#big-idea-5"><i class="fa fa-check"></i><b>9.1</b> Big Idea</a></li>
+<li class="chapter" data-level="9.2" data-path="cross-correlation.html"><a href="cross-correlation.html#reading-5"><i class="fa fa-check"></i><b>9.2</b> Reading</a></li>
+<li class="chapter" data-level="9.3" data-path="cross-correlation.html"><a href="cross-correlation.html#packages-5"><i class="fa fa-check"></i><b>9.3</b> Packages</a></li>
+<li class="chapter" data-level="9.4" data-path="cross-correlation.html"><a href="cross-correlation.html#lags"><i class="fa fa-check"></i><b>9.4</b> Lags</a></li>
+<li class="chapter" data-level="9.5" data-path="cross-correlation.html"><a href="cross-correlation.html#from-acf-to-ccf"><i class="fa fa-check"></i><b>9.5</b> From ACF to CCF</a></li>
+<li class="chapter" data-level="9.6" data-path="cross-correlation.html"><a href="cross-correlation.html#how-ccf-normalizes-correlations"><i class="fa fa-check"></i><b>9.6</b> How <code>Ccf()</code> Normalizes Correlations</a></li>
+<li class="chapter" data-level="9.7" data-path="cross-correlation.html"><a href="cross-correlation.html#your-work-5"><i class="fa fa-check"></i><b>9.7</b> Your work</a>
+<ul>
+<li class="chapter" data-level="9.7.1" data-path="cross-correlation.html"><a href="cross-correlation.html#write-up-and-reflect-5"><i class="fa fa-check"></i><b>9.7.1</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="regression.html"><a href="regression.html"><i class="fa fa-check"></i><b>10</b> Regression</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="regression.html"><a href="regression.html#big-idea-6"><i class="fa fa-check"></i><b>10.1</b> Big Idea</a></li>
+<li class="chapter" data-level="10.2" data-path="regression.html"><a href="regression.html#reading-6"><i class="fa fa-check"></i><b>10.2</b> Reading</a></li>
+<li class="chapter" data-level="10.3" data-path="regression.html"><a href="regression.html#packages-6"><i class="fa fa-check"></i><b>10.3</b> Packages</a></li>
+<li class="chapter" data-level="10.4" data-path="regression.html"><a href="regression.html#regression-1"><i class="fa fa-check"></i><b>10.4</b> Regression</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="regression.html"><a href="regression.html#adjusting-ols"><i class="fa fa-check"></i><b>10.4.1</b> Adjusting OLS</a></li>
+<li class="chapter" data-level="10.4.2" data-path="regression.html"><a href="regression.html#gls"><i class="fa fa-check"></i><b>10.4.2</b> GLS</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="regression.html"><a href="regression.html#your-work-6"><i class="fa fa-check"></i><b>10.5</b> Your work</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="regression.html"><a href="regression.html#what-does-generalized-mean"><i class="fa fa-check"></i><b>10.5.1</b> What Does Generalized Mean?</a></li>
+<li class="chapter" data-level="10.5.2" data-path="regression.html"><a href="regression.html#regression-simulation"><i class="fa fa-check"></i><b>10.5.2</b> Regression Simulation</a></li>
+<li class="chapter" data-level="10.5.3" data-path="regression.html"><a href="regression.html#regression-for-real"><i class="fa fa-check"></i><b>10.5.3</b> Regression for real</a></li>
+<li class="chapter" data-level="10.5.4" data-path="regression.html"><a href="regression.html#write-up-and-reflect-6"><i class="fa fa-check"></i><b>10.5.4</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html"><i class="fa fa-check"></i><b>11</b> Filtering, smoothing</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#big-idea-7"><i class="fa fa-check"></i><b>11.1</b> Big Idea</a></li>
+<li class="chapter" data-level="11.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#packages-7"><i class="fa fa-check"></i><b>11.2</b> Packages</a></li>
+<li class="chapter" data-level="11.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#filters-as-visual-aids"><i class="fa fa-check"></i><b>11.3</b> Filters as visual aids</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#moving-running-average"><i class="fa fa-check"></i><b>11.3.1</b> Moving (running) average</a></li>
+<li class="chapter" data-level="11.3.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#hanning"><i class="fa fa-check"></i><b>11.3.2</b> Hanning</a></li>
+<li class="chapter" data-level="11.3.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#smoothing-splines"><i class="fa fa-check"></i><b>11.3.3</b> Smoothing splines</a></li>
+<li class="chapter" data-level="11.3.4" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#loess"><i class="fa fa-check"></i><b>11.3.4</b> Loess</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#using-filters"><i class="fa fa-check"></i><b>11.4</b> Using filters</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#aggregating"><i class="fa fa-check"></i><b>11.4.1</b> Aggregating</a></li>
+<li class="chapter" data-level="11.4.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#removing-low-frequency-variability"><i class="fa fa-check"></i><b>11.4.2</b> Removing low frequency variability</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#the-case-of-the-poorly-launched-sensors"><i class="fa fa-check"></i><b>11.5</b> The Case of the Poorly-Launched Sensors</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#fix-time-on-temperature"><i class="fa fa-check"></i><b>11.5.1</b> Fix time on temperature</a></li>
+<li class="chapter" data-level="11.5.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#fill-missing-data-on-radiation"><i class="fa fa-check"></i><b>11.5.2</b> Fill missing data on radiation</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#your-work-7"><i class="fa fa-check"></i><b>11.6</b> Your work</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#filter"><i class="fa fa-check"></i><b>11.6.1</b> Filter</a></li>
+<li class="chapter" data-level="11.6.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#revisit-the-case-of-the-poorly-launched-sensors"><i class="fa fa-check"></i><b>11.6.2</b> Revisit the case of the poorly launched sensors</a></li>
+<li class="chapter" data-level="11.6.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#write-up-and-reflect-7"><i class="fa fa-check"></i><b>11.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html"><i class="fa fa-check"></i><b>12</b> The Freqs Come out at Night</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#big-idea-8"><i class="fa fa-check"></i><b>12.1</b> Big Idea</a></li>
+<li class="chapter" data-level="12.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#reading-7"><i class="fa fa-check"></i><b>12.2</b> Reading</a></li>
+<li class="chapter" data-level="12.3" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#packages-8"><i class="fa fa-check"></i><b>12.3</b> Packages</a></li>
+<li class="chapter" data-level="12.4" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#the-frequency-domain"><i class="fa fa-check"></i><b>12.4</b> The Frequency Domain</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#same-data-two-domains"><i class="fa fa-check"></i><b>12.4.1</b> Same Data, Two Domains</a></li>
+<li class="chapter" data-level="12.4.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#worked-example"><i class="fa fa-check"></i><b>12.4.2</b> Worked example</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#sunspot-example"><i class="fa fa-check"></i><b>12.5</b> Sunspot Example</a></li>
+<li class="chapter" data-level="12.6" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#your-work-8"><i class="fa fa-check"></i><b>12.6</b> Your work</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#generate-three-signals"><i class="fa fa-check"></i><b>12.6.1</b> Generate three signals</a></li>
+<li class="chapter" data-level="12.6.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#milankovitch"><i class="fa fa-check"></i><b>12.6.2</b> Milankovitch</a></li>
+<li class="chapter" data-level="12.6.3" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#write-up-and-reflect-8"><i class="fa fa-check"></i><b>12.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#references"><i class="fa fa-check"></i><b>12.7</b> References</a></li>
+<li class="chapter" data-level="12.8" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#postscript-a-glimpse-of-wavelets"><i class="fa fa-check"></i><b>12.8</b> Postscript: A Glimpse of Wavelets</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="references-1.html"><a href="references-1.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A collection of note for ESCI 504</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="cross-correlation" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">9</span> Cross Correlation<a href="cross-correlation.html#cross-correlation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="big-idea-5" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Big Idea<a href="cross-correlation.html#big-idea-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Here we extend the concept of the autocorrelation function to a bivariate case of how <code>y</code> might be correlated with lagged values of <code>x</code>.</p>
+</div>
+<div id="reading-5" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Reading<a href="cross-correlation.html#reading-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Have a look at Chapter three from <span class="citation">Cowpertwait and Metcalfe (<a href="references-1.html#ref-Cowpertwait2009">2009</a>)</span>. It’s OK to skim the readings in this book. It’s not a great book for our purposes as many of you haven’t taken linear algebra and the book occasionally goes that way. But it’s useful to hum your way through the chapter nonetheless.</p>
+</div>
+<div id="packages-5" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> Packages<a href="cross-correlation.html#packages-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>I’ll use <code>forecast</code> <span class="citation">(<a href="references-1.html#ref-R-forecast">Hyndman et al. 2025</a>)</span> as well as tidyverse <span class="citation">(<a href="references-1.html#ref-R-tidyverse">Wickham 2023</a>)</span> syntax.</p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="cross-correlation.html#cb232-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb232-2"><a href="cross-correlation.html#cb232-2" tabindex="-1"></a><span class="fu">library</span>(forecast)</span></code></pre></div>
+</div>
+<div id="lags" class="section level2 hasAnchor" number="9.4">
+<h2><span class="header-section-number">9.4</span> Lags<a href="cross-correlation.html#lags" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Here is a quick primer on different ways of lagging data.</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="cross-correlation.html#cb233-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb233-2"><a href="cross-correlation.html#cb233-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(n))</span>
+<span id="cb233-3"><a href="cross-correlation.html#cb233-3" tabindex="-1"></a>x</span></code></pre></div>
+<pre><code>## Time Series:
+## Start = 1 
+## End = 10 
+## Frequency = 1 
+##  [1]  0.079854780  0.233410688  0.107206736  1.150652223  0.903326353
+##  [6] -0.965635624 -0.146067990 -0.559301795 -0.214952105  0.001970085</code></pre>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="cross-correlation.html#cb235-1" tabindex="-1"></a><span class="co"># v1: Lag by hand</span></span>
+<span id="cb235-2"><a href="cross-correlation.html#cb235-2" tabindex="-1"></a>xLag_v1 <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">c</span>(<span class="cn">NA</span>,x[<span class="sc">-</span>n]))</span>
+<span id="cb235-3"><a href="cross-correlation.html#cb235-3" tabindex="-1"></a><span class="co"># v2: use stats::lag (&quot;little el lag&quot;)</span></span>
+<span id="cb235-4"><a href="cross-correlation.html#cb235-4" tabindex="-1"></a><span class="co"># Note the sign of k: negative k starts later.</span></span>
+<span id="cb235-5"><a href="cross-correlation.html#cb235-5" tabindex="-1"></a>xLag_v2 <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">lag</span>(x, <span class="at">k =</span> <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb235-6"><a href="cross-correlation.html#cb235-6" tabindex="-1"></a>xLag_v2</span></code></pre></div>
+<pre><code>## Time Series:
+## Start = 2 
+## End = 11 
+## Frequency = 1 
+##  [1]  0.079854780  0.233410688  0.107206736  1.150652223  0.903326353
+##  [6] -0.965635624 -0.146067990 -0.559301795 -0.214952105  0.001970085</code></pre>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="cross-correlation.html#cb237-1" tabindex="-1"></a><span class="co"># v3: use Hmisc::Lag  (&quot;big el lag&quot;)</span></span>
+<span id="cb237-2"><a href="cross-correlation.html#cb237-2" tabindex="-1"></a><span class="co"># Note that shift is specifies the number of observations </span></span>
+<span id="cb237-3"><a href="cross-correlation.html#cb237-3" tabindex="-1"></a><span class="co"># to be shifted to the right -- positive shift starts later.</span></span>
+<span id="cb237-4"><a href="cross-correlation.html#cb237-4" tabindex="-1"></a>xLag_v3 <span class="ot">&lt;-</span> Hmisc<span class="sc">::</span><span class="fu">Lag</span>(x, <span class="at">shift =</span> <span class="dv">1</span>)</span>
+<span id="cb237-5"><a href="cross-correlation.html#cb237-5" tabindex="-1"></a>xLag_v3</span></code></pre></div>
+<pre><code>## Time Series:
+## Start = 1 
+## End = 10 
+## Frequency = 1 
+##  [1]          NA  0.07985478  0.23341069  0.10720674  1.15065222  0.90332635
+##  [7] -0.96563562 -0.14606799 -0.55930180 -0.21495211</code></pre>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="cross-correlation.html#cb239-1" tabindex="-1"></a><span class="co"># ^^ This is the same behavior that dplyr::lag has. E.g.,</span></span>
+<span id="cb239-2"><a href="cross-correlation.html#cb239-2" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">lag</span>(<span class="fu">c</span>(x),<span class="at">n=</span><span class="dv">1</span>)</span></code></pre></div>
+<pre><code>##  [1]          NA  0.07985478  0.23341069  0.10720674  1.15065222  0.90332635
+##  [7] -0.96563562 -0.14606799 -0.55930180 -0.21495211</code></pre>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="cross-correlation.html#cb241-1" tabindex="-1"></a><span class="co"># But dplyr::lag doesn&#39;t like ts objects, hence the c(x). </span></span>
+<span id="cb241-2"><a href="cross-correlation.html#cb241-2" tabindex="-1"></a><span class="co"># It&#39;s all gross to parse out, I know.</span></span>
+<span id="cb241-3"><a href="cross-correlation.html#cb241-3" tabindex="-1"></a></span>
+<span id="cb241-4"><a href="cross-correlation.html#cb241-4" tabindex="-1"></a><span class="fu">tsp</span>(xLag_v1)</span></code></pre></div>
+<pre><code>## [1]  1 10  1</code></pre>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="cross-correlation.html#cb243-1" tabindex="-1"></a><span class="fu">tsp</span>(xLag_v2)</span></code></pre></div>
+<pre><code>## [1]  2 11  1</code></pre>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="cross-correlation.html#cb245-1" tabindex="-1"></a><span class="fu">tsp</span>(xLag_v3)</span></code></pre></div>
+<pre><code>## [1]  1 10  1</code></pre>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="cross-correlation.html#cb247-1" tabindex="-1"></a><span class="co"># ts.union helps you see what&#39;s going on</span></span>
+<span id="cb247-2"><a href="cross-correlation.html#cb247-2" tabindex="-1"></a><span class="fu">ts.union</span>(x,xLag_v1,xLag_v2,xLag_v3)</span></code></pre></div>
+<pre><code>## Time Series:
+## Start = 1 
+## End = 11 
+## Frequency = 1 
+##               x     xLag_v1      xLag_v2     xLag_v3
+##  1  0.079854780          NA           NA          NA
+##  2  0.233410688  0.07985478  0.079854780  0.07985478
+##  3  0.107206736  0.23341069  0.233410688  0.23341069
+##  4  1.150652223  0.10720674  0.107206736  0.10720674
+##  5  0.903326353  1.15065222  1.150652223  1.15065222
+##  6 -0.965635624  0.90332635  0.903326353  0.90332635
+##  7 -0.146067990 -0.96563562 -0.965635624 -0.96563562
+##  8 -0.559301795 -0.14606799 -0.146067990 -0.14606799
+##  9 -0.214952105 -0.55930180 -0.559301795 -0.55930180
+## 10  0.001970085 -0.21495211 -0.214952105 -0.21495211
+## 11           NA          NA  0.001970085          NA</code></pre>
+</div>
+<div id="from-acf-to-ccf" class="section level2 hasAnchor" number="9.5">
+<h2><span class="header-section-number">9.5</span> From ACF to CCF<a href="cross-correlation.html#from-acf-to-ccf" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Chapter 3 introduces cross-correlation in the context of forecasting. Here, we reinforce the idea with a simple example and tie it back to the concept of autocorrelation.</p>
+<p>Autocorrelation is the correlation of a variable with its own past values (e.g., <span class="math inline">\(y_t\)</span> with <span class="math inline">\(y_{t-1}\)</span>). Cross-correlation extends this idea to two different time series, asking: how does <span class="math inline">\(x_{t-k}\)</span> relate to <span class="math inline">\(y_t\)</span>?</p>
+<p>You’re already used to the idea that you can correlate two variables <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, but you can also lag <span class="math inline">\(x\)</span> like we did for autocorrelation. For example, <span class="math inline">\(y_t\)</span> can be correlated to <span class="math inline">\(x_{t-1}\)</span>, which we can implement like this: <code>cor(y[2:n], x[1:(n-1)])</code>.</p>
+<p>Here’s a toy example:</p>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="cross-correlation.html#cb249-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb249-2"><a href="cross-correlation.html#cb249-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb249-3"><a href="cross-correlation.html#cb249-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, x[<span class="sc">-</span>n]) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.5</span>)</span>
+<span id="cb249-4"><a href="cross-correlation.html#cb249-4" tabindex="-1"></a><span class="fu">cor</span>(x, y) <span class="co"># doesn&#39;t correlate</span></span></code></pre></div>
+<pre><code>## [1] 0.1149159</code></pre>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="cross-correlation.html#cb251-1" tabindex="-1"></a><span class="fu">cor</span>(x[<span class="dv">1</span><span class="sc">:</span>(n<span class="dv">-1</span>)], y[<span class="dv">2</span><span class="sc">:</span>n]) <span class="co"># correlates great!</span></span></code></pre></div>
+<pre><code>## [1] 0.8908105</code></pre>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="cross-correlation.html#cb253-1" tabindex="-1"></a><span class="fu">Ccf</span>(x, y) <span class="co"># the cross correlation plot</span></span></code></pre></div>
+<p><img src="06CrossCorrelation_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>By hand, you can see that <span class="math inline">\(\text{cor}(x_{t-1}, y_t) = 0.891\)</span>, whereas <span class="math inline">\(\text{cor}(x_t, y_t) = 0.115\)</span>. We can view these correlations across multiple lags using the cross-correlation plot from <code>Ccf</code>. That function returns the correlation between <span class="math inline">\(x_{t+k}\)</span> and <span class="math inline">\(y_t\)</span> for various values of lag <span class="math inline">\(k\)</span>.</p>
+<p>A positive lag on the plot means that <strong>x is lagged behind y</strong> (i.e., you’re correlating earlier y-values with later x-values), while a negative lag means <strong>x leads y</strong> — and might be useful for forecasting.</p>
+<p>This kind of lagged relationship is useful for <strong>predictive modeling</strong>, where we use past values of one variable to forecast the present (or future) values of another.</p>
+<p>Thus, given a time series like <span class="math inline">\(x_t\)</span>, we could forecast <span class="math inline">\(y_t\)</span> based on <span class="math inline">\(x_{t-1}\)</span>:</p>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="cross-correlation.html#cb254-1" tabindex="-1"></a><span class="co"># lag x</span></span>
+<span id="cb254-2"><a href="cross-correlation.html#cb254-2" tabindex="-1"></a>xLag <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, x[<span class="sc">-</span>n])</span>
+<span id="cb254-3"><a href="cross-correlation.html#cb254-3" tabindex="-1"></a><span class="co"># note this does the same lag operation</span></span>
+<span id="cb254-4"><a href="cross-correlation.html#cb254-4" tabindex="-1"></a>xLag <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">lag</span>(x, <span class="at">n =</span> <span class="dv">1</span>, <span class="at">default =</span> <span class="dv">0</span>)</span>
+<span id="cb254-5"><a href="cross-correlation.html#cb254-5" tabindex="-1"></a></span>
+<span id="cb254-6"><a href="cross-correlation.html#cb254-6" tabindex="-1"></a>lmY <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> xLag)</span>
+<span id="cb254-7"><a href="cross-correlation.html#cb254-7" tabindex="-1"></a><span class="fu">plot</span>(y, <span class="fu">predict</span>(lmY))</span>
+<span id="cb254-8"><a href="cross-correlation.html#cb254-8" tabindex="-1"></a><span class="fu">abline</span>(lmY, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="06CrossCorrelation_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Cross-correlation is commonly used to identify short-lag predictive relationships. This is common in economics (e.g., jobless claims leading GDP) and in environmental science — for instance, where river discharge might precede changes in turbidity, or phytoplankton peaks might precede zooplankton booms.</p>
+<p>As with all time series correlations, beware of spurious relationships — especially when both series share strong seasonal or trend components.</p>
+</div>
+<div id="how-ccf-normalizes-correlations" class="section level2 hasAnchor" number="9.6">
+<h2><span class="header-section-number">9.6</span> How <code>Ccf()</code> Normalizes Correlations<a href="cross-correlation.html#how-ccf-normalizes-correlations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The eagle-eyed among you will notice that the values from <code>Ccf</code> don’t align exactly with what <code>cor</code> produces. For the detail oriented, here is the scoop.</p>
+<p>The <code>ccf()</code> function in R computes cross-correlations that are normalized in a specific way. It uses the full-series mean and standard deviation for both variables, even when the number of overlapping points decreases at higher lags. This section shows what that means in practice and how to manually reproduce the <code>ccf()</code> result at lag 1.</p>
+<p>Let’s create some data.</p>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="cross-correlation.html#cb255-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb255-2"><a href="cross-correlation.html#cb255-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb255-3"><a href="cross-correlation.html#cb255-3" tabindex="-1"></a></span>
+<span id="cb255-4"><a href="cross-correlation.html#cb255-4" tabindex="-1"></a><span class="co"># make y depend on lagged x (lag = 1)</span></span>
+<span id="cb255-5"><a href="cross-correlation.html#cb255-5" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fl">0.8</span> <span class="sc">*</span> <span class="fu">c</span>(<span class="dv">0</span>, x[<span class="dv">1</span><span class="sc">:</span>(n<span class="dv">-1</span>)]) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.5</span>)</span>
+<span id="cb255-6"><a href="cross-correlation.html#cb255-6" tabindex="-1"></a></span>
+<span id="cb255-7"><a href="cross-correlation.html#cb255-7" tabindex="-1"></a><span class="co"># Lagged vectors aligned for lag 1</span></span>
+<span id="cb255-8"><a href="cross-correlation.html#cb255-8" tabindex="-1"></a>x_lag <span class="ot">&lt;-</span> x[<span class="dv">1</span><span class="sc">:</span>(n <span class="sc">-</span> <span class="dv">1</span>)]</span>
+<span id="cb255-9"><a href="cross-correlation.html#cb255-9" tabindex="-1"></a>y_trunc <span class="ot">&lt;-</span> y[<span class="dv">2</span><span class="sc">:</span>n]</span></code></pre></div>
+<p>We construct <code>y</code> to depend on a lagged version of <code>x</code>, and use <code>0</code> as the first value to avoid introducing an <code>NA</code>.</p>
+<p>Let’s get the correlation at lag one using <code>cor()</code></p>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="cross-correlation.html#cb256-1" tabindex="-1"></a><span class="fu">cor</span>(x_lag, y_trunc)</span></code></pre></div>
+<pre><code>## [1] 0.8302037</code></pre>
+<p>This computes a standard Pearson correlation using only the overlapping values. It uses <code>n - 1</code> observations and calculates means and standard deviations from that subset.</p>
+<p>Let’s compare that to what <code>ccf()</code> gives</p>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="cross-correlation.html#cb258-1" tabindex="-1"></a>ccf_obj <span class="ot">&lt;-</span> <span class="fu">Ccf</span>(x, y, <span class="at">lag.max =</span> <span class="dv">10</span>)</span></code></pre></div>
+<p><img src="06CrossCorrelation_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="cross-correlation.html#cb259-1" tabindex="-1"></a>ccf_lag1 <span class="ot">&lt;-</span> ccf_obj<span class="sc">$</span>acf[ccf_obj<span class="sc">$</span>lag <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb259-2"><a href="cross-correlation.html#cb259-2" tabindex="-1"></a>ccf_lag1</span></code></pre></div>
+<pre><code>## [1] 0.8253849</code></pre>
+<p>That correlation at lag 1 from <code>ccf_lag1</code> is <strong>slightly different</strong> from the result of <code>cor(x_lag, y_trunc)</code> (0.8302037). Why? Because <code>ccf()</code>:
+- Uses only <code>n - 1</code> data pairs at lag 1
+- But computes the mean and standard deviation using all <code>n</code> values from the full series of <code>x</code> and <code>y</code></p>
+<p>This ensures that correlation values at all lags are on the same scale.</p>
+<p>We can manually reproduce what <code>ccf()</code> does</p>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="cross-correlation.html#cb261-1" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">1</span>  <span class="co"># lag</span></span>
+<span id="cb261-2"><a href="cross-correlation.html#cb261-2" tabindex="-1"></a>num <span class="ot">&lt;-</span> <span class="fu">sum</span>((x_lag <span class="sc">-</span> <span class="fu">mean</span>(x)) <span class="sc">*</span> (y_trunc <span class="sc">-</span> <span class="fu">mean</span>(y)))        <span class="co"># numerator</span></span>
+<span id="cb261-3"><a href="cross-correlation.html#cb261-3" tabindex="-1"></a>denom <span class="ot">&lt;-</span> (n <span class="sc">-</span> k) <span class="sc">*</span> <span class="fu">sd</span>(x) <span class="sc">*</span> <span class="fu">sd</span>(y)                           <span class="co"># denominator uses full-series SDs</span></span>
+<span id="cb261-4"><a href="cross-correlation.html#cb261-4" tabindex="-1"></a>manual_ccf <span class="ot">&lt;-</span> num <span class="sc">/</span> denom</span>
+<span id="cb261-5"><a href="cross-correlation.html#cb261-5" tabindex="-1"></a>manual_ccf</span></code></pre></div>
+<pre><code>## [1] 0.8253849</code></pre>
+<p>This manual calculation matches the value from <code>ccf()</code> exactly.</p>
+<p>You might ask yourself: why does this matter? Well, this normalization approach allows <code>ccf()</code> (and <code>acf()</code>) to produce values that are comparable across different lags, even as the number of overlapping pairs shrinks. It’s a subtle point, but crucial for accurate interpretation of time series correlations. And when lags get really large like in the autotrophs and heterotrophs example, it’s worth understanding what happens under the hood.</p>
+</div>
+<div id="your-work-5" class="section level2 hasAnchor" number="9.7">
+<h2><span class="header-section-number">9.7</span> Your work<a href="cross-correlation.html#your-work-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Look at the file <code>PhytoGrazersExp1.rds</code>. It contains data used in a mesocosm simulation. The <code>producers</code> time series shows relative biomass of phytoplankton while the <code>grazers</code> time series shows the zooplankton biomass. The times are indexed by <code>day</code>.</p>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="cross-correlation.html#cb263-1" tabindex="-1"></a>pg <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/PhytoGrazersExp1.rds&quot;</span>)</span>
+<span id="cb263-2"><a href="cross-correlation.html#cb263-2" tabindex="-1"></a><span class="co"># make these wide data long</span></span>
+<span id="cb263-3"><a href="cross-correlation.html#cb263-3" tabindex="-1"></a>pgLong <span class="ot">&lt;-</span> pg <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb263-4"><a href="cross-correlation.html#cb263-4" tabindex="-1"></a><span class="co"># and make a nice ggplot</span></span>
+<span id="cb263-5"><a href="cross-correlation.html#cb263-5" tabindex="-1"></a><span class="fu">ggplot</span>(pgLong,<span class="fu">aes</span>(<span class="at">x=</span>day,<span class="at">y=</span>value,<span class="at">color=</span>name)) <span class="sc">+</span></span>
+<span id="cb263-6"><a href="cross-correlation.html#cb263-6" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb263-7"><a href="cross-correlation.html#cb263-7" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb263-8"><a href="cross-correlation.html#cb263-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">&quot;Relative biomass&quot;</span>,</span>
+<span id="cb263-9"><a href="cross-correlation.html#cb263-9" tabindex="-1"></a>       <span class="at">x=</span><span class="st">&quot;Number of days from start of experiment&quot;</span>)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="06CrossCorrelation_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>It seems clear that there is an offset between the two series. Just eyeballing it, it looks like there is a four to six week lag between the grazers and producers. Use cross correlation and see if you can determine the lagged relationship more specifically.</p>
+<p>The file <code>PhytoExp2.rds</code> shows you just the phytoplankton from another experiment. Can you forecast the grazers over that time period? That is, show how you can use the lagged relationship between producers and grazers you found above to model the grazers in <code>PhytoExp2.rds</code>.</p>
+<div id="write-up-and-reflect-5" class="section level3 hasAnchor" number="9.7.1">
+<h3><span class="header-section-number">9.7.1</span> Write Up and Reflect<a href="cross-correlation.html#write-up-and-reflect-5" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Pass in a R Markdown doc with your analysis. Leave all code visible, although you may quiet messages and warnings if desired. Turn in your knitted html. The last section of your document should include a reflection where you explain how it all went. What triumphs did you have? What is still confusing?</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="forecasting.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="regression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section",
+    "scroll_highlight": true
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

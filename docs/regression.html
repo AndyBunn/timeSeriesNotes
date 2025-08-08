@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>10 Regression | A collection of note for ESCI 504</title>
+  <meta name="description" content="Helpful materials for ESCI 504" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="10 Regression | A collection of note for ESCI 504" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Helpful materials for ESCI 504" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="10 Regression | A collection of note for ESCI 504" />
+  
+  <meta name="twitter:description" content="Helpful materials for ESCI 504" />
+  
+
+<meta name="author" content="Andy Bunn" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="cross-correlation.html"/>
+<link rel="next" href="filtering-smoothing.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.33/datatables.js"></script>
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+<script>
+/* ========================================================================
+ * Bootstrap: transition.js v3.3.7
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
+
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
+
+    var transEndEventNames = {
+      WebkitTransition : 'webkitTransitionEnd',
+      MozTransition    : 'transitionend',
+      OTransition      : 'oTransitionEnd otransitionend',
+      transition       : 'transitionend'
+    }
+
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
+
+    return false // explicit for ie8 (  ._.)
+  }
+
+  // http://blog.alexmaccaw.com/css-transitions
+  $.fn.emulateTransitionEnd = function (duration) {
+    var called = false
+    var $el = this
+    $(this).one('bsTransitionEnd', function () { called = true })
+    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+    setTimeout(callback, duration)
+    return this
+  }
+
+  $(function () {
+    $.support.transition = transitionEnd()
+
+    if (!$.support.transition) return
+
+    $.event.special.bsTransitionEnd = {
+      bindType: $.support.transition.end,
+      delegateType: $.support.transition.end,
+      handle: function (e) {
+        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+      }
+    }
+  })
+
+}(jQuery);
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: collapse.js v3.3.7
+ * http://getbootstrap.com/javascript/#collapse
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+/* jshint latedef: false */
+
++function ($) {
+  'use strict';
+
+  // COLLAPSE PUBLIC CLASS DEFINITION
+  // ================================
+
+  var Collapse = function (element, options) {
+    this.$element      = $(element)
+    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+    this.$trigger      = $('[data-toggle="collapse"][href="#' + element.id + '"],' +
+                           '[data-toggle="collapse"][data-target="#' + element.id + '"]')
+    this.transitioning = null
+
+    if (this.options.parent) {
+      this.$parent = this.getParent()
+    } else {
+      this.addAriaAndCollapsedClass(this.$element, this.$trigger)
+    }
+
+    if (this.options.toggle) this.toggle()
+  }
+
+  Collapse.VERSION  = '3.3.7'
+
+  Collapse.TRANSITION_DURATION = 350
+
+  Collapse.DEFAULTS = {
+    toggle: true
+  }
+
+  Collapse.prototype.dimension = function () {
+    var hasWidth = this.$element.hasClass('width')
+    return hasWidth ? 'width' : 'height'
+  }
+
+  Collapse.prototype.show = function () {
+    if (this.transitioning || this.$element.hasClass('in')) return
+
+    var activesData
+    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+
+    if (actives && actives.length) {
+      activesData = actives.data('bs.collapse')
+      if (activesData && activesData.transitioning) return
+    }
+
+    var startEvent = $.Event('show.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    if (actives && actives.length) {
+      Plugin.call(actives, 'hide')
+      activesData || actives.data('bs.collapse', null)
+    }
+
+    var dimension = this.dimension()
+
+    this.$element
+      .removeClass('collapse')
+      .addClass('collapsing')[dimension](0)
+      .attr('aria-expanded', true)
+
+    this.$trigger
+      .removeClass('collapsed')
+      .attr('aria-expanded', true)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse in')[dimension]('')
+      this.transitioning = 0
+      this.$element
+        .trigger('shown.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+    this.$element
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
+  }
+
+  Collapse.prototype.hide = function () {
+    if (this.transitioning || !this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('hide.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var dimension = this.dimension()
+
+    this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+
+    this.$element
+      .addClass('collapsing')
+      .removeClass('collapse in')
+      .attr('aria-expanded', false)
+
+    this.$trigger
+      .addClass('collapsed')
+      .attr('aria-expanded', false)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.transitioning = 0
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse')
+        .trigger('hidden.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    this.$element
+      [dimension](0)
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
+  }
+
+  Collapse.prototype.toggle = function () {
+    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+  }
+
+  Collapse.prototype.getParent = function () {
+    return $(this.options.parent)
+      .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
+      .each($.proxy(function (i, element) {
+        var $element = $(element)
+        this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
+      }, this))
+      .end()
+  }
+
+  Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
+    var isOpen = $element.hasClass('in')
+
+    $element.attr('aria-expanded', isOpen)
+    $trigger
+      .toggleClass('collapsed', !isOpen)
+      .attr('aria-expanded', isOpen)
+  }
+
+  function getTargetFromTrigger($trigger) {
+    var href
+    var target = $trigger.attr('data-target')
+      || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+
+    return $(target)
+  }
+
+
+  // COLLAPSE PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.collapse')
+      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data && options.toggle && /show|hide/.test(option)) options.toggle = false
+      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  var old = $.fn.collapse
+
+  $.fn.collapse             = Plugin
+  $.fn.collapse.Constructor = Collapse
+
+
+  // COLLAPSE NO CONFLICT
+  // ====================
+
+  $.fn.collapse.noConflict = function () {
+    $.fn.collapse = old
+    return this
+  }
+
+
+  // COLLAPSE DATA-API
+  // =================
+
+  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
+    var $this   = $(this)
+
+    if (!$this.attr('data-target')) e.preventDefault()
+
+    var $target = getTargetFromTrigger($this)
+    var data    = $target.data('bs.collapse')
+    var option  = data ? 'toggle' : $this.data()
+
+    Plugin.call($target, option)
+  })
+
+}(jQuery);
+</script>
+<script>
+window.initializeCodeFolding = function(show) {
+
+  // handlers for show-all and hide all
+  $("#rmd-show-all-code").click(function() {
+    // close the dropdown menu when an option is clicked
+    $("#allCodeButton").dropdown("toggle");
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('show');
+    });
+  });
+  $("#rmd-hide-all-code").click(function() {
+    // close the dropdown menu when an option is clicked
+    $("#allCodeButton").dropdown("toggle");
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('hide');
+    });
+  });
+
+  // index for unique code element ids
+  var currentIndex = 1;
+
+  // select all R code blocks
+  var rCodeBlocks = $('pre.sourceCode, pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan');
+  rCodeBlocks.each(function() {
+
+    // if code block has been labeled with class `fold-show`, show the code on init!
+    var classList = $(this).attr('class').split(/\s+/);
+    for (var i = 0; i < classList.length; i++) {
+    if (classList[i] === 'fold-show') {
+        show = true;
+      }
+      // AGB add fold-hide
+    if (classList[i] === 'fold-hide') {
+        show = false;
+      }
+    }
+    // AGB
+    // if code block has been labeled with class `fold-hide`, hide the code on init!
+//    var classList = $(this).attr('class').split(/\s+/);
+//    for (var i = 0; i < classList.length; i++) {
+//    if (classList[i] === 'fold-hide') {
+//        show = false;
+//      }
+//    }
+
+    // create a collapsable div to wrap the code in
+    var div = $('<div class="collapse r-code-collapse"></div>');
+    if (show)
+      div.addClass('in');
+    var id = 'rcode-643E0F36' + currentIndex++;
+    div.attr('id', id);
+    $(this).before(div);
+    $(this).detach().appendTo(div);
+
+    // add a show code button right above
+    var showCodeText = $('<span>' + (show ? 'Hide' : 'Code') + '</span>');
+    var showCodeButton = $('<button type="button" class="btn btn-default btn-xs code-folding-btn pull-right"></button>');
+    showCodeButton.append(showCodeText);
+    showCodeButton
+        .attr('data-toggle', 'collapse')
+        .attr('data-target', '#' + id)
+        .attr('aria-expanded', show)
+        .attr('aria-controls', id);
+
+    var buttonRow = $('<div class="row"></div>');
+    var buttonCol = $('<div class="col-md-12"></div>');
+
+    buttonCol.append(showCodeButton);
+    buttonRow.append(buttonCol);
+
+    div.before(buttonRow);
+
+    // hack: return show to false, otherwise all next codeBlocks will be shown!
+    show = true;
+
+    // update state of button on show/hide
+    div.on('hidden.bs.collapse', function () {
+      showCodeText.text('Code');
+    });
+    div.on('show.bs.collapse', function () {
+      showCodeText.text('Hide');
+    });
+  });
+
+}
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: dropdown.js v3.3.7
+ * http://getbootstrap.com/javascript/#dropdowns
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // DROPDOWN CLASS DEFINITION
+  // =========================
+
+  var backdrop = '.dropdown-backdrop'
+  var toggle   = '[data-toggle="dropdown"]'
+  var Dropdown = function (element) {
+    $(element).on('click.bs.dropdown', this.toggle)
+  }
+
+  Dropdown.VERSION = '3.3.7'
+
+  function getParent($this) {
+    var selector = $this.attr('data-target')
+
+    if (!selector) {
+      selector = $this.attr('href')
+      selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
+    }
+
+    var $parent = selector && $(selector)
+
+    return $parent && $parent.length ? $parent : $this.parent()
+  }
+
+  function clearMenus(e) {
+    if (e && e.which === 3) return
+    $(backdrop).remove()
+    $(toggle).each(function () {
+      var $this         = $(this)
+      var $parent       = getParent($this)
+      var relatedTarget = { relatedTarget: this }
+
+      if (!$parent.hasClass('open')) return
+
+      if (e && e.type == 'click' && /input|textarea/i.test(e.target.tagName) && $.contains($parent[0], e.target)) return
+
+      $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
+
+      if (e.isDefaultPrevented()) return
+
+      $this.attr('aria-expanded', 'false')
+      $parent.removeClass('open').trigger($.Event('hidden.bs.dropdown', relatedTarget))
+    })
+  }
+
+  Dropdown.prototype.toggle = function (e) {
+    var $this = $(this)
+
+    if ($this.is('.disabled, :disabled')) return
+
+    var $parent  = getParent($this)
+    var isActive = $parent.hasClass('open')
+
+    clearMenus()
+
+    if (!isActive) {
+      if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
+        // if mobile we use a backdrop because click events don't delegate
+        $(document.createElement('div'))
+          .addClass('dropdown-backdrop')
+          .insertAfter($(this))
+          .on('click', clearMenus)
+      }
+
+      var relatedTarget = { relatedTarget: this }
+      $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget))
+
+      if (e.isDefaultPrevented()) return
+
+      $this
+        .trigger('focus')
+        .attr('aria-expanded', 'true')
+
+      $parent
+        .toggleClass('open')
+        .trigger($.Event('shown.bs.dropdown', relatedTarget))
+    }
+
+    return false
+  }
+
+  Dropdown.prototype.keydown = function (e) {
+    if (!/(38|40|27|32)/.test(e.which) || /input|textarea/i.test(e.target.tagName)) return
+
+    var $this = $(this)
+
+    e.preventDefault()
+    e.stopPropagation()
+
+    if ($this.is('.disabled, :disabled')) return
+
+    var $parent  = getParent($this)
+    var isActive = $parent.hasClass('open')
+
+    if (!isActive && e.which != 27 || isActive && e.which == 27) {
+      if (e.which == 27) $parent.find(toggle).trigger('focus')
+      return $this.trigger('click')
+    }
+
+    var desc = ' li:not(.disabled):visible a'
+    var $items = $parent.find('.dropdown-menu' + desc)
+
+    if (!$items.length) return
+
+    var index = $items.index(e.target)
+
+    if (e.which == 38 && index > 0)                 index--         // up
+    if (e.which == 40 && index < $items.length - 1) index++         // down
+    if (!~index)                                    index = 0
+
+    $items.eq(index).trigger('focus')
+  }
+
+
+  // DROPDOWN PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this = $(this)
+      var data  = $this.data('bs.dropdown')
+
+      if (!data) $this.data('bs.dropdown', (data = new Dropdown(this)))
+      if (typeof option == 'string') data[option].call($this)
+    })
+  }
+
+  var old = $.fn.dropdown
+
+  $.fn.dropdown             = Plugin
+  $.fn.dropdown.Constructor = Dropdown
+
+
+  // DROPDOWN NO CONFLICT
+  // ====================
+
+  $.fn.dropdown.noConflict = function () {
+    $.fn.dropdown = old
+    return this
+  }
+
+
+  // APPLY TO STANDARD DROPDOWN ELEMENTS
+  // ===================================
+
+  $(document)
+    .on('click.bs.dropdown.data-api', clearMenus)
+    .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
+    .on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle)
+    .on('keydown.bs.dropdown.data-api', toggle, Dropdown.prototype.keydown)
+    .on('keydown.bs.dropdown.data-api', '.dropdown-menu', Dropdown.prototype.keydown)
+
+}(jQuery);
+</script>
+<style type="text/css">
+.code-folding-btn {
+  margin-bottom: 4px;
+}
+
+.row { display: flex; }
+.collapse { display: none; }
+.in { display:block }
+.pull-right > .dropdown-menu {
+    right: 0;
+    left: auto;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.open > .dropdown-menu {
+    display: block;
+    color: #ffffff;
+    background-color: #ffffff;
+    background-image: none;
+    border-color: #92897e;
+}
+
+.dropdown-menu > li > a {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #e95420;
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #e95420;
+  outline: 0;
+}
+.dropdown-menu > .disabled > a,
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  color: #aea79f;
+}
+
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  text-decoration: none;
+  cursor: not-allowed;
+  background-color: transparent;
+  background-image: none;
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+
+.btn {
+  display: inline-block;
+  margin-bottom: 1;
+  font-weight: normal;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  padding: 4px 8px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.btn:hover,
+.btn:focus,
+.btn.focus {
+  color: #ffffff;
+  text-decoration: none;
+}
+.btn:active,
+.btn.active {
+  background-image: none;
+  outline: 0;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.btn.disabled,
+.btn[disabled],
+fieldset[disabled] .btn {
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  opacity: 0.65;
+  box-shadow: none;
+}
+a.btn.disabled,
+fieldset[disabled] a.btn {
+  pointer-events: none;
+}
+.btn-default {
+  color: #ffffff;
+  background-color: #aea79f; #important
+  border-color: #aea79f;
+}
+
+.btn-default:focus,
+.btn-default.focus {
+  color: #ffffff;
+  background-color: #978e83;
+  border-color: #6f675e;
+}
+
+.btn-default:hover {
+  color: #ffffff;
+  background-color: #978e83;
+  border-color: #92897e;
+}
+.btn-default:active,
+.btn-default.active,
+.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+  border-radius: 0;
+}
+.btn-group > .btn:first-child {
+  margin-left: 0;
+}
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btn-group > .btn:last-child:not(:first-child),
+.btn-group > .dropdown-toggle:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btn-group > .btn-group {
+  float: left;
+}
+.btn-group > .btn-group:not(:first-child):not(:last-child) > .btn {
+  border-radius: 0;
+}
+.btn-group > .btn-group:first-child:not(:last-child) > .btn:last-child,
+.btn-group > .btn-group:first-child:not(:last-child) > .dropdown-toggle {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btn-group > .btn-group:last-child:not(:first-child) > .btn:first-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btn-group .dropdown-toggle:active,
+.btn-group.open .dropdown-toggle {
+  outline: 0;
+}
+.btn-group > .btn + .dropdown-toggle {
+  padding-right: 8px;
+  padding-left: 8px;
+}
+.btn-group > .btn-lg + .dropdown-toggle {
+  padding-right: 12px;
+  padding-left: 12px;
+}
+.btn-group.open .dropdown-toggle {
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.btn-group.open .dropdown-toggle.btn-link {
+  box-shadow: none;
+}
+
+</style>
+<script>
+var str = '<div class="btn-group pull-right" style="position: fixed; right: 50px; top: 10px; z-index: 200"><button type="button" class="btn btn-default btn-xs dropdown-toggle" id="allCodeButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" data-_extension-text-contrast=""><span>Code</span> <span class="caret"></span></button><ul class="dropdown-menu" style="min-width: 50px;"><li><a id="rmd-show-all-code" href="#">Show All Code</a></li><li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li></ul></div>';
+document.write(str);
+</script>
+<script>
+$(document).ready(function () {
+  // AGB add fold-hide changed === to !== to default to showing code
+  window.initializeCodeFolding("show" !== "hide");
+});
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preamble</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#technical-setup"><i class="fa fa-check"></i><b>1.1</b> Technical Setup</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#project-structure"><i class="fa fa-check"></i><b>1.1.1</b> Project Structure</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#why-use-projects-in-r"><i class="fa fa-check"></i><b>1.1.2</b> Why Use Projects in R?</a></li>
+<li class="chapter" data-level="1.1.3" data-path="index.html"><a href="index.html#why-reproducibility-matters"><i class="fa fa-check"></i><b>1.1.3</b> Why Reproducibility Matters</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html"><i class="fa fa-check"></i><b>2</b> The Measure of Time</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#big-idea"><i class="fa fa-check"></i><b>2.1</b> Big Idea</a></li>
+<li class="chapter" data-level="2.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#reading"><i class="fa fa-check"></i><b>2.2</b> Reading</a></li>
+<li class="chapter" data-level="2.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#packages"><i class="fa fa-check"></i><b>2.3</b> Packages</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#load"><i class="fa fa-check"></i><b>2.3.1</b> Load</a></li>
+<li class="chapter" data-level="2.3.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#keep-up-to-date"><i class="fa fa-check"></i><b>2.3.2</b> Keep Up to Date</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#what-kinds-of-data"><i class="fa fa-check"></i><b>2.4</b> What Kinds of Data?</a></li>
+<li class="chapter" data-level="2.5" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#the-ts-class"><i class="fa fa-check"></i><b>2.5</b> The <code>ts</code> Class</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#a-very-useful-class"><i class="fa fa-check"></i><b>2.5.1</b> A Very Useful Class</a></li>
+<li class="chapter" data-level="2.5.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#digression-describing-a-time-series"><i class="fa fa-check"></i><b>2.5.2</b> Digression: Describing a Time Series</a></li>
+<li class="chapter" data-level="2.5.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#more-on-the-ts-index"><i class="fa fa-check"></i><b>2.5.3</b> More on the <code>ts</code> Index</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#trend-in-time"><i class="fa fa-check"></i><b>2.6</b> Trend in time</a></li>
+<li class="chapter" data-level="2.7" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#the-zoo-class"><i class="fa fa-check"></i><b>2.7</b> The <code>zoo</code> Class</a></li>
+<li class="chapter" data-level="2.8" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#lubricate-the-dates"><i class="fa fa-check"></i><b>2.8</b> Lubricate the Dates</a></li>
+<li class="chapter" data-level="2.9" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#tidy-it-up"><i class="fa fa-check"></i><b>2.9</b> Tidy it Up</a></li>
+<li class="chapter" data-level="2.10" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#your-work"><i class="fa fa-check"></i><b>2.10</b> Your Work</a>
+<ul>
+<li class="chapter" data-level="2.10.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#berkeley-earth-temperature-data"><i class="fa fa-check"></i><b>2.10.1</b> Berkeley Earth Temperature Data</a></li>
+<li class="chapter" data-level="2.10.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#your-turn"><i class="fa fa-check"></i><b>2.10.2</b> Your Turn</a></li>
+<li class="chapter" data-level="2.10.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#write-up-and-reflect"><i class="fa fa-check"></i><b>2.10.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html"><i class="fa fa-check"></i><b>3</b> An Aside: Understanding Methods and Generics in R</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#youve-come-a-long-way-in-r"><i class="fa fa-check"></i><b>3.1</b> You’ve Come a Long Way in R</a></li>
+<li class="chapter" data-level="3.2" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#why-use-generics"><i class="fa fa-check"></i><b>3.2</b> Why Use Generics?</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#same-function-different-behavior-what-gives"><i class="fa fa-check"></i><b>3.2.1</b> Same Function, Different Behavior — What Gives?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#how-this-works"><i class="fa fa-check"></i><b>3.3</b> How This Works</a></li>
+<li class="chapter" data-level="3.4" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#whats-the-difference-between-a-generic-and-a-method"><i class="fa fa-check"></i><b>3.4</b> What’s the Difference Between a Generic and a Method?</a></li>
+<li class="chapter" data-level="3.5" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#common-generic-functions"><i class="fa fa-check"></i><b>3.5</b> Common Generic Functions</a></li>
+<li class="chapter" data-level="3.6" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#how-to-explore-and-understand-methods"><i class="fa fa-check"></i><b>3.6</b> How to Explore and Understand Methods</a></li>
+<li class="chapter" data-level="3.7" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#why-this-matters"><i class="fa fa-check"></i><b>3.7</b> Why This Matters</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="decomposition.html"><a href="decomposition.html"><i class="fa fa-check"></i><b>4</b> Decomposition</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="decomposition.html"><a href="decomposition.html#big-idea-1"><i class="fa fa-check"></i><b>4.1</b> Big Idea</a></li>
+<li class="chapter" data-level="4.2" data-path="decomposition.html"><a href="decomposition.html#reading-1"><i class="fa fa-check"></i><b>4.2</b> Reading</a></li>
+<li class="chapter" data-level="4.3" data-path="decomposition.html"><a href="decomposition.html#packages-1"><i class="fa fa-check"></i><b>4.3</b> Packages</a></li>
+<li class="chapter" data-level="4.4" data-path="decomposition.html"><a href="decomposition.html#seasonality-and-decomposition"><i class="fa fa-check"></i><b>4.4</b> Seasonality and decomposition</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="decomposition.html"><a href="decomposition.html#breaking-down-a-series-the-tedious-way"><i class="fa fa-check"></i><b>4.4.1</b> Breaking down a series the tedious way</a></li>
+<li class="chapter" data-level="4.4.2" data-path="decomposition.html"><a href="decomposition.html#breaking-down-a-series-the-easy-way"><i class="fa fa-check"></i><b>4.4.2</b> Breaking down a series the easy way</a></li>
+<li class="chapter" data-level="4.4.3" data-path="decomposition.html"><a href="decomposition.html#how-does-m-differ-from-the-slope-in-a-lm"><i class="fa fa-check"></i><b>4.4.3</b> How does <code>m</code> differ from the slope in a <code>lm</code>?</a></li>
+<li class="chapter" data-level="4.4.4" data-path="decomposition.html"><a href="decomposition.html#warning"><i class="fa fa-check"></i><b>4.4.4</b> Warning</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="decomposition.html"><a href="decomposition.html#stationarity"><i class="fa fa-check"></i><b>4.5</b> Stationarity</a></li>
+<li class="chapter" data-level="4.6" data-path="decomposition.html"><a href="decomposition.html#your-work-1"><i class="fa fa-check"></i><b>4.6</b> Your Work</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="decomposition.html"><a href="decomposition.html#air-passengers"><i class="fa fa-check"></i><b>4.6.1</b> Air Passengers</a></li>
+<li class="chapter" data-level="4.6.2" data-path="decomposition.html"><a href="decomposition.html#kbli"><i class="fa fa-check"></i><b>4.6.2</b> KBLI</a></li>
+<li class="chapter" data-level="4.6.3" data-path="decomposition.html"><a href="decomposition.html#write-up-and-reflect-1"><i class="fa fa-check"></i><b>4.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html"><i class="fa fa-check"></i><b>5</b> AR(p), ACF, PACF, etc.</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#big-idea-2"><i class="fa fa-check"></i><b>5.1</b> Big Idea</a></li>
+<li class="chapter" data-level="5.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#reading-2"><i class="fa fa-check"></i><b>5.2</b> Reading</a></li>
+<li class="chapter" data-level="5.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#packages-2"><i class="fa fa-check"></i><b>5.3</b> Packages</a></li>
+<li class="chapter" data-level="5.4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#correlation-and-covariance"><i class="fa fa-check"></i><b>5.4</b> Correlation and Covariance</a></li>
+<li class="chapter" data-level="5.5" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation"><i class="fa fa-check"></i><b>5.5</b> Autocorrelation</a></li>
+<li class="chapter" data-level="5.6" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation-function"><i class="fa fa-check"></i><b>5.6</b> Autocorrelation Function</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#the-very-fun-presentation"><i class="fa fa-check"></i><b>5.6.1</b> The Very Fun Presentation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#the-boring-presentation"><i class="fa fa-check"></i><b>5.7</b> The Boring Presentation</a>
+<ul>
+<li class="chapter" data-level="5.7.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#tidy"><i class="fa fa-check"></i><b>5.7.1</b> Tidy</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#partial-autocorrelation-function"><i class="fa fa-check"></i><b>5.8</b> Partial Autocorrelation Function</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#pacf"><i class="fa fa-check"></i><b>5.8.1</b> PACF</a></li>
+<li class="chapter" data-level="5.8.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#underneath-the-hood-of-pacf"><i class="fa fa-check"></i><b>5.8.2</b> Underneath the Hood of PACF</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#ar1-to-arp"><i class="fa fa-check"></i><b>5.9</b> AR(1) to AR(p)</a></li>
+<li class="chapter" data-level="5.10" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#random-walks"><i class="fa fa-check"></i><b>5.10</b> Random walks</a>
+<ul>
+<li class="chapter" data-level="5.10.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#stationarity-is-dead"><i class="fa fa-check"></i><b>5.10.1</b> Stationarity is dead</a></li>
+</ul></li>
+<li class="chapter" data-level="5.11" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation-examples-with-real-data"><i class="fa fa-check"></i><b>5.11</b> Autocorrelation examples with real data</a>
+<ul>
+<li class="chapter" data-level="5.11.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#nile"><i class="fa fa-check"></i><b>5.11.1</b> Nile</a></li>
+<li class="chapter" data-level="5.11.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#air-temperature"><i class="fa fa-check"></i><b>5.11.2</b> Air Temperature</a></li>
+<li class="chapter" data-level="5.11.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#sunspots"><i class="fa fa-check"></i><b>5.11.3</b> Sunspots</a></li>
+</ul></li>
+<li class="chapter" data-level="5.12" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#choosing-the-order-of-an-arp-model-by-aic"><i class="fa fa-check"></i><b>5.12</b> Choosing the Order of an AR(p) Model by AIC</a></li>
+<li class="chapter" data-level="5.13" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#your-work-2"><i class="fa fa-check"></i><b>5.13</b> Your work</a>
+<ul>
+<li class="chapter" data-level="5.13.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#acf-and-pacf-with-different-values-of-phi."><i class="fa fa-check"></i><b>5.13.1</b> ACF and PACF with different values of <span class="math inline">\(\phi\)</span>.</a></li>
+<li class="chapter" data-level="5.13.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#roll-your-own-ar2"><i class="fa fa-check"></i><b>5.13.2</b> Roll your own AR(2)</a></li>
+<li class="chapter" data-level="5.13.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#sockeye"><i class="fa fa-check"></i><b>5.13.3</b> Sockeye</a></li>
+<li class="chapter" data-level="5.13.4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#write-up-and-reflect-2"><i class="fa fa-check"></i><b>5.13.4</b> Write Up and Reflect</a></li>
+</ul></li>
+<li class="chapter" data-level="5.14" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#postscript-a-helpful-plotting-chunk"><i class="fa fa-check"></i><b>5.14</b> Postscript: A Helpful Plotting Chunk</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><i class="fa fa-check"></i><b>6</b> Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#introduction"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#acf-and-pacf-of-a-single-ma1-simulation"><i class="fa fa-check"></i><b>6.2</b> ACF and PACF of a Single MA(1) Simulation</a></li>
+<li class="chapter" data-level="6.3" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#simulation-study-across-many-ma1-coefficients"><i class="fa fa-check"></i><b>6.3</b> Simulation Study Across Many MA(1) Coefficients</a></li>
+<li class="chapter" data-level="6.4" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-1-pacf-lag-1-underestimates-theta"><i class="fa fa-check"></i><b>6.4</b> Insight 1: PACF Lag 1 Underestimates <span class="math inline">\(\theta\)</span></a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens"><i class="fa fa-check"></i><b>6.4.1</b> Why This Happens</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-2-pacf-lag-2-is-consistently-negative"><i class="fa fa-check"></i><b>6.5</b> Insight 2: PACF Lag 2 is Consistently Negative</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens-1"><i class="fa fa-check"></i><b>6.5.1</b> Why This Happens</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#conclusion"><i class="fa fa-check"></i><b>6.6</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="armapq.html"><a href="armapq.html"><i class="fa fa-check"></i><b>7</b> ARMA(p,q)</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="armapq.html"><a href="armapq.html#big-idea-3"><i class="fa fa-check"></i><b>7.1</b> Big Idea</a></li>
+<li class="chapter" data-level="7.2" data-path="armapq.html"><a href="armapq.html#reading-3"><i class="fa fa-check"></i><b>7.2</b> Reading</a></li>
+<li class="chapter" data-level="7.3" data-path="armapq.html"><a href="armapq.html#packages-3"><i class="fa fa-check"></i><b>7.3</b> Packages</a></li>
+<li class="chapter" data-level="7.4" data-path="armapq.html"><a href="armapq.html#arp-to-maq"><i class="fa fa-check"></i><b>7.4</b> AR(p) to MA(q)</a></li>
+<li class="chapter" data-level="7.5" data-path="armapq.html"><a href="armapq.html#armapq-1"><i class="fa fa-check"></i><b>7.5</b> ARMA(p,q)</a></li>
+<li class="chapter" data-level="7.6" data-path="armapq.html"><a href="armapq.html#what-about-arimap-d-q"><i class="fa fa-check"></i><b>7.6</b> What about ARIMA(p, d, q)?</a>
+<ul>
+<li class="chapter" data-level="7.6.1" data-path="armapq.html"><a href="armapq.html#why-do-arma-models-require-stationarity"><i class="fa fa-check"></i><b>7.6.1</b> Why Do ARMA Models Require Stationarity?</a></li>
+<li class="chapter" data-level="7.6.2" data-path="armapq.html"><a href="armapq.html#simulated-data"><i class="fa fa-check"></i><b>7.6.2</b> Simulated Data</a></li>
+</ul></li>
+<li class="chapter" data-level="7.7" data-path="armapq.html"><a href="armapq.html#evaluating-arma-models"><i class="fa fa-check"></i><b>7.7</b> Evaluating ARMA models</a>
+<ul>
+<li class="chapter" data-level="7.7.1" data-path="armapq.html"><a href="armapq.html#simulated-data-1"><i class="fa fa-check"></i><b>7.7.1</b> Simulated Data</a></li>
+<li class="chapter" data-level="7.7.2" data-path="armapq.html"><a href="armapq.html#sst-data"><i class="fa fa-check"></i><b>7.7.2</b> SST Data</a></li>
+<li class="chapter" data-level="7.7.3" data-path="armapq.html"><a href="armapq.html#how-do-you-decide-which-information-criterion-to-use"><i class="fa fa-check"></i><b>7.7.3</b> How Do You Decide Which Information Criterion to Use?</a></li>
+</ul></li>
+<li class="chapter" data-level="7.8" data-path="armapq.html"><a href="armapq.html#your-work-3"><i class="fa fa-check"></i><b>7.8</b> Your work</a>
+<ul>
+<li class="chapter" data-level="7.8.1" data-path="armapq.html"><a href="armapq.html#bunnies-and-kitties"><i class="fa fa-check"></i><b>7.8.1</b> Bunnies and Kitties</a></li>
+<li class="chapter" data-level="7.8.2" data-path="armapq.html"><a href="armapq.html#write-up-and-reflect-3"><i class="fa fa-check"></i><b>7.8.2</b> Write up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i><b>8</b> Forecasting</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="forecasting.html"><a href="forecasting.html#big-idea-4"><i class="fa fa-check"></i><b>8.1</b> Big Idea</a></li>
+<li class="chapter" data-level="8.2" data-path="forecasting.html"><a href="forecasting.html#reading-4"><i class="fa fa-check"></i><b>8.2</b> Reading</a></li>
+<li class="chapter" data-level="8.3" data-path="forecasting.html"><a href="forecasting.html#packages-4"><i class="fa fa-check"></i><b>8.3</b> Packages</a></li>
+<li class="chapter" data-level="8.4" data-path="forecasting.html"><a href="forecasting.html#introduction-1"><i class="fa fa-check"></i><b>8.4</b> Introduction</a></li>
+<li class="chapter" data-level="8.5" data-path="forecasting.html"><a href="forecasting.html#a-simple-forecast"><i class="fa fa-check"></i><b>8.5</b> A simple forecast</a>
+<ul>
+<li class="chapter" data-level="8.5.1" data-path="forecasting.html"><a href="forecasting.html#two-step-ahead-forecast"><i class="fa fa-check"></i><b>8.5.1</b> Two-step-ahead forecast</a></li>
+<li class="chapter" data-level="8.5.2" data-path="forecasting.html"><a href="forecasting.html#example"><i class="fa fa-check"></i><b>8.5.2</b> Example</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="forecasting.html"><a href="forecasting.html#using-arma-coefficients-to-forecast"><i class="fa fa-check"></i><b>8.6</b> Using ARMA coefficients to forecast</a></li>
+<li class="chapter" data-level="8.7" data-path="forecasting.html"><a href="forecasting.html#holt-winters"><i class="fa fa-check"></i><b>8.7</b> Holt-Winters</a></li>
+<li class="chapter" data-level="8.8" data-path="forecasting.html"><a href="forecasting.html#your-work-4"><i class="fa fa-check"></i><b>8.8</b> Your work</a>
+<ul>
+<li class="chapter" data-level="8.8.1" data-path="forecasting.html"><a href="forecasting.html#a-silly-prediction"><i class="fa fa-check"></i><b>8.8.1</b> A silly prediction</a></li>
+<li class="chapter" data-level="8.8.2" data-path="forecasting.html"><a href="forecasting.html#write-up-and-reflect-4"><i class="fa fa-check"></i><b>8.8.2</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="cross-correlation.html"><a href="cross-correlation.html"><i class="fa fa-check"></i><b>9</b> Cross Correlation</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="cross-correlation.html"><a href="cross-correlation.html#big-idea-5"><i class="fa fa-check"></i><b>9.1</b> Big Idea</a></li>
+<li class="chapter" data-level="9.2" data-path="cross-correlation.html"><a href="cross-correlation.html#reading-5"><i class="fa fa-check"></i><b>9.2</b> Reading</a></li>
+<li class="chapter" data-level="9.3" data-path="cross-correlation.html"><a href="cross-correlation.html#packages-5"><i class="fa fa-check"></i><b>9.3</b> Packages</a></li>
+<li class="chapter" data-level="9.4" data-path="cross-correlation.html"><a href="cross-correlation.html#lags"><i class="fa fa-check"></i><b>9.4</b> Lags</a></li>
+<li class="chapter" data-level="9.5" data-path="cross-correlation.html"><a href="cross-correlation.html#from-acf-to-ccf"><i class="fa fa-check"></i><b>9.5</b> From ACF to CCF</a></li>
+<li class="chapter" data-level="9.6" data-path="cross-correlation.html"><a href="cross-correlation.html#how-ccf-normalizes-correlations"><i class="fa fa-check"></i><b>9.6</b> How <code>Ccf()</code> Normalizes Correlations</a></li>
+<li class="chapter" data-level="9.7" data-path="cross-correlation.html"><a href="cross-correlation.html#your-work-5"><i class="fa fa-check"></i><b>9.7</b> Your work</a>
+<ul>
+<li class="chapter" data-level="9.7.1" data-path="cross-correlation.html"><a href="cross-correlation.html#write-up-and-reflect-5"><i class="fa fa-check"></i><b>9.7.1</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="regression.html"><a href="regression.html"><i class="fa fa-check"></i><b>10</b> Regression</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="regression.html"><a href="regression.html#big-idea-6"><i class="fa fa-check"></i><b>10.1</b> Big Idea</a></li>
+<li class="chapter" data-level="10.2" data-path="regression.html"><a href="regression.html#reading-6"><i class="fa fa-check"></i><b>10.2</b> Reading</a></li>
+<li class="chapter" data-level="10.3" data-path="regression.html"><a href="regression.html#packages-6"><i class="fa fa-check"></i><b>10.3</b> Packages</a></li>
+<li class="chapter" data-level="10.4" data-path="regression.html"><a href="regression.html#regression-1"><i class="fa fa-check"></i><b>10.4</b> Regression</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="regression.html"><a href="regression.html#adjusting-ols"><i class="fa fa-check"></i><b>10.4.1</b> Adjusting OLS</a></li>
+<li class="chapter" data-level="10.4.2" data-path="regression.html"><a href="regression.html#gls"><i class="fa fa-check"></i><b>10.4.2</b> GLS</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="regression.html"><a href="regression.html#your-work-6"><i class="fa fa-check"></i><b>10.5</b> Your work</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="regression.html"><a href="regression.html#what-does-generalized-mean"><i class="fa fa-check"></i><b>10.5.1</b> What Does Generalized Mean?</a></li>
+<li class="chapter" data-level="10.5.2" data-path="regression.html"><a href="regression.html#regression-simulation"><i class="fa fa-check"></i><b>10.5.2</b> Regression Simulation</a></li>
+<li class="chapter" data-level="10.5.3" data-path="regression.html"><a href="regression.html#regression-for-real"><i class="fa fa-check"></i><b>10.5.3</b> Regression for real</a></li>
+<li class="chapter" data-level="10.5.4" data-path="regression.html"><a href="regression.html#write-up-and-reflect-6"><i class="fa fa-check"></i><b>10.5.4</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html"><i class="fa fa-check"></i><b>11</b> Filtering, smoothing</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#big-idea-7"><i class="fa fa-check"></i><b>11.1</b> Big Idea</a></li>
+<li class="chapter" data-level="11.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#packages-7"><i class="fa fa-check"></i><b>11.2</b> Packages</a></li>
+<li class="chapter" data-level="11.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#filters-as-visual-aids"><i class="fa fa-check"></i><b>11.3</b> Filters as visual aids</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#moving-running-average"><i class="fa fa-check"></i><b>11.3.1</b> Moving (running) average</a></li>
+<li class="chapter" data-level="11.3.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#hanning"><i class="fa fa-check"></i><b>11.3.2</b> Hanning</a></li>
+<li class="chapter" data-level="11.3.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#smoothing-splines"><i class="fa fa-check"></i><b>11.3.3</b> Smoothing splines</a></li>
+<li class="chapter" data-level="11.3.4" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#loess"><i class="fa fa-check"></i><b>11.3.4</b> Loess</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#using-filters"><i class="fa fa-check"></i><b>11.4</b> Using filters</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#aggregating"><i class="fa fa-check"></i><b>11.4.1</b> Aggregating</a></li>
+<li class="chapter" data-level="11.4.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#removing-low-frequency-variability"><i class="fa fa-check"></i><b>11.4.2</b> Removing low frequency variability</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#the-case-of-the-poorly-launched-sensors"><i class="fa fa-check"></i><b>11.5</b> The Case of the Poorly-Launched Sensors</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#fix-time-on-temperature"><i class="fa fa-check"></i><b>11.5.1</b> Fix time on temperature</a></li>
+<li class="chapter" data-level="11.5.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#fill-missing-data-on-radiation"><i class="fa fa-check"></i><b>11.5.2</b> Fill missing data on radiation</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#your-work-7"><i class="fa fa-check"></i><b>11.6</b> Your work</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#filter"><i class="fa fa-check"></i><b>11.6.1</b> Filter</a></li>
+<li class="chapter" data-level="11.6.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#revisit-the-case-of-the-poorly-launched-sensors"><i class="fa fa-check"></i><b>11.6.2</b> Revisit the case of the poorly launched sensors</a></li>
+<li class="chapter" data-level="11.6.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#write-up-and-reflect-7"><i class="fa fa-check"></i><b>11.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html"><i class="fa fa-check"></i><b>12</b> The Freqs Come out at Night</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#big-idea-8"><i class="fa fa-check"></i><b>12.1</b> Big Idea</a></li>
+<li class="chapter" data-level="12.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#reading-7"><i class="fa fa-check"></i><b>12.2</b> Reading</a></li>
+<li class="chapter" data-level="12.3" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#packages-8"><i class="fa fa-check"></i><b>12.3</b> Packages</a></li>
+<li class="chapter" data-level="12.4" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#the-frequency-domain"><i class="fa fa-check"></i><b>12.4</b> The Frequency Domain</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#same-data-two-domains"><i class="fa fa-check"></i><b>12.4.1</b> Same Data, Two Domains</a></li>
+<li class="chapter" data-level="12.4.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#worked-example"><i class="fa fa-check"></i><b>12.4.2</b> Worked example</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#sunspot-example"><i class="fa fa-check"></i><b>12.5</b> Sunspot Example</a></li>
+<li class="chapter" data-level="12.6" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#your-work-8"><i class="fa fa-check"></i><b>12.6</b> Your work</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#generate-three-signals"><i class="fa fa-check"></i><b>12.6.1</b> Generate three signals</a></li>
+<li class="chapter" data-level="12.6.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#milankovitch"><i class="fa fa-check"></i><b>12.6.2</b> Milankovitch</a></li>
+<li class="chapter" data-level="12.6.3" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#write-up-and-reflect-8"><i class="fa fa-check"></i><b>12.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#references"><i class="fa fa-check"></i><b>12.7</b> References</a></li>
+<li class="chapter" data-level="12.8" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#postscript-a-glimpse-of-wavelets"><i class="fa fa-check"></i><b>12.8</b> Postscript: A Glimpse of Wavelets</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="references-1.html"><a href="references-1.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A collection of note for ESCI 504</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="regression" class="section level1 hasAnchor" number="10">
+<h1><span class="header-section-number">10</span> Regression<a href="regression.html#regression" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="big-idea-6" class="section level2 hasAnchor" number="10.1">
+<h2><span class="header-section-number">10.1</span> Big Idea<a href="regression.html#big-idea-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>OLS regression can be problematic with time series because the assumption of independence gets violated pretty easily. But, there are other approaches that are useful.</p>
+</div>
+<div id="reading-6" class="section level2 hasAnchor" number="10.2">
+<h2><span class="header-section-number">10.2</span> Reading<a href="regression.html#reading-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Have a look at Chapter five (through section 5.3) from <span class="citation">Cowpertwait and Metcalfe (<a href="references-1.html#ref-Cowpertwait2009">2009</a>)</span>. It’s OK to skim the readings in this book. It’s not a great book for our purposes as many of you haven’t taken linear algebra and the book occasionally goes that way. But it’s useful to hum your way through the chapter nonetheless.</p>
+</div>
+<div id="packages-6" class="section level2 hasAnchor" number="10.3">
+<h2><span class="header-section-number">10.3</span> Packages<a href="regression.html#packages-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>You’ll want to install the <code>nlme</code> <span class="citation">(<a href="references-1.html#ref-R-nlme">Pinheiro, Bates, and R Core Team 2025</a>)</span> library if you don’t have it. We are going to fit a linear model using generalized least squares as opposed to ordinary least squares and you’ll need the <code>gls</code> function from <code>nlme</code>. I’ll use <code>forecast</code> <span class="citation">(<a href="references-1.html#ref-R-forecast">Hyndman et al. 2025</a>)</span> as well and tidyverse <span class="citation">(<a href="references-1.html#ref-R-tidyverse">Wickham 2023</a>)</span>.</p>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="regression.html#cb265-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb265-2"><a href="regression.html#cb265-2" tabindex="-1"></a><span class="fu">library</span>(nlme)</span>
+<span id="cb265-3"><a href="regression.html#cb265-3" tabindex="-1"></a><span class="fu">library</span>(forecast)</span></code></pre></div>
+</div>
+<div id="regression-1" class="section level2 hasAnchor" number="10.4">
+<h2><span class="header-section-number">10.4</span> Regression<a href="regression.html#regression-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="adjusting-ols" class="section level3 hasAnchor" number="10.4.1">
+<h3><span class="header-section-number">10.4.1</span> Adjusting OLS<a href="regression.html#adjusting-ols" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>As know, time series data are typically autocorrelated in some way. We’ve seen this over and over and we’ve learned to spot it and to fit models of various complexity to describe it.</p>
+<p>A very common situation with environmental data is to want to do an ordinary least squares regression using time series data. If your data are a time series, you are doing time-series regression. And that has different pitfalls than standard regression.</p>
+<p>The biggest issue is that if the residuals (errors) are autocorrelated, you have violated the assumption of independence. What does this mean? Well, <a href="https://en.wikipedia.org/wiki/Autocorrelation#Regression_analysis">the standard errors on the coefficient estimates tend to be underestimated (and the t-scores overestimated) when the autocorrelations of the errors at low lags are positive</a>. This means that any statistical inference could be wrong, e.g., the the p-values from a t-test will be artificially low. But despair not! If we take the the time series structure of the errors into account we can usually still model the association between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> effectively.</p>
+<p>Is this a little opaque? Let’s make up an example. Let’s say you wanted to build a model of salmon in a creek as function of the summer water temperature. Temps get too warm and the wee fish suffer and die before they get counted by the poor intern. You can make up a mechanism however you like. This is just a thought experiment, right? So you make a nice linear model <span class="math inline">\(y=\beta_0 + \beta_1 x + \epsilon\)</span> where <span class="math inline">\(y\)</span> is the number of salmon, <span class="math inline">\(\beta_0\)</span> is the intercept and <span class="math inline">\(\beta_1\)</span> is the coefficient on the variable <span class="math inline">\(x\)</span> which is the water temperature, and <span class="math inline">\(\epsilon\)</span> is the residual. You have a gorgeous time series every year (<span class="math inline">\(t\)</span>) for some number of years which makes this a time series regression: <span class="math inline">\(y_t=\beta_0 + \beta_1 x_t + \epsilon_t\)</span>. You run an OLS regression and get a negative slope and a t-test says that your model has skill (good <span class="math inline">\(R^2\)</span>, <span class="math inline">\(p&lt;0.05\)</span>, etc). Great – you fire off a letter to Nature, or write your thesis, or go put some wood in a stream, or just bathe in the satisfaction of a job well done. But of course your model won’t fit perfectly so you’ll have residuals or errors from the model (<span class="math inline">\(\epsilon\)</span>). Now, if those residuals are not independent and identically distributed (~iid), you have violated the assumptions of the OLS regression. The standard errors might be wrong, the p-values might be inflated. Alas. The classic reason that residuals are not ~iid in time series is because they are not independent and that means autocorrelation.</p>
+<p>In general here is a good approach when dealing with time series variables in a regression.</p>
+<ol style="list-style-type: decimal">
+<li><p>Start by doing an ordinary least squares regression.</p></li>
+<li><p>Look at the AR structure of the residuals with ACF and PACF plots.</p></li>
+<li><p>If the residuals look clean then carry on. Note that it’s OK for the variable <span class="math inline">\(y\)</span> or <span class="math inline">\(x\)</span> to be autocorrelated – watch the residuals. If the residuals have AR structure, estimate and diagnose an appropriate AR or ARMA model.</p></li>
+<li><p>If needed, get the adjusted regression coefficients (estimates, standard errors). We want to have a model that adjusts for the AR structure in the residuals. We can create an adjusted data set by hand and use OLS (see text) or use GLS with an appropriate correlation structure (below).</p></li>
+</ol>
+<p>Let’s create a data set to play with. We will generate two time series. The variable <code>x</code> will be ordinary white noise. The variable <code>y</code> will be a function of <code>x</code> plus AR(1) noise <span class="math inline">\(\epsilon\)</span>. We will pretend we don’t know about <span class="math inline">\(\epsilon\)</span> and perform two regressions of <span class="math inline">\(y=f(x)\)</span> and look at the residuals and the estimate of the slope (<span class="math inline">\(\hat\beta\)</span>).</p>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="regression.html#cb266-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">47</span>) <span class="co"># for reproducibility</span></span>
+<span id="cb266-2"><a href="regression.html#cb266-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb266-3"><a href="regression.html#cb266-3" tabindex="-1"></a>phi <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
+<span id="cb266-4"><a href="regression.html#cb266-4" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(n))</span>
+<span id="cb266-5"><a href="regression.html#cb266-5" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="at">model =</span> <span class="fu">list</span>(<span class="at">ar=</span>phi),<span class="at">n =</span> n)</span>
+<span id="cb266-6"><a href="regression.html#cb266-6" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> epsilon <span class="sc">-</span> <span class="fu">mean</span>(epsilon) <span class="co"># demean</span></span>
+<span id="cb266-7"><a href="regression.html#cb266-7" tabindex="-1"></a>B0 <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co"># intercept</span></span>
+<span id="cb266-8"><a href="regression.html#cb266-8" tabindex="-1"></a>B1 <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="co"># slope</span></span>
+<span id="cb266-9"><a href="regression.html#cb266-9" tabindex="-1"></a>y <span class="ot">&lt;-</span> B0 <span class="sc">+</span> B1<span class="sc">*</span>x <span class="sc">+</span> epsilon</span>
+<span id="cb266-10"><a href="regression.html#cb266-10" tabindex="-1"></a><span class="co"># step 1 - the regular ols regression</span></span>
+<span id="cb266-11"><a href="regression.html#cb266-11" tabindex="-1"></a>ols1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>x)</span>
+<span id="cb266-12"><a href="regression.html#cb266-12" tabindex="-1"></a><span class="co"># step 2 - inspect the residuals</span></span>
+<span id="cb266-13"><a href="regression.html#cb266-13" tabindex="-1"></a><span class="fu">Acf</span>(<span class="fu">residuals</span>(ols1)) <span class="co"># problem with independence</span></span></code></pre></div>
+<p><img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="regression.html#cb267-1" tabindex="-1"></a><span class="fu">Pacf</span>(<span class="fu">residuals</span>(ols1)) <span class="co"># looks like an AR1</span></span></code></pre></div>
+<p><img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb268-1"><a href="regression.html#cb268-1" tabindex="-1"></a><span class="co"># step 3 - get a good model</span></span>
+<span id="cb268-2"><a href="regression.html#cb268-2" tabindex="-1"></a>ar1 <span class="ot">&lt;-</span> <span class="fu">ar</span>(<span class="fu">residuals</span>(ols1))<span class="sc">$</span>ar</span>
+<span id="cb268-3"><a href="regression.html#cb268-3" tabindex="-1"></a>ar1</span></code></pre></div>
+<pre><code>## [1] 0.7429079</code></pre>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="regression.html#cb270-1" tabindex="-1"></a><span class="co"># two ways of getting a model that works</span></span>
+<span id="cb270-2"><a href="regression.html#cb270-2" tabindex="-1"></a><span class="co"># step 4 - method 1 - adjust by hand</span></span>
+<span id="cb270-3"><a href="regression.html#cb270-3" tabindex="-1"></a><span class="co"># y lagged at one time step: </span></span>
+<span id="cb270-4"><a href="regression.html#cb270-4" tabindex="-1"></a><span class="co"># (see poscript below of notes on lagging)</span></span>
+<span id="cb270-5"><a href="regression.html#cb270-5" tabindex="-1"></a>y.lag1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>,y[<span class="sc">-</span>n]) </span>
+<span id="cb270-6"><a href="regression.html#cb270-6" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">cbind</span>(y,y.lag1))</span></code></pre></div>
+<pre><code>## Time Series:
+## Start = 1 
+## End = 6 
+## Frequency = 1 
+##             y      y.lag1
+## 1  1.27400585          NA
+## 2 -0.66681772  1.27400585
+## 3 -0.03946659 -0.66681772
+## 4  1.07026783 -0.03946659
+## 5  0.52585722  1.07026783
+## 6  0.86750649  0.52585722</code></pre>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="regression.html#cb272-1" tabindex="-1"></a>y2 <span class="ot">&lt;-</span> y <span class="sc">-</span> ar1<span class="sc">*</span>y.lag1 <span class="co"># Use ar1 to make y white noise</span></span>
+<span id="cb272-2"><a href="regression.html#cb272-2" tabindex="-1"></a></span>
+<span id="cb272-3"><a href="regression.html#cb272-3" tabindex="-1"></a>x.lag1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>,x[<span class="sc">-</span>n]) <span class="co"># x lagged at one time step</span></span>
+<span id="cb272-4"><a href="regression.html#cb272-4" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> x <span class="sc">-</span> ar1<span class="sc">*</span>x.lag1 <span class="co"># Use ar1 to make x white noise</span></span>
+<span id="cb272-5"><a href="regression.html#cb272-5" tabindex="-1"></a></span>
+<span id="cb272-6"><a href="regression.html#cb272-6" tabindex="-1"></a>ols2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y2<span class="sc">~</span>x2)</span>
+<span id="cb272-7"><a href="regression.html#cb272-7" tabindex="-1"></a><span class="fu">Acf</span>(<span class="fu">residuals</span>(ols2)) <span class="co"># clean</span></span></code></pre></div>
+<p><img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-3-3.png" width="672" /></p>
+</div>
+<div id="gls" class="section level3 hasAnchor" number="10.4.2">
+<h3><span class="header-section-number">10.4.2</span> GLS<a href="regression.html#gls" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We have all been taught OLS. OLS is a <strong>method</strong> for estimating the unknown parameters in a linear regression model – e.g., estimating the intercept (<span class="math inline">\(\beta_0\)</span>) and slope (<span class="math inline">\(\beta_1\)</span>) of a line in the formula <span class="math inline">\(y=\beta_0 + \beta_1x\)</span>. OLS works by choosing the parameters of a linear function by minimizing the sum of the squares of the differences between the observed dependent variable (<span class="math inline">\(y\)</span>) in the given data set and those predicted by the linear function (e.g., <span class="math inline">\(y=\beta_0 + \beta_1x\)</span> in the example above, but note that you can have more than one independent variable in a multiple regression). If conditions like homoscedasticity, independence, and normality are met, the OLS estimators are optimal (often called BLUE – Best Linear Unbiased Estimators). In other words, when the assumptions are met, OLS works. OLS has a nice property that teaching it is relatively simple and can be done without a bunch of matrix algebra. You can calculate the sum of squares by hand and in intro stats courses we relate OLS to simpler concepts like correlation.</p>
+<p>The other common least squares approach is generalized least squares (GLS). GLS is a <strong>method</strong> of estimation of a linear process which accounts for heteroscedasticity and structure in the error term. If OLS is used for homoscedastic regressions (i.e. <span class="math inline">\(y\)</span> has the same variance for each <span class="math inline">\(x\)</span>), GLS is used for heteroscedastic regression (different variances). GLS can also be used for correlated (non-independent) residuals. The theory with GLS is that the residuals can be transformed so that the variances are equal and uncorrelated. You can think of it like this: OLS minimizes the sum of the squared distances between the observed and predicted values assuming uncorrelated and equal variance in errors. GLS minimizes the squared distances relative to the <strong>covariance structure</strong> of the residuals.</p>
+<p>Formally, the GLS estimator is:
+<span class="math display">\[ \hat{\beta}_{GLS} = (X^\top \Sigma^{-1} X)^{-1} X^\top \Sigma^{-1} y \]</span>
+where <span class="math inline">\(\Sigma\)</span> is the error covariance matrix.</p>
+<p>When using <code>gls()</code> from the <code>nlme</code> package in R, estimation is typically done via <strong>Restricted Maximum Likelihood (REML)</strong>, which is particularly useful when estimating variance parameters in the presence of correlation. But the core idea is still weighted least squares — just with more structure in how we define those weights.</p>
+<p>In spatial and time-series analysis, the error term is often autocorrelated. So, if the important difference between OLS and GLS is the assumptions made about the error term of the model, we can use GLS to allow for autocorrelated errors and avoid having inefficient estimation of the unknown parameters in a linear model. <a href="https://www.reddit.com/r/AskStatistics/comments/36ocl1/why_not_always_use_gls_over_ols/">Why not always use GLS over OLS?</a>. It’s a good question and I think of it along the lines of the <a href="https://en.wikipedia.org/wiki/KISS_principle">KISS principle</a>. If you meet the OLS assumptions, use it. If you don’t then look for alternatives like GLS. Also, GLS requires you to know (or correctly guess) the structure of the residual correlations — if you get that wrong, you might do more harm than good.</p>
+<p>We will start by assuming <code>epsilon</code> follows an iid process (e.g., <span class="math inline">\(N(0,1)\)</span>) and we will fit a model with uncorrelated errors. E.g., here we use <code>gls</code> but this gives the same info as <code>lm</code> would because <code>gls</code> assumes iid errors unless told otherwise.</p>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="regression.html#cb273-1" tabindex="-1"></a><span class="co"># step 1 - the regular ols regression but fit with gls rather than lm</span></span>
+<span id="cb273-2"><a href="regression.html#cb273-2" tabindex="-1"></a>gls1 <span class="ot">&lt;-</span> <span class="fu">gls</span>(y<span class="sc">~</span>x)</span>
+<span id="cb273-3"><a href="regression.html#cb273-3" tabindex="-1"></a><span class="fu">summary</span>(gls1)</span></code></pre></div>
+<pre><code>## Generalized least squares fit by REML
+##   Model: y ~ x 
+##   Data: NULL 
+##        AIC     BIC    logLik
+##   395.8891 403.644 -194.9446
+## 
+## Coefficients:
+##                  Value Std.Error   t-value p-value
+## (Intercept) 0.01618039 0.1690315 0.0957241  0.9239
+## x           0.18575084 0.1726484 1.0758912  0.2846
+## 
+##  Correlation: 
+##   (Intr)
+## x -0.053
+## 
+## Standardized residuals:
+##        Min         Q1        Med         Q3        Max 
+## -2.4730783 -0.3348105  0.1230050  0.5216485  2.3144795 
+## 
+## Residual standard error: 1.687976 
+## Degrees of freedom: 100 total; 98 residual</code></pre>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="regression.html#cb275-1" tabindex="-1"></a><span class="co"># step 2 - inspect the residuals</span></span>
+<span id="cb275-2"><a href="regression.html#cb275-2" tabindex="-1"></a><span class="fu">Acf</span>(<span class="fu">residuals</span>(gls1)) <span class="co"># problem with independence</span></span></code></pre></div>
+<p><img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="regression.html#cb276-1" tabindex="-1"></a><span class="fu">Pacf</span>(<span class="fu">residuals</span>(gls1)) <span class="co"># looks like an AR1</span></span></code></pre></div>
+<p><img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<p>The residuals of this model are autocorrelated as an AR(1) process from looking at the plots. Thus, we have violated the assumption of independent residuals. But do not despair. We will use a GLS model that allows us to specify an AR(1) correlation structure for the residuals and perform hypothesis testing in the presence of this temporal structure. Doing so, will give us new and improved estimates of the parameters. We will thus sleep well knowing in our hearts that we have done good.</p>
+<p>We will do this by updating the <code>gls1</code> object and specifying that errors follow an autoregressive process with the <code>corARMA</code> function. By specifying <code>corARMA(p=1)</code> we are asking <code>nlme</code> to fit an AR(1) error structure. An AR(1) assumes that residuals closer in time are more similar and the correlation decays geometrically. If we had residuals that followed a different process (e.g., an ARMA(1,1) model) we could try to fit that with <code>corARMA(p=1, q=1)</code>. The <code>update</code> function will then try to estimate the AR and MA parameters using numerical optimization. This can fail when models are too complex (e.g., too high an order).</p>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="regression.html#cb277-1" tabindex="-1"></a><span class="co"># step 3 - update the model with an appropriate correlation structure</span></span>
+<span id="cb277-2"><a href="regression.html#cb277-2" tabindex="-1"></a>cs1 <span class="ot">&lt;-</span> <span class="fu">corARMA</span>(<span class="at">p=</span><span class="dv">1</span>)</span>
+<span id="cb277-3"><a href="regression.html#cb277-3" tabindex="-1"></a>gls2 <span class="ot">&lt;-</span> <span class="fu">update</span>(gls1,<span class="at">correlation=</span>cs1)</span>
+<span id="cb277-4"><a href="regression.html#cb277-4" tabindex="-1"></a><span class="fu">summary</span>(gls2)</span></code></pre></div>
+<pre><code>## Generalized least squares fit by REML
+##   Model: y ~ x 
+##   Data: NULL 
+##      AIC      BIC  logLik
+##   307.26 317.5998 -149.63
+## 
+## Correlation Structure: AR(1)
+##  Formula: ~1 
+##  Parameter estimate(s):
+##       Phi 
+## 0.7946776 
+## 
+## Coefficients:
+##                  Value Std.Error   t-value p-value
+## (Intercept) -0.0697539 0.5035316 -0.138529  0.8901
+## x            0.4496653 0.0948284  4.741882  0.0000
+## 
+##  Correlation: 
+##   (Intr)
+## x -0.023
+## 
+## Standardized residuals:
+##        Min         Q1        Med         Q3        Max 
+## -2.4516182 -0.4319559  0.1445074  0.5484367  2.1868956 
+## 
+## Residual standard error: 1.767387 
+## Degrees of freedom: 100 total; 98 residual</code></pre>
+<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb279-1"><a href="regression.html#cb279-1" tabindex="-1"></a><span class="co"># step 4 - and inspect the residuals. Note type=&quot;normalized&quot;</span></span>
+<span id="cb279-2"><a href="regression.html#cb279-2" tabindex="-1"></a><span class="co"># in the calls to `residuals`.</span></span>
+<span id="cb279-3"><a href="regression.html#cb279-3" tabindex="-1"></a><span class="fu">Acf</span>(<span class="fu">residuals</span>(gls2,<span class="at">type=</span><span class="st">&quot;normalized&quot;</span>)) <span class="co"># clean!</span></span></code></pre></div>
+<p><img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>We ask for the “normalized” residuals above because they are the transformed residuals that account for the error correlation and heteroscedasticity structure we specified. They’re essentially standardized residuals that assume your model’s covariance matrix is correct.</p>
+<p>Zooming out a bit. We fit a linear model of the form <span class="math inline">\(y=\beta_0 + \beta_1x\)</span> using GLS and got out estimates for the intercept (<span class="math inline">\(\hat\beta_0\)</span>) and slope (<span class="math inline">\(\hat\beta_1\)</span>). First, we assumed that the error term was uncorrelated. Looking at summary, we can see the the estimate of the slope (<span class="math inline">\(\hat\beta_1\)</span>) is 0.186 and significantly different than zero. We also have a variety of goodness of fit statistics and some other goodies. I’ll walk through those in the video. The important thing to wrap your head around here is that we fit GLS with uncorrelated errors meaning it’s essentially identical to OLS. Compare the above to the more familiar <code>summary(lm(y~x))</code>.</p>
+<p>So what’s the big deal? We started with a model that showed <code>x</code> as a significant predictor of <code>y</code>. We ended up, after much wailing and rending of garments, with a model that showed <code>x</code> as a significant predictor of <code>y</code>. Is it a better model? Was it worth the trouble? Let’s consider a few things.</p>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="regression.html#cb280-1" tabindex="-1"></a><span class="fu">anova</span>(gls1,gls2)</span></code></pre></div>
+<pre><code>##      Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+## gls1     1  3 395.8891 403.6440 -194.9445                        
+## gls2     2  4 307.2600 317.5998 -149.6300 1 vs 2 90.62914  &lt;.0001</code></pre>
+<ol style="list-style-type: decimal">
+<li><p>The GLS model with the correlated residuals has a lower AIC and BIC than the naive uncorrelated model.</p></li>
+<li><p>The original function we used to make <span class="math inline">\(y\)</span> was <span class="math inline">\(y=\beta_0 + \beta_1x + \epsilon\)</span> where <span class="math inline">\(\beta_0 = 0\)</span> and <span class="math inline">\(\beta_1\)</span> = 0.5. Both the GLS models got the intercept right (-0.07 for <code>gls2</code> and 0.02 for <code>gls1</code>). But the GLS model with the correlated residuals does a better job of getting the true value of the slope (0.45 vs 0.19).</p></li>
+<li><p>The error estimate on <span class="math inline">\(\beta_1\)</span> was lower on the model with correlated residuals than the naive uncorrelated model (0.0948 vs 0.1726). This is because GLS uses the correct structure of error variance and correlation, which improves <strong>efficiency</strong> of parameter estimation.</p></li>
+</ol>
+<p>Finally, we did it “right” – that should be satisfying. What would have happened if <span class="math inline">\(\beta_1\)</span> had been lower? That is, what if <span class="math inline">\(y\)</span> was made up of more noise and less <span class="math inline">\(x\)</span>? E.g., <span class="math inline">\(y=\beta_0 + 0.5(\beta_1)x + 2(\epsilon)\)</span>? This model, with 100 points should be pretty robust on the simple hypothesis test on the slope (H<span class="math inline">\(_1\)</span>: <span class="math inline">\(\beta_1 \neq 0\)</span>) but we know that parameter estimation is inefficient with autocorrelated residuals so having clean residuals and good parameter estimation is important.</p>
+<p>There is a lot to learn about how the <code>nlme</code> library goes about fitting the correlation structures. The definitive book on the subject is Pinheiro and Bates (2000) and should be something you look to for more information. Zuur’s 2009 book “Mixed Effects Models and Extensions in Ecology with R” is also quite good.</p>
+</div>
+</div>
+<div id="your-work-6" class="section level2 hasAnchor" number="10.5">
+<h2><span class="header-section-number">10.5</span> Your work<a href="regression.html#your-work-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="what-does-generalized-mean" class="section level3 hasAnchor" number="10.5.1">
+<h3><span class="header-section-number">10.5.1</span> What Does Generalized Mean?<a href="regression.html#what-does-generalized-mean" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Below I’m going to ask you to compare GLS and OLS using some real data. But first, write a paragraph that explains the difference between OLS and GLS. What is a generalized model?</p>
+</div>
+<div id="regression-simulation" class="section level3 hasAnchor" number="10.5.2">
+<h3><span class="header-section-number">10.5.2</span> Regression Simulation<a href="regression.html#regression-simulation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Now, revisit the code above and adjust <code>n</code>, <code>B1</code>, and <code>phi</code> to see how the results of an OLS model change. Is OLS or GLS better at capturing the true value of <code>B1</code> when there are non-independent errors? Or is OLS robust to moderate autocorrelation? You can do this in a full blown simulation of course, but you can just mess around with the values a bit and try to get a feel for it.</p>
+</div>
+<div id="regression-for-real" class="section level3 hasAnchor" number="10.5.3">
+<h3><span class="header-section-number">10.5.3</span> Regression for real<a href="regression.html#regression-for-real" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Finally, let’s look at some data. A great <a href="http://onlinelibrary.wiley.com/doi/10.1002/2015GL067613/full">paper</a> by Connie Woodhouse and colleagues looks at how annual flows on the Colorado River are affected by precipitation, soil moisture, and temperature. Read the paper. It’s great and short.</p>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="regression.html#cb282-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/woodhouse.rds&quot;</span>)</span>
+<span id="cb282-2"><a href="regression.html#cb282-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">MAF =</span> LeesWYflow <span class="sc">/</span> <span class="fl">1e6</span>)</span>
+<span id="cb282-3"><a href="regression.html#cb282-3" tabindex="-1"></a><span class="co"># add a 5-yr moving average</span></span>
+<span id="cb282-4"><a href="regression.html#cb282-4" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">MAF5yr =</span> <span class="fu">c</span>(stats<span class="sc">::</span><span class="fu">filter</span>(MAF,<span class="at">filter =</span> <span class="fu">rep</span>(<span class="fl">0.2</span>,<span class="dv">5</span>))))</span>
+<span id="cb282-5"><a href="regression.html#cb282-5" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat, <span class="fu">aes</span>(<span class="at">x=</span>Year)) <span class="sc">+</span></span>
+<span id="cb282-6"><a href="regression.html#cb282-6" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>MAF),<span class="at">color=</span><span class="st">&quot;lightgreen&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb282-7"><a href="regression.html#cb282-7" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>MAF5yr),<span class="at">color=</span><span class="st">&quot;darkgreen&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb282-8"><a href="regression.html#cb282-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span> <span class="st">&quot;Millions of Acre Feet&quot;</span>, <span class="at">title=</span><span class="st">&quot;Colorado River at Lee&#39;s Ferry&quot;</span>,</span>
+<span id="cb282-9"><a href="regression.html#cb282-9" tabindex="-1"></a>       <span class="at">sub =</span> <span class="st">&quot;Total Flow for Water Year&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb282-10"><a href="regression.html#cb282-10" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))</span></code></pre></div>
+<pre><code>## Warning: Removed 4 rows containing missing values or values outside the scale range
+## (`geom_line()`).</code></pre>
+<p><img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>The main gist of the paper is that precipitation explains most of the variability in the river’s flow but that temperature is important under certain conditions. E.g., “Different combinations of temperature, precipitation, and soil moisture can result in flow deficits of similar magnitude, but recent droughts have been amplified by warmer temperatures that exacerbate the effects of relatively modest precipitation deficits.” This is cool: Transpiration and evaporation are greater when it’s warmer, right? The cool thing that Woodhouse et al. have done is tease out the relationship between precipitation and temperature in a new way.</p>
+<p>The data they used are <a href="http://api.onlinelibrary.wiley.com/asset/v1/doi/10.1002%2F2015GL067613/asset/supinfo%2Fgrl54032-sup-0002-supplementary.xls?l=SkaBT8QEx2qJNlNuWYUA8egjXrDIGPrsc%2BJNFhVbgejndxaATsnxsKxw9Obx5z6ES3xmGsI%2BC8dr%0ATCeBc2NX422bcHVTPUXn">online</a> and I’ve grabbed the relevant info and put it in the file <code>woodhouse.rds</code> as a <code>data.frame</code>. Explore the data (go back to week one for ideas of what to do – <strong>plot your data!</strong>) and eventually make a model of river flow (<code>LeesWYflow</code>) as a function of October to April precipitation (<code>OctAprP</code>). The units on flow are cumulative flow over the water year in acre feet and cumulative October to April precipitation is in mm.</p>
+<p>Is it a good model? How do the residuals look in a time series context? Interpret. Does a GLS approach change your interpretation from an OLS approach? Given your work with the simulated data above do you think Woodhouse et al. are on safe footing with OLS?</p>
+</div>
+<div id="write-up-and-reflect-6" class="section level3 hasAnchor" number="10.5.4">
+<h3><span class="header-section-number">10.5.4</span> Write Up and Reflect<a href="regression.html#write-up-and-reflect-6" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Pass in a R Markdown doc with your analysis. Leave all code visible, although you may quiet messages and warnings if desired. Turn in your knitted html. The last section of your document should include a reflection where you explain how it all went. What triumphs did you have? What is still confusing?</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="cross-correlation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="filtering-smoothing.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section",
+    "scroll_highlight": true
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

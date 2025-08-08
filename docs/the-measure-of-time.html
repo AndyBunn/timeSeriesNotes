@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 The Measure of Time | A collection of note for ESCI 504</title>
+  <meta name="description" content="Helpful materials for ESCI 504" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 The Measure of Time | A collection of note for ESCI 504" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Helpful materials for ESCI 504" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 The Measure of Time | A collection of note for ESCI 504" />
+  
+  <meta name="twitter:description" content="Helpful materials for ESCI 504" />
+  
+
+<meta name="author" content="Andy Bunn" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="an-aside-understanding-methods-and-generics-in-r.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.33/datatables.js"></script>
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+<script>
+/* ========================================================================
+ * Bootstrap: transition.js v3.3.7
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
+
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
+
+    var transEndEventNames = {
+      WebkitTransition : 'webkitTransitionEnd',
+      MozTransition    : 'transitionend',
+      OTransition      : 'oTransitionEnd otransitionend',
+      transition       : 'transitionend'
+    }
+
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
+
+    return false // explicit for ie8 (  ._.)
+  }
+
+  // http://blog.alexmaccaw.com/css-transitions
+  $.fn.emulateTransitionEnd = function (duration) {
+    var called = false
+    var $el = this
+    $(this).one('bsTransitionEnd', function () { called = true })
+    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+    setTimeout(callback, duration)
+    return this
+  }
+
+  $(function () {
+    $.support.transition = transitionEnd()
+
+    if (!$.support.transition) return
+
+    $.event.special.bsTransitionEnd = {
+      bindType: $.support.transition.end,
+      delegateType: $.support.transition.end,
+      handle: function (e) {
+        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+      }
+    }
+  })
+
+}(jQuery);
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: collapse.js v3.3.7
+ * http://getbootstrap.com/javascript/#collapse
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+/* jshint latedef: false */
+
++function ($) {
+  'use strict';
+
+  // COLLAPSE PUBLIC CLASS DEFINITION
+  // ================================
+
+  var Collapse = function (element, options) {
+    this.$element      = $(element)
+    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+    this.$trigger      = $('[data-toggle="collapse"][href="#' + element.id + '"],' +
+                           '[data-toggle="collapse"][data-target="#' + element.id + '"]')
+    this.transitioning = null
+
+    if (this.options.parent) {
+      this.$parent = this.getParent()
+    } else {
+      this.addAriaAndCollapsedClass(this.$element, this.$trigger)
+    }
+
+    if (this.options.toggle) this.toggle()
+  }
+
+  Collapse.VERSION  = '3.3.7'
+
+  Collapse.TRANSITION_DURATION = 350
+
+  Collapse.DEFAULTS = {
+    toggle: true
+  }
+
+  Collapse.prototype.dimension = function () {
+    var hasWidth = this.$element.hasClass('width')
+    return hasWidth ? 'width' : 'height'
+  }
+
+  Collapse.prototype.show = function () {
+    if (this.transitioning || this.$element.hasClass('in')) return
+
+    var activesData
+    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+
+    if (actives && actives.length) {
+      activesData = actives.data('bs.collapse')
+      if (activesData && activesData.transitioning) return
+    }
+
+    var startEvent = $.Event('show.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    if (actives && actives.length) {
+      Plugin.call(actives, 'hide')
+      activesData || actives.data('bs.collapse', null)
+    }
+
+    var dimension = this.dimension()
+
+    this.$element
+      .removeClass('collapse')
+      .addClass('collapsing')[dimension](0)
+      .attr('aria-expanded', true)
+
+    this.$trigger
+      .removeClass('collapsed')
+      .attr('aria-expanded', true)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse in')[dimension]('')
+      this.transitioning = 0
+      this.$element
+        .trigger('shown.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+    this.$element
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
+  }
+
+  Collapse.prototype.hide = function () {
+    if (this.transitioning || !this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('hide.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var dimension = this.dimension()
+
+    this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+
+    this.$element
+      .addClass('collapsing')
+      .removeClass('collapse in')
+      .attr('aria-expanded', false)
+
+    this.$trigger
+      .addClass('collapsed')
+      .attr('aria-expanded', false)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.transitioning = 0
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse')
+        .trigger('hidden.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    this.$element
+      [dimension](0)
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
+  }
+
+  Collapse.prototype.toggle = function () {
+    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+  }
+
+  Collapse.prototype.getParent = function () {
+    return $(this.options.parent)
+      .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
+      .each($.proxy(function (i, element) {
+        var $element = $(element)
+        this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
+      }, this))
+      .end()
+  }
+
+  Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
+    var isOpen = $element.hasClass('in')
+
+    $element.attr('aria-expanded', isOpen)
+    $trigger
+      .toggleClass('collapsed', !isOpen)
+      .attr('aria-expanded', isOpen)
+  }
+
+  function getTargetFromTrigger($trigger) {
+    var href
+    var target = $trigger.attr('data-target')
+      || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+
+    return $(target)
+  }
+
+
+  // COLLAPSE PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.collapse')
+      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data && options.toggle && /show|hide/.test(option)) options.toggle = false
+      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  var old = $.fn.collapse
+
+  $.fn.collapse             = Plugin
+  $.fn.collapse.Constructor = Collapse
+
+
+  // COLLAPSE NO CONFLICT
+  // ====================
+
+  $.fn.collapse.noConflict = function () {
+    $.fn.collapse = old
+    return this
+  }
+
+
+  // COLLAPSE DATA-API
+  // =================
+
+  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
+    var $this   = $(this)
+
+    if (!$this.attr('data-target')) e.preventDefault()
+
+    var $target = getTargetFromTrigger($this)
+    var data    = $target.data('bs.collapse')
+    var option  = data ? 'toggle' : $this.data()
+
+    Plugin.call($target, option)
+  })
+
+}(jQuery);
+</script>
+<script>
+window.initializeCodeFolding = function(show) {
+
+  // handlers for show-all and hide all
+  $("#rmd-show-all-code").click(function() {
+    // close the dropdown menu when an option is clicked
+    $("#allCodeButton").dropdown("toggle");
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('show');
+    });
+  });
+  $("#rmd-hide-all-code").click(function() {
+    // close the dropdown menu when an option is clicked
+    $("#allCodeButton").dropdown("toggle");
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('hide');
+    });
+  });
+
+  // index for unique code element ids
+  var currentIndex = 1;
+
+  // select all R code blocks
+  var rCodeBlocks = $('pre.sourceCode, pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan');
+  rCodeBlocks.each(function() {
+
+    // if code block has been labeled with class `fold-show`, show the code on init!
+    var classList = $(this).attr('class').split(/\s+/);
+    for (var i = 0; i < classList.length; i++) {
+    if (classList[i] === 'fold-show') {
+        show = true;
+      }
+      // AGB add fold-hide
+    if (classList[i] === 'fold-hide') {
+        show = false;
+      }
+    }
+    // AGB
+    // if code block has been labeled with class `fold-hide`, hide the code on init!
+//    var classList = $(this).attr('class').split(/\s+/);
+//    for (var i = 0; i < classList.length; i++) {
+//    if (classList[i] === 'fold-hide') {
+//        show = false;
+//      }
+//    }
+
+    // create a collapsable div to wrap the code in
+    var div = $('<div class="collapse r-code-collapse"></div>');
+    if (show)
+      div.addClass('in');
+    var id = 'rcode-643E0F36' + currentIndex++;
+    div.attr('id', id);
+    $(this).before(div);
+    $(this).detach().appendTo(div);
+
+    // add a show code button right above
+    var showCodeText = $('<span>' + (show ? 'Hide' : 'Code') + '</span>');
+    var showCodeButton = $('<button type="button" class="btn btn-default btn-xs code-folding-btn pull-right"></button>');
+    showCodeButton.append(showCodeText);
+    showCodeButton
+        .attr('data-toggle', 'collapse')
+        .attr('data-target', '#' + id)
+        .attr('aria-expanded', show)
+        .attr('aria-controls', id);
+
+    var buttonRow = $('<div class="row"></div>');
+    var buttonCol = $('<div class="col-md-12"></div>');
+
+    buttonCol.append(showCodeButton);
+    buttonRow.append(buttonCol);
+
+    div.before(buttonRow);
+
+    // hack: return show to false, otherwise all next codeBlocks will be shown!
+    show = true;
+
+    // update state of button on show/hide
+    div.on('hidden.bs.collapse', function () {
+      showCodeText.text('Code');
+    });
+    div.on('show.bs.collapse', function () {
+      showCodeText.text('Hide');
+    });
+  });
+
+}
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: dropdown.js v3.3.7
+ * http://getbootstrap.com/javascript/#dropdowns
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // DROPDOWN CLASS DEFINITION
+  // =========================
+
+  var backdrop = '.dropdown-backdrop'
+  var toggle   = '[data-toggle="dropdown"]'
+  var Dropdown = function (element) {
+    $(element).on('click.bs.dropdown', this.toggle)
+  }
+
+  Dropdown.VERSION = '3.3.7'
+
+  function getParent($this) {
+    var selector = $this.attr('data-target')
+
+    if (!selector) {
+      selector = $this.attr('href')
+      selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
+    }
+
+    var $parent = selector && $(selector)
+
+    return $parent && $parent.length ? $parent : $this.parent()
+  }
+
+  function clearMenus(e) {
+    if (e && e.which === 3) return
+    $(backdrop).remove()
+    $(toggle).each(function () {
+      var $this         = $(this)
+      var $parent       = getParent($this)
+      var relatedTarget = { relatedTarget: this }
+
+      if (!$parent.hasClass('open')) return
+
+      if (e && e.type == 'click' && /input|textarea/i.test(e.target.tagName) && $.contains($parent[0], e.target)) return
+
+      $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
+
+      if (e.isDefaultPrevented()) return
+
+      $this.attr('aria-expanded', 'false')
+      $parent.removeClass('open').trigger($.Event('hidden.bs.dropdown', relatedTarget))
+    })
+  }
+
+  Dropdown.prototype.toggle = function (e) {
+    var $this = $(this)
+
+    if ($this.is('.disabled, :disabled')) return
+
+    var $parent  = getParent($this)
+    var isActive = $parent.hasClass('open')
+
+    clearMenus()
+
+    if (!isActive) {
+      if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
+        // if mobile we use a backdrop because click events don't delegate
+        $(document.createElement('div'))
+          .addClass('dropdown-backdrop')
+          .insertAfter($(this))
+          .on('click', clearMenus)
+      }
+
+      var relatedTarget = { relatedTarget: this }
+      $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget))
+
+      if (e.isDefaultPrevented()) return
+
+      $this
+        .trigger('focus')
+        .attr('aria-expanded', 'true')
+
+      $parent
+        .toggleClass('open')
+        .trigger($.Event('shown.bs.dropdown', relatedTarget))
+    }
+
+    return false
+  }
+
+  Dropdown.prototype.keydown = function (e) {
+    if (!/(38|40|27|32)/.test(e.which) || /input|textarea/i.test(e.target.tagName)) return
+
+    var $this = $(this)
+
+    e.preventDefault()
+    e.stopPropagation()
+
+    if ($this.is('.disabled, :disabled')) return
+
+    var $parent  = getParent($this)
+    var isActive = $parent.hasClass('open')
+
+    if (!isActive && e.which != 27 || isActive && e.which == 27) {
+      if (e.which == 27) $parent.find(toggle).trigger('focus')
+      return $this.trigger('click')
+    }
+
+    var desc = ' li:not(.disabled):visible a'
+    var $items = $parent.find('.dropdown-menu' + desc)
+
+    if (!$items.length) return
+
+    var index = $items.index(e.target)
+
+    if (e.which == 38 && index > 0)                 index--         // up
+    if (e.which == 40 && index < $items.length - 1) index++         // down
+    if (!~index)                                    index = 0
+
+    $items.eq(index).trigger('focus')
+  }
+
+
+  // DROPDOWN PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this = $(this)
+      var data  = $this.data('bs.dropdown')
+
+      if (!data) $this.data('bs.dropdown', (data = new Dropdown(this)))
+      if (typeof option == 'string') data[option].call($this)
+    })
+  }
+
+  var old = $.fn.dropdown
+
+  $.fn.dropdown             = Plugin
+  $.fn.dropdown.Constructor = Dropdown
+
+
+  // DROPDOWN NO CONFLICT
+  // ====================
+
+  $.fn.dropdown.noConflict = function () {
+    $.fn.dropdown = old
+    return this
+  }
+
+
+  // APPLY TO STANDARD DROPDOWN ELEMENTS
+  // ===================================
+
+  $(document)
+    .on('click.bs.dropdown.data-api', clearMenus)
+    .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
+    .on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle)
+    .on('keydown.bs.dropdown.data-api', toggle, Dropdown.prototype.keydown)
+    .on('keydown.bs.dropdown.data-api', '.dropdown-menu', Dropdown.prototype.keydown)
+
+}(jQuery);
+</script>
+<style type="text/css">
+.code-folding-btn {
+  margin-bottom: 4px;
+}
+
+.row { display: flex; }
+.collapse { display: none; }
+.in { display:block }
+.pull-right > .dropdown-menu {
+    right: 0;
+    left: auto;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.open > .dropdown-menu {
+    display: block;
+    color: #ffffff;
+    background-color: #ffffff;
+    background-image: none;
+    border-color: #92897e;
+}
+
+.dropdown-menu > li > a {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #e95420;
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #e95420;
+  outline: 0;
+}
+.dropdown-menu > .disabled > a,
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  color: #aea79f;
+}
+
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  text-decoration: none;
+  cursor: not-allowed;
+  background-color: transparent;
+  background-image: none;
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+
+.btn {
+  display: inline-block;
+  margin-bottom: 1;
+  font-weight: normal;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  padding: 4px 8px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.btn:hover,
+.btn:focus,
+.btn.focus {
+  color: #ffffff;
+  text-decoration: none;
+}
+.btn:active,
+.btn.active {
+  background-image: none;
+  outline: 0;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.btn.disabled,
+.btn[disabled],
+fieldset[disabled] .btn {
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  opacity: 0.65;
+  box-shadow: none;
+}
+a.btn.disabled,
+fieldset[disabled] a.btn {
+  pointer-events: none;
+}
+.btn-default {
+  color: #ffffff;
+  background-color: #aea79f; #important
+  border-color: #aea79f;
+}
+
+.btn-default:focus,
+.btn-default.focus {
+  color: #ffffff;
+  background-color: #978e83;
+  border-color: #6f675e;
+}
+
+.btn-default:hover {
+  color: #ffffff;
+  background-color: #978e83;
+  border-color: #92897e;
+}
+.btn-default:active,
+.btn-default.active,
+.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+  border-radius: 0;
+}
+.btn-group > .btn:first-child {
+  margin-left: 0;
+}
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btn-group > .btn:last-child:not(:first-child),
+.btn-group > .dropdown-toggle:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btn-group > .btn-group {
+  float: left;
+}
+.btn-group > .btn-group:not(:first-child):not(:last-child) > .btn {
+  border-radius: 0;
+}
+.btn-group > .btn-group:first-child:not(:last-child) > .btn:last-child,
+.btn-group > .btn-group:first-child:not(:last-child) > .dropdown-toggle {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btn-group > .btn-group:last-child:not(:first-child) > .btn:first-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btn-group .dropdown-toggle:active,
+.btn-group.open .dropdown-toggle {
+  outline: 0;
+}
+.btn-group > .btn + .dropdown-toggle {
+  padding-right: 8px;
+  padding-left: 8px;
+}
+.btn-group > .btn-lg + .dropdown-toggle {
+  padding-right: 12px;
+  padding-left: 12px;
+}
+.btn-group.open .dropdown-toggle {
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.btn-group.open .dropdown-toggle.btn-link {
+  box-shadow: none;
+}
+
+</style>
+<script>
+var str = '<div class="btn-group pull-right" style="position: fixed; right: 50px; top: 10px; z-index: 200"><button type="button" class="btn btn-default btn-xs dropdown-toggle" id="allCodeButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" data-_extension-text-contrast=""><span>Code</span> <span class="caret"></span></button><ul class="dropdown-menu" style="min-width: 50px;"><li><a id="rmd-show-all-code" href="#">Show All Code</a></li><li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li></ul></div>';
+document.write(str);
+</script>
+<script>
+$(document).ready(function () {
+  // AGB add fold-hide changed === to !== to default to showing code
+  window.initializeCodeFolding("show" !== "hide");
+});
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preamble</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#technical-setup"><i class="fa fa-check"></i><b>1.1</b> Technical Setup</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#project-structure"><i class="fa fa-check"></i><b>1.1.1</b> Project Structure</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#why-use-projects-in-r"><i class="fa fa-check"></i><b>1.1.2</b> Why Use Projects in R?</a></li>
+<li class="chapter" data-level="1.1.3" data-path="index.html"><a href="index.html#why-reproducibility-matters"><i class="fa fa-check"></i><b>1.1.3</b> Why Reproducibility Matters</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html"><i class="fa fa-check"></i><b>2</b> The Measure of Time</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#big-idea"><i class="fa fa-check"></i><b>2.1</b> Big Idea</a></li>
+<li class="chapter" data-level="2.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#reading"><i class="fa fa-check"></i><b>2.2</b> Reading</a></li>
+<li class="chapter" data-level="2.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#packages"><i class="fa fa-check"></i><b>2.3</b> Packages</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#load"><i class="fa fa-check"></i><b>2.3.1</b> Load</a></li>
+<li class="chapter" data-level="2.3.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#keep-up-to-date"><i class="fa fa-check"></i><b>2.3.2</b> Keep Up to Date</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#what-kinds-of-data"><i class="fa fa-check"></i><b>2.4</b> What Kinds of Data?</a></li>
+<li class="chapter" data-level="2.5" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#the-ts-class"><i class="fa fa-check"></i><b>2.5</b> The <code>ts</code> Class</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#a-very-useful-class"><i class="fa fa-check"></i><b>2.5.1</b> A Very Useful Class</a></li>
+<li class="chapter" data-level="2.5.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#digression-describing-a-time-series"><i class="fa fa-check"></i><b>2.5.2</b> Digression: Describing a Time Series</a></li>
+<li class="chapter" data-level="2.5.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#more-on-the-ts-index"><i class="fa fa-check"></i><b>2.5.3</b> More on the <code>ts</code> Index</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#trend-in-time"><i class="fa fa-check"></i><b>2.6</b> Trend in time</a></li>
+<li class="chapter" data-level="2.7" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#the-zoo-class"><i class="fa fa-check"></i><b>2.7</b> The <code>zoo</code> Class</a></li>
+<li class="chapter" data-level="2.8" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#lubricate-the-dates"><i class="fa fa-check"></i><b>2.8</b> Lubricate the Dates</a></li>
+<li class="chapter" data-level="2.9" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#tidy-it-up"><i class="fa fa-check"></i><b>2.9</b> Tidy it Up</a></li>
+<li class="chapter" data-level="2.10" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#your-work"><i class="fa fa-check"></i><b>2.10</b> Your Work</a>
+<ul>
+<li class="chapter" data-level="2.10.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#berkeley-earth-temperature-data"><i class="fa fa-check"></i><b>2.10.1</b> Berkeley Earth Temperature Data</a></li>
+<li class="chapter" data-level="2.10.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#your-turn"><i class="fa fa-check"></i><b>2.10.2</b> Your Turn</a></li>
+<li class="chapter" data-level="2.10.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#write-up-and-reflect"><i class="fa fa-check"></i><b>2.10.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html"><i class="fa fa-check"></i><b>3</b> An Aside: Understanding Methods and Generics in R</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#youve-come-a-long-way-in-r"><i class="fa fa-check"></i><b>3.1</b> You’ve Come a Long Way in R</a></li>
+<li class="chapter" data-level="3.2" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#why-use-generics"><i class="fa fa-check"></i><b>3.2</b> Why Use Generics?</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#same-function-different-behavior-what-gives"><i class="fa fa-check"></i><b>3.2.1</b> Same Function, Different Behavior — What Gives?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#how-this-works"><i class="fa fa-check"></i><b>3.3</b> How This Works</a></li>
+<li class="chapter" data-level="3.4" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#whats-the-difference-between-a-generic-and-a-method"><i class="fa fa-check"></i><b>3.4</b> What’s the Difference Between a Generic and a Method?</a></li>
+<li class="chapter" data-level="3.5" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#common-generic-functions"><i class="fa fa-check"></i><b>3.5</b> Common Generic Functions</a></li>
+<li class="chapter" data-level="3.6" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#how-to-explore-and-understand-methods"><i class="fa fa-check"></i><b>3.6</b> How to Explore and Understand Methods</a></li>
+<li class="chapter" data-level="3.7" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#why-this-matters"><i class="fa fa-check"></i><b>3.7</b> Why This Matters</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="decomposition.html"><a href="decomposition.html"><i class="fa fa-check"></i><b>4</b> Decomposition</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="decomposition.html"><a href="decomposition.html#big-idea-1"><i class="fa fa-check"></i><b>4.1</b> Big Idea</a></li>
+<li class="chapter" data-level="4.2" data-path="decomposition.html"><a href="decomposition.html#reading-1"><i class="fa fa-check"></i><b>4.2</b> Reading</a></li>
+<li class="chapter" data-level="4.3" data-path="decomposition.html"><a href="decomposition.html#packages-1"><i class="fa fa-check"></i><b>4.3</b> Packages</a></li>
+<li class="chapter" data-level="4.4" data-path="decomposition.html"><a href="decomposition.html#seasonality-and-decomposition"><i class="fa fa-check"></i><b>4.4</b> Seasonality and decomposition</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="decomposition.html"><a href="decomposition.html#breaking-down-a-series-the-tedious-way"><i class="fa fa-check"></i><b>4.4.1</b> Breaking down a series the tedious way</a></li>
+<li class="chapter" data-level="4.4.2" data-path="decomposition.html"><a href="decomposition.html#breaking-down-a-series-the-easy-way"><i class="fa fa-check"></i><b>4.4.2</b> Breaking down a series the easy way</a></li>
+<li class="chapter" data-level="4.4.3" data-path="decomposition.html"><a href="decomposition.html#how-does-m-differ-from-the-slope-in-a-lm"><i class="fa fa-check"></i><b>4.4.3</b> How does <code>m</code> differ from the slope in a <code>lm</code>?</a></li>
+<li class="chapter" data-level="4.4.4" data-path="decomposition.html"><a href="decomposition.html#warning"><i class="fa fa-check"></i><b>4.4.4</b> Warning</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="decomposition.html"><a href="decomposition.html#stationarity"><i class="fa fa-check"></i><b>4.5</b> Stationarity</a></li>
+<li class="chapter" data-level="4.6" data-path="decomposition.html"><a href="decomposition.html#your-work-1"><i class="fa fa-check"></i><b>4.6</b> Your Work</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="decomposition.html"><a href="decomposition.html#air-passengers"><i class="fa fa-check"></i><b>4.6.1</b> Air Passengers</a></li>
+<li class="chapter" data-level="4.6.2" data-path="decomposition.html"><a href="decomposition.html#kbli"><i class="fa fa-check"></i><b>4.6.2</b> KBLI</a></li>
+<li class="chapter" data-level="4.6.3" data-path="decomposition.html"><a href="decomposition.html#write-up-and-reflect-1"><i class="fa fa-check"></i><b>4.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html"><i class="fa fa-check"></i><b>5</b> AR(p), ACF, PACF, etc.</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#big-idea-2"><i class="fa fa-check"></i><b>5.1</b> Big Idea</a></li>
+<li class="chapter" data-level="5.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#reading-2"><i class="fa fa-check"></i><b>5.2</b> Reading</a></li>
+<li class="chapter" data-level="5.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#packages-2"><i class="fa fa-check"></i><b>5.3</b> Packages</a></li>
+<li class="chapter" data-level="5.4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#correlation-and-covariance"><i class="fa fa-check"></i><b>5.4</b> Correlation and Covariance</a></li>
+<li class="chapter" data-level="5.5" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation"><i class="fa fa-check"></i><b>5.5</b> Autocorrelation</a></li>
+<li class="chapter" data-level="5.6" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation-function"><i class="fa fa-check"></i><b>5.6</b> Autocorrelation Function</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#the-very-fun-presentation"><i class="fa fa-check"></i><b>5.6.1</b> The Very Fun Presentation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#the-boring-presentation"><i class="fa fa-check"></i><b>5.7</b> The Boring Presentation</a>
+<ul>
+<li class="chapter" data-level="5.7.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#tidy"><i class="fa fa-check"></i><b>5.7.1</b> Tidy</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#partial-autocorrelation-function"><i class="fa fa-check"></i><b>5.8</b> Partial Autocorrelation Function</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#pacf"><i class="fa fa-check"></i><b>5.8.1</b> PACF</a></li>
+<li class="chapter" data-level="5.8.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#underneath-the-hood-of-pacf"><i class="fa fa-check"></i><b>5.8.2</b> Underneath the Hood of PACF</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#ar1-to-arp"><i class="fa fa-check"></i><b>5.9</b> AR(1) to AR(p)</a></li>
+<li class="chapter" data-level="5.10" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#random-walks"><i class="fa fa-check"></i><b>5.10</b> Random walks</a>
+<ul>
+<li class="chapter" data-level="5.10.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#stationarity-is-dead"><i class="fa fa-check"></i><b>5.10.1</b> Stationarity is dead</a></li>
+</ul></li>
+<li class="chapter" data-level="5.11" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation-examples-with-real-data"><i class="fa fa-check"></i><b>5.11</b> Autocorrelation examples with real data</a>
+<ul>
+<li class="chapter" data-level="5.11.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#nile"><i class="fa fa-check"></i><b>5.11.1</b> Nile</a></li>
+<li class="chapter" data-level="5.11.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#air-temperature"><i class="fa fa-check"></i><b>5.11.2</b> Air Temperature</a></li>
+<li class="chapter" data-level="5.11.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#sunspots"><i class="fa fa-check"></i><b>5.11.3</b> Sunspots</a></li>
+</ul></li>
+<li class="chapter" data-level="5.12" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#choosing-the-order-of-an-arp-model-by-aic"><i class="fa fa-check"></i><b>5.12</b> Choosing the Order of an AR(p) Model by AIC</a></li>
+<li class="chapter" data-level="5.13" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#your-work-2"><i class="fa fa-check"></i><b>5.13</b> Your work</a>
+<ul>
+<li class="chapter" data-level="5.13.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#acf-and-pacf-with-different-values-of-phi."><i class="fa fa-check"></i><b>5.13.1</b> ACF and PACF with different values of <span class="math inline">\(\phi\)</span>.</a></li>
+<li class="chapter" data-level="5.13.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#roll-your-own-ar2"><i class="fa fa-check"></i><b>5.13.2</b> Roll your own AR(2)</a></li>
+<li class="chapter" data-level="5.13.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#sockeye"><i class="fa fa-check"></i><b>5.13.3</b> Sockeye</a></li>
+<li class="chapter" data-level="5.13.4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#write-up-and-reflect-2"><i class="fa fa-check"></i><b>5.13.4</b> Write Up and Reflect</a></li>
+</ul></li>
+<li class="chapter" data-level="5.14" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#postscript-a-helpful-plotting-chunk"><i class="fa fa-check"></i><b>5.14</b> Postscript: A Helpful Plotting Chunk</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><i class="fa fa-check"></i><b>6</b> Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#introduction"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#acf-and-pacf-of-a-single-ma1-simulation"><i class="fa fa-check"></i><b>6.2</b> ACF and PACF of a Single MA(1) Simulation</a></li>
+<li class="chapter" data-level="6.3" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#simulation-study-across-many-ma1-coefficients"><i class="fa fa-check"></i><b>6.3</b> Simulation Study Across Many MA(1) Coefficients</a></li>
+<li class="chapter" data-level="6.4" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-1-pacf-lag-1-underestimates-theta"><i class="fa fa-check"></i><b>6.4</b> Insight 1: PACF Lag 1 Underestimates <span class="math inline">\(\theta\)</span></a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens"><i class="fa fa-check"></i><b>6.4.1</b> Why This Happens</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-2-pacf-lag-2-is-consistently-negative"><i class="fa fa-check"></i><b>6.5</b> Insight 2: PACF Lag 2 is Consistently Negative</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens-1"><i class="fa fa-check"></i><b>6.5.1</b> Why This Happens</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#conclusion"><i class="fa fa-check"></i><b>6.6</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="armapq.html"><a href="armapq.html"><i class="fa fa-check"></i><b>7</b> ARMA(p,q)</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="armapq.html"><a href="armapq.html#big-idea-3"><i class="fa fa-check"></i><b>7.1</b> Big Idea</a></li>
+<li class="chapter" data-level="7.2" data-path="armapq.html"><a href="armapq.html#reading-3"><i class="fa fa-check"></i><b>7.2</b> Reading</a></li>
+<li class="chapter" data-level="7.3" data-path="armapq.html"><a href="armapq.html#packages-3"><i class="fa fa-check"></i><b>7.3</b> Packages</a></li>
+<li class="chapter" data-level="7.4" data-path="armapq.html"><a href="armapq.html#arp-to-maq"><i class="fa fa-check"></i><b>7.4</b> AR(p) to MA(q)</a></li>
+<li class="chapter" data-level="7.5" data-path="armapq.html"><a href="armapq.html#armapq-1"><i class="fa fa-check"></i><b>7.5</b> ARMA(p,q)</a></li>
+<li class="chapter" data-level="7.6" data-path="armapq.html"><a href="armapq.html#what-about-arimap-d-q"><i class="fa fa-check"></i><b>7.6</b> What about ARIMA(p, d, q)?</a>
+<ul>
+<li class="chapter" data-level="7.6.1" data-path="armapq.html"><a href="armapq.html#why-do-arma-models-require-stationarity"><i class="fa fa-check"></i><b>7.6.1</b> Why Do ARMA Models Require Stationarity?</a></li>
+<li class="chapter" data-level="7.6.2" data-path="armapq.html"><a href="armapq.html#simulated-data"><i class="fa fa-check"></i><b>7.6.2</b> Simulated Data</a></li>
+</ul></li>
+<li class="chapter" data-level="7.7" data-path="armapq.html"><a href="armapq.html#evaluating-arma-models"><i class="fa fa-check"></i><b>7.7</b> Evaluating ARMA models</a>
+<ul>
+<li class="chapter" data-level="7.7.1" data-path="armapq.html"><a href="armapq.html#simulated-data-1"><i class="fa fa-check"></i><b>7.7.1</b> Simulated Data</a></li>
+<li class="chapter" data-level="7.7.2" data-path="armapq.html"><a href="armapq.html#sst-data"><i class="fa fa-check"></i><b>7.7.2</b> SST Data</a></li>
+<li class="chapter" data-level="7.7.3" data-path="armapq.html"><a href="armapq.html#how-do-you-decide-which-information-criterion-to-use"><i class="fa fa-check"></i><b>7.7.3</b> How Do You Decide Which Information Criterion to Use?</a></li>
+</ul></li>
+<li class="chapter" data-level="7.8" data-path="armapq.html"><a href="armapq.html#your-work-3"><i class="fa fa-check"></i><b>7.8</b> Your work</a>
+<ul>
+<li class="chapter" data-level="7.8.1" data-path="armapq.html"><a href="armapq.html#bunnies-and-kitties"><i class="fa fa-check"></i><b>7.8.1</b> Bunnies and Kitties</a></li>
+<li class="chapter" data-level="7.8.2" data-path="armapq.html"><a href="armapq.html#write-up-and-reflect-3"><i class="fa fa-check"></i><b>7.8.2</b> Write up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i><b>8</b> Forecasting</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="forecasting.html"><a href="forecasting.html#big-idea-4"><i class="fa fa-check"></i><b>8.1</b> Big Idea</a></li>
+<li class="chapter" data-level="8.2" data-path="forecasting.html"><a href="forecasting.html#reading-4"><i class="fa fa-check"></i><b>8.2</b> Reading</a></li>
+<li class="chapter" data-level="8.3" data-path="forecasting.html"><a href="forecasting.html#packages-4"><i class="fa fa-check"></i><b>8.3</b> Packages</a></li>
+<li class="chapter" data-level="8.4" data-path="forecasting.html"><a href="forecasting.html#introduction-1"><i class="fa fa-check"></i><b>8.4</b> Introduction</a></li>
+<li class="chapter" data-level="8.5" data-path="forecasting.html"><a href="forecasting.html#a-simple-forecast"><i class="fa fa-check"></i><b>8.5</b> A simple forecast</a>
+<ul>
+<li class="chapter" data-level="8.5.1" data-path="forecasting.html"><a href="forecasting.html#two-step-ahead-forecast"><i class="fa fa-check"></i><b>8.5.1</b> Two-step-ahead forecast</a></li>
+<li class="chapter" data-level="8.5.2" data-path="forecasting.html"><a href="forecasting.html#example"><i class="fa fa-check"></i><b>8.5.2</b> Example</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="forecasting.html"><a href="forecasting.html#using-arma-coefficients-to-forecast"><i class="fa fa-check"></i><b>8.6</b> Using ARMA coefficients to forecast</a></li>
+<li class="chapter" data-level="8.7" data-path="forecasting.html"><a href="forecasting.html#holt-winters"><i class="fa fa-check"></i><b>8.7</b> Holt-Winters</a></li>
+<li class="chapter" data-level="8.8" data-path="forecasting.html"><a href="forecasting.html#your-work-4"><i class="fa fa-check"></i><b>8.8</b> Your work</a>
+<ul>
+<li class="chapter" data-level="8.8.1" data-path="forecasting.html"><a href="forecasting.html#a-silly-prediction"><i class="fa fa-check"></i><b>8.8.1</b> A silly prediction</a></li>
+<li class="chapter" data-level="8.8.2" data-path="forecasting.html"><a href="forecasting.html#write-up-and-reflect-4"><i class="fa fa-check"></i><b>8.8.2</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="cross-correlation.html"><a href="cross-correlation.html"><i class="fa fa-check"></i><b>9</b> Cross Correlation</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="cross-correlation.html"><a href="cross-correlation.html#big-idea-5"><i class="fa fa-check"></i><b>9.1</b> Big Idea</a></li>
+<li class="chapter" data-level="9.2" data-path="cross-correlation.html"><a href="cross-correlation.html#reading-5"><i class="fa fa-check"></i><b>9.2</b> Reading</a></li>
+<li class="chapter" data-level="9.3" data-path="cross-correlation.html"><a href="cross-correlation.html#packages-5"><i class="fa fa-check"></i><b>9.3</b> Packages</a></li>
+<li class="chapter" data-level="9.4" data-path="cross-correlation.html"><a href="cross-correlation.html#lags"><i class="fa fa-check"></i><b>9.4</b> Lags</a></li>
+<li class="chapter" data-level="9.5" data-path="cross-correlation.html"><a href="cross-correlation.html#from-acf-to-ccf"><i class="fa fa-check"></i><b>9.5</b> From ACF to CCF</a></li>
+<li class="chapter" data-level="9.6" data-path="cross-correlation.html"><a href="cross-correlation.html#how-ccf-normalizes-correlations"><i class="fa fa-check"></i><b>9.6</b> How <code>Ccf()</code> Normalizes Correlations</a></li>
+<li class="chapter" data-level="9.7" data-path="cross-correlation.html"><a href="cross-correlation.html#your-work-5"><i class="fa fa-check"></i><b>9.7</b> Your work</a>
+<ul>
+<li class="chapter" data-level="9.7.1" data-path="cross-correlation.html"><a href="cross-correlation.html#write-up-and-reflect-5"><i class="fa fa-check"></i><b>9.7.1</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="regression.html"><a href="regression.html"><i class="fa fa-check"></i><b>10</b> Regression</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="regression.html"><a href="regression.html#big-idea-6"><i class="fa fa-check"></i><b>10.1</b> Big Idea</a></li>
+<li class="chapter" data-level="10.2" data-path="regression.html"><a href="regression.html#reading-6"><i class="fa fa-check"></i><b>10.2</b> Reading</a></li>
+<li class="chapter" data-level="10.3" data-path="regression.html"><a href="regression.html#packages-6"><i class="fa fa-check"></i><b>10.3</b> Packages</a></li>
+<li class="chapter" data-level="10.4" data-path="regression.html"><a href="regression.html#regression-1"><i class="fa fa-check"></i><b>10.4</b> Regression</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="regression.html"><a href="regression.html#adjusting-ols"><i class="fa fa-check"></i><b>10.4.1</b> Adjusting OLS</a></li>
+<li class="chapter" data-level="10.4.2" data-path="regression.html"><a href="regression.html#gls"><i class="fa fa-check"></i><b>10.4.2</b> GLS</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="regression.html"><a href="regression.html#your-work-6"><i class="fa fa-check"></i><b>10.5</b> Your work</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="regression.html"><a href="regression.html#what-does-generalized-mean"><i class="fa fa-check"></i><b>10.5.1</b> What Does Generalized Mean?</a></li>
+<li class="chapter" data-level="10.5.2" data-path="regression.html"><a href="regression.html#regression-simulation"><i class="fa fa-check"></i><b>10.5.2</b> Regression Simulation</a></li>
+<li class="chapter" data-level="10.5.3" data-path="regression.html"><a href="regression.html#regression-for-real"><i class="fa fa-check"></i><b>10.5.3</b> Regression for real</a></li>
+<li class="chapter" data-level="10.5.4" data-path="regression.html"><a href="regression.html#write-up-and-reflect-6"><i class="fa fa-check"></i><b>10.5.4</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html"><i class="fa fa-check"></i><b>11</b> Filtering, smoothing</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#big-idea-7"><i class="fa fa-check"></i><b>11.1</b> Big Idea</a></li>
+<li class="chapter" data-level="11.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#packages-7"><i class="fa fa-check"></i><b>11.2</b> Packages</a></li>
+<li class="chapter" data-level="11.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#filters-as-visual-aids"><i class="fa fa-check"></i><b>11.3</b> Filters as visual aids</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#moving-running-average"><i class="fa fa-check"></i><b>11.3.1</b> Moving (running) average</a></li>
+<li class="chapter" data-level="11.3.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#hanning"><i class="fa fa-check"></i><b>11.3.2</b> Hanning</a></li>
+<li class="chapter" data-level="11.3.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#smoothing-splines"><i class="fa fa-check"></i><b>11.3.3</b> Smoothing splines</a></li>
+<li class="chapter" data-level="11.3.4" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#loess"><i class="fa fa-check"></i><b>11.3.4</b> Loess</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#using-filters"><i class="fa fa-check"></i><b>11.4</b> Using filters</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#aggregating"><i class="fa fa-check"></i><b>11.4.1</b> Aggregating</a></li>
+<li class="chapter" data-level="11.4.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#removing-low-frequency-variability"><i class="fa fa-check"></i><b>11.4.2</b> Removing low frequency variability</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#the-case-of-the-poorly-launched-sensors"><i class="fa fa-check"></i><b>11.5</b> The Case of the Poorly-Launched Sensors</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#fix-time-on-temperature"><i class="fa fa-check"></i><b>11.5.1</b> Fix time on temperature</a></li>
+<li class="chapter" data-level="11.5.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#fill-missing-data-on-radiation"><i class="fa fa-check"></i><b>11.5.2</b> Fill missing data on radiation</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#your-work-7"><i class="fa fa-check"></i><b>11.6</b> Your work</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#filter"><i class="fa fa-check"></i><b>11.6.1</b> Filter</a></li>
+<li class="chapter" data-level="11.6.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#revisit-the-case-of-the-poorly-launched-sensors"><i class="fa fa-check"></i><b>11.6.2</b> Revisit the case of the poorly launched sensors</a></li>
+<li class="chapter" data-level="11.6.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#write-up-and-reflect-7"><i class="fa fa-check"></i><b>11.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html"><i class="fa fa-check"></i><b>12</b> The Freqs Come out at Night</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#big-idea-8"><i class="fa fa-check"></i><b>12.1</b> Big Idea</a></li>
+<li class="chapter" data-level="12.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#reading-7"><i class="fa fa-check"></i><b>12.2</b> Reading</a></li>
+<li class="chapter" data-level="12.3" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#packages-8"><i class="fa fa-check"></i><b>12.3</b> Packages</a></li>
+<li class="chapter" data-level="12.4" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#the-frequency-domain"><i class="fa fa-check"></i><b>12.4</b> The Frequency Domain</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#same-data-two-domains"><i class="fa fa-check"></i><b>12.4.1</b> Same Data, Two Domains</a></li>
+<li class="chapter" data-level="12.4.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#worked-example"><i class="fa fa-check"></i><b>12.4.2</b> Worked example</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#sunspot-example"><i class="fa fa-check"></i><b>12.5</b> Sunspot Example</a></li>
+<li class="chapter" data-level="12.6" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#your-work-8"><i class="fa fa-check"></i><b>12.6</b> Your work</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#generate-three-signals"><i class="fa fa-check"></i><b>12.6.1</b> Generate three signals</a></li>
+<li class="chapter" data-level="12.6.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#milankovitch"><i class="fa fa-check"></i><b>12.6.2</b> Milankovitch</a></li>
+<li class="chapter" data-level="12.6.3" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#write-up-and-reflect-8"><i class="fa fa-check"></i><b>12.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#references"><i class="fa fa-check"></i><b>12.7</b> References</a></li>
+<li class="chapter" data-level="12.8" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#postscript-a-glimpse-of-wavelets"><i class="fa fa-check"></i><b>12.8</b> Postscript: A Glimpse of Wavelets</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="references-1.html"><a href="references-1.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A collection of note for ESCI 504</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="the-measure-of-time" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">2</span> The Measure of Time<a href="the-measure-of-time.html#the-measure-of-time" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="big-idea" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Big Idea<a href="the-measure-of-time.html#big-idea" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>One of the weirder things in our understanding of the universe is that time flows in only one direction. This “arrow of time” creates some wrinkles in how we handle time-series data.</p>
+</div>
+<div id="reading" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Reading<a href="the-measure-of-time.html#reading" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Have a look at Chapter one (through section 1.4) from <span class="citation">Cowpertwait and Metcalfe (<a href="references-1.html#ref-Cowpertwait2009">2009</a>)</span>. It’s OK to skim the readings in this book. It’s not a great text for our purposes as many of you haven’t taken linear algebra and the book occasionally goes that way. But it’s useful to hum your way through the chapter nonetheless.</p>
+</div>
+<div id="packages" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Packages<a href="the-measure-of-time.html#packages" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="load" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Load<a href="the-measure-of-time.html#load" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We will use the <code>tidyverse</code> <span class="citation">(<a href="references-1.html#ref-R-tidyverse">Wickham 2023</a>)</span>, <code>zoo</code> <span class="citation">(<a href="references-1.html#ref-R-zoo">Zeileis, Grothendieck, and Ryan 2025</a>)</span>, and <code>broom</code> <span class="citation">(<a href="references-1.html#ref-R-broom">Robinson, Hayes, and Couch 2025</a>)</span>. Install them if you haven’t done so already (e.g.,: <code>install.packages(c("tidyverse", "zoo"))</code>).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="the-measure-of-time.html#cb3-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-2"><a href="the-measure-of-time.html#cb3-2" tabindex="-1"></a><span class="fu">library</span>(zoo)</span></code></pre></div>
+</div>
+<div id="keep-up-to-date" class="section level3 hasAnchor" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Keep Up to Date<a href="the-measure-of-time.html#keep-up-to-date" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>It’s important that you are (reasonably) current in your <code>R</code> and RStudio installations. That goes for packages too. Here are the versions of the packages above that are loaded when this page was knit.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="the-measure-of-time.html#cb4-1" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">&quot;tidyverse&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &#39;2.0.0&#39;</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="the-measure-of-time.html#cb6-1" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">&quot;zoo&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &#39;1.8.14&#39;</code></pre>
+<p>Get in the habit of updating packages regularly. A good way of doing that is via <code>update.packages()</code>. Because I’m usually content to let <code>R</code> update everything semi-automatically I usually run that as <code>update.packages(ask = FALSE, type = "binary")</code> from a <em>fresh <code>R</code> session</em>. Fresh here means that don’t have packages already loaded – e.g., go to Session | Restart R in Rstudio. Running that regularly (I do it every week, but I’m a pretty heavy user) is a very good idea. You can also click the little update button under the pacakges in RStudio if you prefer that kind of interaction.</p>
+</div>
+</div>
+<div id="what-kinds-of-data" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> What Kinds of Data?<a href="the-measure-of-time.html#what-kinds-of-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>So weirdly enough we have to ask, what is a time series? My default place for answers for non-controversial things is <a href="https://en.wikipedia.org/wiki/Time_series">Wikipedia</a>, “A time series is a series of data points indexed in time order. Most commonly, a time series is a sequence taken at successive equally spaced points in time.”</p>
+<p>OK. That’s actually perfect for our purposes. It has some key aspects that we should consider. First, the data are in a <a href="https://en.wikipedia.org/wiki/Series_(mathematics)">series</a> meaning they come one after another. Second, they are <a href="https://en.wikipedia.org/wiki/Index_set">indexed</a> in time. Third, the data are typically at regularly spaced intervals of time.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>We will refer to a time series <span class="math inline">\(y\)</span> measured/observed at time <span class="math inline">\(t\)</span> as <span class="math inline">\(y_t\)</span>. For regular time series <span class="math inline">\(t\)</span> is the index of the time (e.g., year, day, second, etc.) so that <span class="math inline">\(t_i - t_{i-1} = 1\)</span>. More formally, we treat <span class="math inline">\(y_t\)</span> as random variable that is a realization of a process at time <span class="math inline">\(t\)</span> so that <span class="math inline">\(\{y_t,t \in T \}\)</span>.</p>
+<p>This is all straightforward. The confusing part in getting started with working with time series is often figuring out how to tell the computer about how the indexing is done. Are the data measured at arbitrary time steps? Does the index refer to actual dates and times? If so, how do we deal with leap days? Or time zones? And how do computers even store these kinds of data?</p>
+</div>
+<div id="the-ts-class" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> The <code>ts</code> Class<a href="the-measure-of-time.html#the-ts-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="a-very-useful-class" class="section level3 hasAnchor" number="2.5.1">
+<h3><span class="header-section-number">2.5.1</span> A Very Useful Class<a href="the-measure-of-time.html#a-very-useful-class" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>As you know <code>R</code> has a lot of of onboard data sets. You can take a look at the data sets package to get an idea of what’s easy to grab. But you can also look at the time-series packages (like my package <code>dplR</code>) many of which have data available as well. We’ll also work with data we can read into <code>R</code> from an online source or via a text file of some sort. The options are, for almost any reasonable definition, infinite. Let’s start with two onboard data sets.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="the-measure-of-time.html#cb8-1" tabindex="-1"></a><span class="fu">data</span>(LakeHuron)</span>
+<span id="cb8-2"><a href="the-measure-of-time.html#cb8-2" tabindex="-1"></a><span class="fu">plot</span>(LakeHuron)</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>OK, what’s going on here? We loaded a data set of the level of Lake Huron (in feet) from 1875 to 1972, made a plot, and looked at some summary statistics. You can look at the help page for the data via <code>?LakeHuron</code>.</p>
+<p><code>R</code> knows this is a time series – the class of the object <code>LakeHuron</code> is class <code>ts</code> which is one of the ways we will work with time-series data.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="the-measure-of-time.html#cb9-1" tabindex="-1"></a><span class="fu">class</span>(LakeHuron)</span></code></pre></div>
+<pre><code>## [1] &quot;ts&quot;</code></pre>
+<p>Look at the help page for <code>ts</code> to understand what that structure looks like. The most important thing to understand is that the time values are attributes and not, say, a stand-alone column of times next to the data the way you might do it in Excel. Because this is a regular time series, the object just has data values (the lake height in feet). The index of time values isn’t stored row-by-row the way you might keep them in a spreadsheet. Rather, the index is calculated dynamically using <code>start</code>, <code>end</code> and <code>frequency</code> values stored as attributes. We can see these using the very handy <code>tsp</code> function.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="the-measure-of-time.html#cb11-1" tabindex="-1"></a><span class="fu">tsp</span>(LakeHuron)</span></code></pre></div>
+<pre><code>## [1] 1875 1972    1</code></pre>
+<p>This tells us the start time, end time, and frequency of the data. The <code>LakeHuron</code> time series starts in the year 1875 and runs until 1972 with one observation per year. Before we go on, note that there are several methods for working with this class (like plotting). Recall that classes with methods can have shortcuts to commonly used functions. For instance, calling <code>plot(LakeHuron)</code> is the same as calling <code>plot.ts(LakeHuron)</code> because the <code>ts</code> class has a plot method. We will talk more about this later but you can see all of the methods that are in the <code>ts</code> class via <code>methods(class="ts")</code>.</p>
+<p>Let’s look at another data set:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="the-measure-of-time.html#cb13-1" tabindex="-1"></a><span class="fu">data</span>(co2)</span>
+<span id="cb13-2"><a href="the-measure-of-time.html#cb13-2" tabindex="-1"></a><span class="fu">str</span>(co2)</span></code></pre></div>
+<pre><code>##  Time-Series [1:468] from 1959 to 1998: 315 316 316 318 318 ...</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="the-measure-of-time.html#cb15-1" tabindex="-1"></a><span class="fu">plot</span>(co2)</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>These data are monthly and run from 1959 to 1998. From a purely practical standpoint you should make sure that you and <code>R</code> agree on the time-series properties of a data set. For instance, you should know the start and end times and the frequency (the number of observations per unit of time). Before you go further, can you predict what the output will be when you run <code>tsp(co2)</code>?</p>
+<p>To look under the hood further and get an idea of how these objects exist in <code>R</code> run <code>attributes(co2)</code> and <code>class(co2)</code>.</p>
+</div>
+<div id="digression-describing-a-time-series" class="section level3 hasAnchor" number="2.5.2">
+<h3><span class="header-section-number">2.5.2</span> Digression: Describing a Time Series<a href="the-measure-of-time.html#digression-describing-a-time-series" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We’ve been focusing on the time-series qualities of the data (e.g., the index). But we can also treat these data they way we would other data. That is, when working with a time series you should be able to describe it the same way you’d describe any data. The <code>summary</code> function is most useful but I like to know things like the standard deviation too. And I like diagnostic plots like boxplots and histograms. Recall that <em>time-series data</em> are most importantly <em>data</em> and you should always explore your data thoroughly with descriptive statistics and plots.</p>
+<p>We will learn more techniques that are specific to time series (e.g., autocorrelation) later. But first, let’s plot a histogram of the Lake Huron data, overlay a normal curve, and look at the shape. This is a moderately involved bit of plotting but you can step through it bit by bit. I’ll go old school here with some base graphics.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="the-measure-of-time.html#cb16-1" tabindex="-1"></a>my.xlim <span class="ot">&lt;-</span> <span class="fu">range</span>(LakeHuron)</span>
+<span id="cb16-2"><a href="the-measure-of-time.html#cb16-2" tabindex="-1"></a>h<span class="ot">&lt;-</span><span class="fu">hist</span>(LakeHuron, <span class="at">breaks=</span><span class="dv">10</span>, <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Lake Level (ft)&quot;</span>,</span>
+<span id="cb16-3"><a href="the-measure-of-time.html#cb16-3" tabindex="-1"></a>        <span class="at">main=</span><span class="st">&quot;&quot;</span>,<span class="at">xlim=</span>my.xlim) </span>
+<span id="cb16-4"><a href="the-measure-of-time.html#cb16-4" tabindex="-1"></a>xfit <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(LakeHuron),<span class="fu">max</span>(LakeHuron),<span class="at">length=</span><span class="dv">100</span>) </span>
+<span id="cb16-5"><a href="the-measure-of-time.html#cb16-5" tabindex="-1"></a>yfit <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(xfit,<span class="at">mean=</span><span class="fu">mean</span>(LakeHuron),<span class="at">sd=</span><span class="fu">sd</span>(LakeHuron)) </span>
+<span id="cb16-6"><a href="the-measure-of-time.html#cb16-6" tabindex="-1"></a>yfit <span class="ot">&lt;-</span> yfit<span class="sc">*</span><span class="fu">diff</span>(h<span class="sc">$</span>mids[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])<span class="sc">*</span><span class="fu">length</span>(LakeHuron) </span>
+<span id="cb16-7"><a href="the-measure-of-time.html#cb16-7" tabindex="-1"></a><span class="fu">lines</span>(xfit, yfit, <span class="at">col=</span><span class="st">&quot;darkblue&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb16-8"><a href="the-measure-of-time.html#cb16-8" tabindex="-1"></a><span class="fu">boxplot</span>(LakeHuron, <span class="at">horizontal=</span><span class="cn">TRUE</span>,  <span class="at">outline=</span><span class="cn">TRUE</span>,  <span class="at">axes=</span><span class="cn">FALSE</span>,</span>
+<span id="cb16-9"><a href="the-measure-of-time.html#cb16-9" tabindex="-1"></a>        <span class="at">ylim=</span>my.xlim, <span class="at">col =</span> <span class="st">&quot;lightgreen&quot;</span>, <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">boxwex=</span><span class="dv">3</span>)</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Given a sample size of less than 100, these data don’t show much kurtosis or skew and in fact look pretty normal. That is, I wouldn’t say they were platykurtic or negatively skewed as compared to a random expectation. How could I test such a thing? Well, there are tests in the <code>moments</code> package (e.g., <code>agostino.test(LakeHuron)</code>, <code>anscombe.test(LakeHuron)</code>, <code>jarque.test(c(LakeHuron)</code>) or we could use some kind of resampling method (e.g., bootstrapping). But here is where we get to the single most important mantra I have when working with data: plot and explore it. <strong>Plot your data. Plot your data. Plot your data</strong>. Statistical significance is like pornography (to steal from United States Supreme Court Justice Potter Stewart), you know it when you see it.</p>
+<p>There are other plots I like to make when exploring data. I’m partial to plotting the cumulative distribution function (take a look at <code>ecdf</code>) and maybe a normal QQ plot (<code>qqnorm</code>) but we can leave it here for the time being. Just remember: <strong><em>Plot your data</em></strong>.</p>
+</div>
+<div id="more-on-the-ts-index" class="section level3 hasAnchor" number="2.5.3">
+<h3><span class="header-section-number">2.5.3</span> More on the <code>ts</code> Index<a href="the-measure-of-time.html#more-on-the-ts-index" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let’s go back to the <code>LakeHuron</code> data. We think of these data as annual with the time index in years. But the <code>ts</code> class itself just thinks in terms of start, end, and frequency. It’s a simple system but not always what you want – in fact <code>ts</code> with a frequency of one isn’t really in years. From the help page for <code>ts</code>:</p>
+<blockquote>
+<p>The value of argument frequency is used when the series is sampled an integral number of times in each unit time interval. For example, one could use a value of 7 for frequency when the data are sampled daily, and the natural time period is a week, or 12 when the data are sampled monthly and the natural time period is a year. Values of 4 and 12 are assumed in (e.g.) print methods to imply a quarterly and monthly series respectively.</p>
+</blockquote>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="the-measure-of-time.html#cb17-1" tabindex="-1"></a><span class="fu">time</span>(LakeHuron)</span></code></pre></div>
+<pre><code>## Time Series:
+## Start = 1875 
+## End = 1972 
+## Frequency = 1 
+##  [1] 1875 1876 1877 1878 1879 1880 1881 1882 1883 1884 1885 1886 1887 1888 1889
+## [16] 1890 1891 1892 1893 1894 1895 1896 1897 1898 1899 1900 1901 1902 1903 1904
+## [31] 1905 1906 1907 1908 1909 1910 1911 1912 1913 1914 1915 1916 1917 1918 1919
+## [46] 1920 1921 1922 1923 1924 1925 1926 1927 1928 1929 1930 1931 1932 1933 1934
+## [61] 1935 1936 1937 1938 1939 1940 1941 1942 1943 1944 1945 1946 1947 1948 1949
+## [76] 1950 1951 1952 1953 1954 1955 1956 1957 1958 1959 1960 1961 1962 1963 1964
+## [91] 1965 1966 1967 1968 1969 1970 1971 1972</code></pre>
+<p>The times in the <code>ts</code> class aren’t really related to reality. Run the code below and then use <code>time(foo)</code> for each line to look at what ‘times’ you created.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="the-measure-of-time.html#cb19-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb19-2"><a href="the-measure-of-time.html#cb19-2" tabindex="-1"></a><span class="co"># Annual data starting in the year 2000</span></span>
+<span id="cb19-3"><a href="the-measure-of-time.html#cb19-3" tabindex="-1"></a>foo <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(n),<span class="at">start=</span><span class="dv">2000</span>,<span class="at">frequency =</span> <span class="dv">1</span>) <span class="co">#time(foo)</span></span>
+<span id="cb19-4"><a href="the-measure-of-time.html#cb19-4" tabindex="-1"></a><span class="co"># 100 months starting in the year 2000</span></span>
+<span id="cb19-5"><a href="the-measure-of-time.html#cb19-5" tabindex="-1"></a>foo <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(n),<span class="at">start=</span><span class="dv">2000</span>,<span class="at">frequency =</span> <span class="dv">12</span>) <span class="co">#time(foo)</span></span>
+<span id="cb19-6"><a href="the-measure-of-time.html#cb19-6" tabindex="-1"></a><span class="co"># quarterly data</span></span>
+<span id="cb19-7"><a href="the-measure-of-time.html#cb19-7" tabindex="-1"></a>foo <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(n),<span class="at">start=</span><span class="dv">2000</span>,<span class="at">frequency =</span> <span class="dv">4</span>) <span class="co">#time(foo)</span></span>
+<span id="cb19-8"><a href="the-measure-of-time.html#cb19-8" tabindex="-1"></a><span class="co"># less than one year of daily data</span></span>
+<span id="cb19-9"><a href="the-measure-of-time.html#cb19-9" tabindex="-1"></a>foo <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(n),<span class="at">start=</span><span class="dv">2000</span>,<span class="at">frequency =</span> <span class="dv">365</span>) <span class="co">#time(foo)</span></span>
+<span id="cb19-10"><a href="the-measure-of-time.html#cb19-10" tabindex="-1"></a><span class="co"># decades!</span></span>
+<span id="cb19-11"><a href="the-measure-of-time.html#cb19-11" tabindex="-1"></a>foo <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(n),<span class="at">start=</span><span class="dv">2000</span>,<span class="at">frequency =</span> <span class="fl">0.1</span>) <span class="co">#time(foo)</span></span>
+<span id="cb19-12"><a href="the-measure-of-time.html#cb19-12" tabindex="-1"></a><span class="co"># hours!</span></span>
+<span id="cb19-13"><a href="the-measure-of-time.html#cb19-13" tabindex="-1"></a>foo <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(n),<span class="at">start=</span><span class="dv">2000</span>,<span class="at">frequency =</span> <span class="dv">365</span><span class="sc">*</span><span class="dv">24</span>) <span class="co">#time(foo)</span></span></code></pre></div>
+<p>We are definitely going to want to use time series with real dates and times. What if you have data that are hourly and start on January 3, 2021 at 1:01AM PST? Can you coerce that into the <code>ts</code> class? Well, maybe but it’s not intuitive and there are better ways in <code>R</code> of doing this. The <code>ts</code> class is only one of the ways that <code>R</code> deals with time series (say hello <code>zoo</code> library!). The <code>ts</code> class very simple but not great for dates and times of day. As you work with other data you’ll encounter some of the other ways that <code>R</code> stores times and dates. Trying to understand these can get tricky very fast. Consider all the things you have to account for with calendar data. Leap years (<a href="https://en.wikipedia.org/wiki/Leap_second">leap seconds!</a>), time zones, daylight savings, and so on. You can look at the help page for <code>Date</code> and <code>DateTime</code> to get started but in reality you’ll be better off searching the internet for explanations of how time is accounted for in <code>R</code>. And ultimately you just have to dive in. This is not an issue that is specific to <code>R</code>. It’s a devilish problem for every computer platform that is not unlike dealing with projections in GIS. I’m going to be as gentle as possible about it but I know that we’ll get stumped soon. The <code>lubridate</code> package is exciting as a way of making working with time-series data more pleasant. The package promises to make “working with dates fun instead of frustrating.” That would be nice.</p>
+</div>
+</div>
+<div id="trend-in-time" class="section level2 hasAnchor" number="2.6">
+<h2><span class="header-section-number">2.6</span> Trend in time<a href="the-measure-of-time.html#trend-in-time" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>One of the most common things to do with a time series is to fit a linear model and see if there is a trend in the data as a function of time. Note that later in class we will worry about how to do this in a way that allows us to test the significance of the trend in a responsible way but for now let’s get a slope on the Lake Huron data. Were lake levels increasing or decreasing over those years?</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="the-measure-of-time.html#cb20-1" tabindex="-1"></a>LakeHuronLinearModel <span class="ot">&lt;-</span> <span class="fu">lm</span>(LakeHuron<span class="sc">~</span><span class="fu">time</span>(LakeHuron))</span>
+<span id="cb20-2"><a href="the-measure-of-time.html#cb20-2" tabindex="-1"></a>LakeHuronLinearModel</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = LakeHuron ~ time(LakeHuron))
+## 
+## Coefficients:
+##     (Intercept)  time(LakeHuron)  
+##        625.5549          -0.0242</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="the-measure-of-time.html#cb22-1" tabindex="-1"></a><span class="fu">plot</span>(LakeHuron)</span>
+<span id="cb22-2"><a href="the-measure-of-time.html#cb22-2" tabindex="-1"></a><span class="fu">abline</span>(LakeHuronLinearModel,<span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>We can see that how lake levels are changing at a rate of -0.02 feet per year.</p>
+</div>
+<div id="the-zoo-class" class="section level2 hasAnchor" number="2.7">
+<h2><span class="header-section-number">2.7</span> The <code>zoo</code> Class<a href="the-measure-of-time.html#the-zoo-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When you have run up against the limitations of the <code>ts</code> class it’s time to visit the <code>zoo</code>. Let’s look at using the <code>zoo</code> library to work with time series. When I have dates and times that is the package I tend to use.</p>
+<p>Let’s look at the list of the vignettes in <code>zoo</code>.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="the-measure-of-time.html#cb23-1" tabindex="-1"></a><span class="fu">vignette</span>(<span class="at">package=</span><span class="st">&quot;zoo&quot;</span>)</span></code></pre></div>
+<p>I suggest perusing these. E.g., <code>vignette(topic="zoo", package="zoo")</code>.</p>
+<p>Now to work. I have compiled weather data from the Bellingham Airport using the <code>GSODR</code> package.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="the-measure-of-time.html#cb24-1" tabindex="-1"></a>kbli <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/kbli.rds&quot;</span>)</span></code></pre></div>
+<p>Run <code>str</code>, <code>summary</code>, and <code>head</code> on them to what this object is all about see. E.g.,</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="the-measure-of-time.html#cb25-1" tabindex="-1"></a><span class="fu">str</span>(kbli)</span></code></pre></div>
+<pre><code>## &#39;zoo&#39; series from 2000-01-01 to 2024-12-31
+##   Data: num [1:9131, 1:2] 5.3 3.6 1.1 7.6 5.1 3.7 5.2 7.2 4.3 2.6 ...
+##  - attr(*, &quot;dimnames&quot;)=List of 2
+##   ..$ : NULL
+##   ..$ : chr [1:2] &quot;TEMP&quot; &quot;PRCP&quot;
+##   Index:  Date[1:9131], format: &quot;2000-01-01&quot; &quot;2000-01-02&quot; &quot;2000-01-03&quot; &quot;2000-01-04&quot; &quot;2000-01-05&quot; ...</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="the-measure-of-time.html#cb27-1" tabindex="-1"></a><span class="fu">summary</span>(kbli)</span></code></pre></div>
+<pre><code>##      Index                 TEMP             PRCP       
+##  Min.   :2000-01-01   Min.   :-12.80   Min.   : 0.000  
+##  1st Qu.:2006-04-02   1st Qu.:  6.40   1st Qu.: 0.000  
+##  Median :2012-07-02   Median : 10.40   Median : 0.000  
+##  Mean   :2012-07-01   Mean   : 10.36   Mean   : 2.389  
+##  3rd Qu.:2018-10-01   3rd Qu.: 15.00   3rd Qu.: 2.290  
+##  Max.   :2024-12-31   Max.   : 28.00   Max.   :87.880</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="the-measure-of-time.html#cb29-1" tabindex="-1"></a><span class="fu">head</span>(kbli)</span></code></pre></div>
+<pre><code>##            TEMP         PRCP
+## 2000-01-01  5.3 1.219000e+01
+## 2000-01-02  3.6 1.270000e+00
+## 2000-01-03  1.1 1.270000e+00
+## 2000-01-04  7.6 8.890000e+00
+## 2000-01-05  5.1 5.100000e-01
+## 2000-01-06  3.7 1.110223e-15</code></pre>
+<p>OK. What have we learned? The object <code>kbli</code> is class <code>zoo</code> the time index is a <code>Date</code>, there are two columns of data (precipitation and temperature) and therefore we refer to this as a multivariate time series. Let’s do some plotting with the built in plot function for <code>zoo</code></p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="the-measure-of-time.html#cb31-1" tabindex="-1"></a><span class="fu">plot</span>(kbli)</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>And look at some precip data with <code>window</code>. This is the 2024 water year.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="the-measure-of-time.html#cb32-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">window</span>(kbli<span class="sc">$</span>PRCP, <span class="at">start =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2023-11-01&quot;</span>), </span>
+<span id="cb32-2"><a href="the-measure-of-time.html#cb32-2" tabindex="-1"></a>     <span class="at">end =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2024-10-31&quot;</span>)), <span class="at">ylab=</span><span class="st">&quot;Precip (mm)&quot;</span>)</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Reminder, this is a <code>zoo</code> object and so <code>R</code> uses <code>plot.zoo</code> to do the actual plotting even though you just type <code>plot</code>. Same goes for <code>window</code>.</p>
+<p>The important distinction here is that unlike class <code>ts</code>, the times are actual dates and not an arbitrary index like we had with the <code>LakeHuron</code> data. The times are stored as class <code>Date</code> which is a good class for dates without times. If we had more finely resolved data we might want a different class like <code>POSIXlt</code> or <code>POSIXct</code>. Peruse the help file for Date-Time Classes via <code>?DateTimeClasses</code>.</p>
+</div>
+<div id="lubricate-the-dates" class="section level2 hasAnchor" number="2.8">
+<h2><span class="header-section-number">2.8</span> Lubricate the Dates<a href="the-measure-of-time.html#lubricate-the-dates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The package <code>lubridate</code> has some nifty functions for working with dates and times. There is one very nice vignette to look at and I suggest perusing it via <code>vignette(topic="lubridate",package="lubridate")</code>.</p>
+<p>For instance, you can grab the month for each observation in <code>kbli</code> via <code>month(kbli)</code> which might come in handy for pulling out just the summer months.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="the-measure-of-time.html#cb33-1" tabindex="-1"></a>summerPrecip <span class="ot">&lt;-</span> kbli<span class="sc">$</span>PRCP[<span class="fu">month</span>(kbli) <span class="sc">%in%</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">8</span>]</span></code></pre></div>
+<p>Or you might want to convert all the dates to decimal dates (which are just plain numbers) and use that to make a <code>tibble</code>.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="the-measure-of-time.html#cb34-1" tabindex="-1"></a>kbliDD <span class="ot">&lt;-</span> <span class="fu">decimal_date</span>(kbli)</span>
+<span id="cb34-2"><a href="the-measure-of-time.html#cb34-2" tabindex="-1"></a>temp_tb <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">decimalDate =</span> kbliDD, <span class="at">TEMP =</span> <span class="fu">as.vector</span>(kbli<span class="sc">$</span>TEMP))</span>
+<span id="cb34-3"><a href="the-measure-of-time.html#cb34-3" tabindex="-1"></a>temp_tb <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>decimalDate,<span class="at">y=</span>TEMP)) <span class="sc">+</span></span>
+<span id="cb34-4"><a href="the-measure-of-time.html#cb34-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb34-5"><a href="the-measure-of-time.html#cb34-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Date&quot;</span>,<span class="at">y=</span><span class="fu">expression</span>(degree<span class="sc">~</span>C),</span>
+<span id="cb34-6"><a href="the-measure-of-time.html#cb34-6" tabindex="-1"></a>       <span class="at">title=</span><span class="st">&quot;Average Daily Temperature, Bellingham WA&quot;</span>) <span class="sc">+</span></span>
+<span id="cb34-7"><a href="the-measure-of-time.html#cb34-7" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>Most often I use <code>lubridate</code> for making date and time objects from characters or decimal dates. E.g., <code>date_decimal(kbliDD)</code> would go back to a date from the numbers. Or if you had characters of dates like “2009-02-10” you could make that a date via <code>ymd("2009-02-10")</code>. You will encounter dates in an Excel spreadsheet at some point. And when that happens, even the most religious of people will declare that there is no god. Remember that <code>lubridate</code> can help.</p>
+</div>
+<div id="tidy-it-up" class="section level2 hasAnchor" number="2.9">
+<h2><span class="header-section-number">2.9</span> Tidy it Up<a href="the-measure-of-time.html#tidy-it-up" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We can also work with these objects in the <code>tidyverse</code> but we need to convert the <code>zoo</code> object into a <code>tibble.</code> There are a few ways of doing this (e.g., like the example above) but the <code>tidy</code> function from <code>broom</code> does a nice job of making a long <code>tibble</code> from a zoo object. Note that I’m not loading the whole <code>broom</code> library here but just grabbing the function <code>tidy</code>.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="the-measure-of-time.html#cb35-1" tabindex="-1"></a>kbli_tb <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(kbli)</span>
+<span id="cb35-2"><a href="the-measure-of-time.html#cb35-2" tabindex="-1"></a><span class="fu">glimpse</span>(kbli_tb)</span></code></pre></div>
+<pre><code>## Rows: 18,262
+## Columns: 3
+## $ index  &lt;date&gt; 2000-01-01, 2000-01-01, 2000-01-02, 2000-01-02, 2000-01-03, 20…
+## $ series &lt;chr&gt; &quot;TEMP&quot;, &quot;PRCP&quot;, &quot;TEMP&quot;, &quot;PRCP&quot;, &quot;TEMP&quot;, &quot;PRCP&quot;, &quot;TEMP&quot;, &quot;PRCP&quot;,…
+## $ value  &lt;dbl&gt; 5.300000e+00, 1.219000e+01, 3.600000e+00, 1.270000e+00, 1.10000…</code></pre>
+<p>This is similar to what we did above. And like the above, we can now treat this like any other <code>tibble</code>.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="the-measure-of-time.html#cb37-1" tabindex="-1"></a>kbli_tb <span class="sc">%&gt;%</span> </span>
+<span id="cb37-2"><a href="the-measure-of-time.html#cb37-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">series =</span> <span class="fu">recode</span>(series, </span>
+<span id="cb37-3"><a href="the-measure-of-time.html#cb37-3" tabindex="-1"></a>                         <span class="at">PRCP =</span> <span class="st">&quot;Precipitation (mm)&quot;</span>,</span>
+<span id="cb37-4"><a href="the-measure-of-time.html#cb37-4" tabindex="-1"></a>                         <span class="at">TEMP =</span> <span class="st">&quot;Temperature (C)&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb37-5"><a href="the-measure-of-time.html#cb37-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>index,<span class="at">y=</span>value)) <span class="sc">+</span></span>
+<span id="cb37-6"><a href="the-measure-of-time.html#cb37-6" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb37-7"><a href="the-measure-of-time.html#cb37-7" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>series,<span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>,<span class="at">ncol=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb37-8"><a href="the-measure-of-time.html#cb37-8" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Date&quot;</span>,<span class="at">y=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb37-9"><a href="the-measure-of-time.html#cb37-9" tabindex="-1"></a>       <span class="at">title=</span><span class="st">&quot;Average Temperature and Precipitation, Bellingham WA&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-10"><a href="the-measure-of-time.html#cb37-10" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>Also note that this works with <code>ts</code> objects as well.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="the-measure-of-time.html#cb38-1" tabindex="-1"></a>co2_tb <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(co2)</span>
+<span id="cb38-2"><a href="the-measure-of-time.html#cb38-2" tabindex="-1"></a>co2_tb <span class="sc">%&gt;%</span> </span>
+<span id="cb38-3"><a href="the-measure-of-time.html#cb38-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>index,<span class="at">y=</span>value)) <span class="sc">+</span> </span>
+<span id="cb38-4"><a href="the-measure-of-time.html#cb38-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb38-5"><a href="the-measure-of-time.html#cb38-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Date&quot;</span>,<span class="at">y=</span><span class="fu">expression</span>(CO[<span class="dv">2</span>]<span class="sc">~</span>(ppm)))</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>I really hate use base plotting and will probably convert back and forth a good deal. You are welcome to use base plotting (e.g., <code>plot</code>) or <code>ggplot</code>.</p>
+</div>
+<div id="your-work" class="section level2 hasAnchor" number="2.10">
+<h2><span class="header-section-number">2.10</span> Your Work<a href="the-measure-of-time.html#your-work" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>That was a lot to deal with. I know. This week, let’s try to get comfortable reading in a time series from the web and working with it as a <code>tibble</code>, <code>ts</code>, and <code>zoo</code> objects.</p>
+<div id="berkeley-earth-temperature-data" class="section level3 hasAnchor" number="2.10.1">
+<h3><span class="header-section-number">2.10.1</span> Berkeley Earth Temperature Data<a href="the-measure-of-time.html#berkeley-earth-temperature-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The data I’ll give you are global temperature anomalies (in degrees C) for land surfaces from the Berkeley Earth group. This is one of the half dozen or so research groups that maintains global climate data sets in real time. <a href="https://berkeleyearth.org/data/">“Global Land Only (1750 – Recent)”</a> is the original source and you can read about how the data are created and formatted. This is the important bit from the top of the file:</p>
+<blockquote>
+<p>This file contains a detailed summary of the land-surface average results produced by the Berkeley Averaging method. Temperatures are in Celsius and reported as anomalies relative to the Jan 1951-Dec 1980 average. Uncertainties represent the 95% confidence interval for statistical and spatial undersampling effects.</p>
+</blockquote>
+<p>The time index is monthly and starts in 1750. So the first observation is January 1, 1750.</p>
+<p>Let’s go get the data. Below, I’ll download it from the web, save it into a file (that file goes into whatever your working directory is), and then read it.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="the-measure-of-time.html#cb39-1" tabindex="-1"></a>fname <span class="ot">&lt;-</span> <span class="st">&quot;https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Complete_TAVG_complete.txt&quot;</span></span>
+<span id="cb39-2"><a href="the-measure-of-time.html#cb39-2" tabindex="-1"></a><span class="fu">download.file</span>(fname, <span class="st">&quot;data/Complete_TAVG_complete.txt&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="the-measure-of-time.html#cb40-1" tabindex="-1"></a>tAnoms <span class="ot">&lt;-</span> <span class="fu">read_table</span>(<span class="st">&quot;data/Complete_TAVG_complete.txt&quot;</span>, <span class="at">skip =</span> <span class="dv">35</span>,<span class="at">na =</span> <span class="st">&quot;NaN&quot;</span>,<span class="at">col_names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
+## cols(
+##   X1 = col_double(),
+##   X2 = col_double(),
+##   X3 = col_double(),
+##   X4 = col_double(),
+##   X5 = col_double(),
+##   X6 = col_double(),
+##   X7 = col_double(),
+##   X8 = col_double(),
+##   X9 = col_double(),
+##   X10 = col_double(),
+##   X11 = col_double(),
+##   X12 = col_double()
+## )</code></pre>
+<p>We will just keep the first three columns of the data which are the year, month, and temperature anomaly.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="the-measure-of-time.html#cb42-1" tabindex="-1"></a>tAnoms <span class="ot">&lt;-</span> tAnoms[,<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="sc">%&gt;%</span></span>
+<span id="cb42-2"><a href="the-measure-of-time.html#cb42-2" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Year =</span> X1, <span class="at">Month =</span> X2, <span class="at">degC =</span> X3)</span>
+<span id="cb42-3"><a href="the-measure-of-time.html#cb42-3" tabindex="-1"></a><span class="fu">glimpse</span>(tAnoms)</span></code></pre></div>
+<pre><code>## Rows: 3,300
+## Columns: 3
+## $ Year  &lt;dbl&gt; 1750, 1750, 1750, 1750, 1750, 1750, 1750, 1750, 1750, 1750, 1750…
+## $ Month &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9…
+## $ degC  &lt;dbl&gt; -0.252, -1.261, 0.225, 0.288, -0.970, -0.573, 0.390, 0.947, -0.4…</code></pre>
+<p>I’ll toss out the data prior to 1851 as well. The uncertainty is pretty large before that time because there weren’t a ton of thermometers contributing to this global record prior to the mid-19th century.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="the-measure-of-time.html#cb44-1" tabindex="-1"></a>tAnoms <span class="ot">&lt;-</span> tAnoms <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Year <span class="sc">&gt;</span> <span class="dv">1850</span>)</span>
+<span id="cb44-2"><a href="the-measure-of-time.html#cb44-2" tabindex="-1"></a><span class="fu">glimpse</span>(tAnoms)</span></code></pre></div>
+<pre><code>## Rows: 2,088
+## Columns: 3
+## $ Year  &lt;dbl&gt; 1851, 1851, 1851, 1851, 1851, 1851, 1851, 1851, 1851, 1851, 1851…
+## $ Month &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9…
+## $ degC  &lt;dbl&gt; -0.012, -0.618, -1.146, -1.051, -0.299, -0.238, 0.058, -0.277, -…</code></pre>
+<p>Ok. We have <code>tAnoms</code> which is a standard <code>tibble</code>. This will suit many of our needs but we will need the <code>ts</code> and <code>zoo</code> classes from time to time. So, let’s make <code>ts</code> and <code>zoo</code> objects from the data.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="the-measure-of-time.html#cb46-1" tabindex="-1"></a>tAnoms_ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(tAnoms<span class="sc">$</span>degC,<span class="at">start=</span><span class="fu">c</span>(<span class="dv">1851</span>,<span class="dv">1</span>),<span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb46-2"><a href="the-measure-of-time.html#cb46-2" tabindex="-1"></a>tAnoms_zoo <span class="ot">&lt;-</span> <span class="fu">zoo</span>(tAnoms<span class="sc">$</span>degC,</span>
+<span id="cb46-3"><a href="the-measure-of-time.html#cb46-3" tabindex="-1"></a>                  <span class="at">order.by =</span> <span class="fu">as.Date</span>(<span class="fu">paste</span>(tAnoms<span class="sc">$</span>Year,<span class="st">&quot;-&quot;</span>,tAnoms<span class="sc">$</span>Month,<span class="st">&quot;-&quot;</span>,<span class="st">&quot;1&quot;</span>,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)))</span></code></pre></div>
+<p>Now we have three different objects all containing the same data. We have objects that are class <code>tibble</code>, <code>ts</code>, and <code>zoo</code>. Ideally you will be comfortable working with all three of these objects. E.g., figure out how to plot, summarize the all the objects.</p>
+<p>For instance, here is a plot of just August temperatures using each data set. Note how I used <code>month</code> from <code>lubridate</code> in one instance and <code>cycle</code> in another just to show you that there are many different ways of doing things.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="the-measure-of-time.html#cb47-1" tabindex="-1"></a>tAnoms <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Month <span class="sc">==</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb47-2"><a href="the-measure-of-time.html#cb47-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>Year,<span class="at">y=</span>degC)) <span class="sc">+</span></span>
+<span id="cb47-3"><a href="the-measure-of-time.html#cb47-3" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb47-4"><a href="the-measure-of-time.html#cb47-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="fu">expression</span>(Anomaly<span class="sc">~</span>degree<span class="sc">*</span>C), </span>
+<span id="cb47-5"><a href="the-measure-of-time.html#cb47-5" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;August Temperatures&quot;</span>, </span>
+<span id="cb47-6"><a href="the-measure-of-time.html#cb47-6" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&quot;Anomalies relative to the Jan 1951-Dec 1980  average&quot;</span>) <span class="sc">+</span></span>
+<span id="cb47-7"><a href="the-measure-of-time.html#cb47-7" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="the-measure-of-time.html#cb48-1" tabindex="-1"></a><span class="fu">plot</span>(tAnoms_zoo[<span class="fu">month</span>(tAnoms_zoo)<span class="sc">==</span><span class="dv">8</span>], <span class="at">xlab=</span><span class="st">&quot;Year&quot;</span>,<span class="at">ylab=</span><span class="fu">expression</span>(Anomaly<span class="sc">~</span>degree<span class="sc">*</span>C), </span>
+<span id="cb48-2"><a href="the-measure-of-time.html#cb48-2" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;August Temperatures&quot;</span>,</span>
+<span id="cb48-3"><a href="the-measure-of-time.html#cb48-3" tabindex="-1"></a>     <span class="at">sub =</span> <span class="st">&quot;Anomalies relative to the Jan 1951-Dec 1980  average&quot;</span>)</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-28-2.png" width="672" /></p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="the-measure-of-time.html#cb49-1" tabindex="-1"></a>augtAnoms_ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(tAnoms_ts[<span class="fu">cycle</span>(tAnoms_ts)<span class="sc">==</span><span class="dv">8</span>],<span class="at">start=</span><span class="dv">1851</span>)</span>
+<span id="cb49-2"><a href="the-measure-of-time.html#cb49-2" tabindex="-1"></a><span class="fu">plot</span>(augtAnoms_ts, </span>
+<span id="cb49-3"><a href="the-measure-of-time.html#cb49-3" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Year&quot;</span>,<span class="at">ylab=</span><span class="fu">expression</span>(Anomaly<span class="sc">~</span>degree<span class="sc">*</span>C), </span>
+<span id="cb49-4"><a href="the-measure-of-time.html#cb49-4" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;August Temperatures&quot;</span>,</span>
+<span id="cb49-5"><a href="the-measure-of-time.html#cb49-5" tabindex="-1"></a>     <span class="at">sub =</span> <span class="st">&quot;Anomalies relative to the Jan 1951-Dec 1980  average&quot;</span>)</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-28-3.png" width="672" /></p>
+</div>
+<div id="your-turn" class="section level3 hasAnchor" number="2.10.2">
+<h3><span class="header-section-number">2.10.2</span> Your Turn<a href="the-measure-of-time.html#your-turn" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Get somewhat comfy with basic data manipulation. Try to get a feel for how the times are stored in each class. When you are ready, do two things with each class (<code>tibble</code>, <code>ts</code>, and <code>zoo</code>). First, create and plot an annual mean temperature anomaly from the monthly data (e.g., 1851 will have one value that is the average of 12 temperatures from January to December). Second, report the trend in the data using the slope coefficient from a linear model. And if you are feeling spunky, try an optional third step: add a five-year centered moving average to each plot. I want you to do these with each class (<code>tibble</code>, <code>ts</code>, and <code>zoo</code>) because we will encounter all them as we move forward. Your plots, slopes, etc. should look the same for each class.</p>
+<p>I’ll start you off by showing one way to take these monthly data and make them annual.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="the-measure-of-time.html#cb50-1" tabindex="-1"></a>tAnomsAnn <span class="ot">&lt;-</span> tAnoms <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">degC =</span> <span class="fu">mean</span>(degC))</span>
+<span id="cb50-2"><a href="the-measure-of-time.html#cb50-2" tabindex="-1"></a>tAnomsAnn_ts <span class="ot">&lt;-</span> <span class="fu">aggregate.ts</span>(tAnoms_ts, <span class="at">nfrequency =</span> <span class="dv">1</span>, <span class="at">FUN =</span> mean)</span>
+<span id="cb50-3"><a href="the-measure-of-time.html#cb50-3" tabindex="-1"></a>tAnomsAnn_zoo <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(tAnoms_zoo, <span class="at">by =</span> year,<span class="at">FUN =</span> mean)</span></code></pre></div>
+<p>When I fit a linear model I find that the annual trend is 0.01 degrees C per year. That’s a degree per century. Yikes.</p>
+<p>I’ve hidden my code, but here is what I came up with in terms of plots.</p>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-31-1.png" width="672" /><img src="01Intro_files/figure-html/unnamed-chunk-31-2.png" width="672" /><img src="01Intro_files/figure-html/unnamed-chunk-31-3.png" width="672" /></p>
+</div>
+<div id="write-up-and-reflect" class="section level3 hasAnchor" number="2.10.3">
+<h3><span class="header-section-number">2.10.3</span> Write Up and Reflect<a href="the-measure-of-time.html#write-up-and-reflect" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Pass in a R Markdown doc with those plots. Leave all code visible, although you may quiet messages and warnings if desired. Turn in your knitted html. The last section of your document should include a reflection where you explain how it all went. What triumphs did you have? What is still confusing?</p>
+
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>We will consider irregular time series later in the the class but not deal with them too often.<a href="the-measure-of-time.html#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="an-aside-understanding-methods-and-generics-in-r.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section",
+    "scroll_highlight": true
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

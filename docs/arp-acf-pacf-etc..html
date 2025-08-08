@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>5 AR(p), ACF, PACF, etc. | A collection of note for ESCI 504</title>
+  <meta name="description" content="Helpful materials for ESCI 504" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="5 AR(p), ACF, PACF, etc. | A collection of note for ESCI 504" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Helpful materials for ESCI 504" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="5 AR(p), ACF, PACF, etc. | A collection of note for ESCI 504" />
+  
+  <meta name="twitter:description" content="Helpful materials for ESCI 504" />
+  
+
+<meta name="author" content="Andy Bunn" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="decomposition.html"/>
+<link rel="next" href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.33/datatables.js"></script>
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+<script>
+/* ========================================================================
+ * Bootstrap: transition.js v3.3.7
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
+
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
+
+    var transEndEventNames = {
+      WebkitTransition : 'webkitTransitionEnd',
+      MozTransition    : 'transitionend',
+      OTransition      : 'oTransitionEnd otransitionend',
+      transition       : 'transitionend'
+    }
+
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
+
+    return false // explicit for ie8 (  ._.)
+  }
+
+  // http://blog.alexmaccaw.com/css-transitions
+  $.fn.emulateTransitionEnd = function (duration) {
+    var called = false
+    var $el = this
+    $(this).one('bsTransitionEnd', function () { called = true })
+    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+    setTimeout(callback, duration)
+    return this
+  }
+
+  $(function () {
+    $.support.transition = transitionEnd()
+
+    if (!$.support.transition) return
+
+    $.event.special.bsTransitionEnd = {
+      bindType: $.support.transition.end,
+      delegateType: $.support.transition.end,
+      handle: function (e) {
+        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+      }
+    }
+  })
+
+}(jQuery);
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: collapse.js v3.3.7
+ * http://getbootstrap.com/javascript/#collapse
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+/* jshint latedef: false */
+
++function ($) {
+  'use strict';
+
+  // COLLAPSE PUBLIC CLASS DEFINITION
+  // ================================
+
+  var Collapse = function (element, options) {
+    this.$element      = $(element)
+    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+    this.$trigger      = $('[data-toggle="collapse"][href="#' + element.id + '"],' +
+                           '[data-toggle="collapse"][data-target="#' + element.id + '"]')
+    this.transitioning = null
+
+    if (this.options.parent) {
+      this.$parent = this.getParent()
+    } else {
+      this.addAriaAndCollapsedClass(this.$element, this.$trigger)
+    }
+
+    if (this.options.toggle) this.toggle()
+  }
+
+  Collapse.VERSION  = '3.3.7'
+
+  Collapse.TRANSITION_DURATION = 350
+
+  Collapse.DEFAULTS = {
+    toggle: true
+  }
+
+  Collapse.prototype.dimension = function () {
+    var hasWidth = this.$element.hasClass('width')
+    return hasWidth ? 'width' : 'height'
+  }
+
+  Collapse.prototype.show = function () {
+    if (this.transitioning || this.$element.hasClass('in')) return
+
+    var activesData
+    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+
+    if (actives && actives.length) {
+      activesData = actives.data('bs.collapse')
+      if (activesData && activesData.transitioning) return
+    }
+
+    var startEvent = $.Event('show.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    if (actives && actives.length) {
+      Plugin.call(actives, 'hide')
+      activesData || actives.data('bs.collapse', null)
+    }
+
+    var dimension = this.dimension()
+
+    this.$element
+      .removeClass('collapse')
+      .addClass('collapsing')[dimension](0)
+      .attr('aria-expanded', true)
+
+    this.$trigger
+      .removeClass('collapsed')
+      .attr('aria-expanded', true)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse in')[dimension]('')
+      this.transitioning = 0
+      this.$element
+        .trigger('shown.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+    this.$element
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
+  }
+
+  Collapse.prototype.hide = function () {
+    if (this.transitioning || !this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('hide.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var dimension = this.dimension()
+
+    this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+
+    this.$element
+      .addClass('collapsing')
+      .removeClass('collapse in')
+      .attr('aria-expanded', false)
+
+    this.$trigger
+      .addClass('collapsed')
+      .attr('aria-expanded', false)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.transitioning = 0
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse')
+        .trigger('hidden.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    this.$element
+      [dimension](0)
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
+  }
+
+  Collapse.prototype.toggle = function () {
+    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+  }
+
+  Collapse.prototype.getParent = function () {
+    return $(this.options.parent)
+      .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
+      .each($.proxy(function (i, element) {
+        var $element = $(element)
+        this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
+      }, this))
+      .end()
+  }
+
+  Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
+    var isOpen = $element.hasClass('in')
+
+    $element.attr('aria-expanded', isOpen)
+    $trigger
+      .toggleClass('collapsed', !isOpen)
+      .attr('aria-expanded', isOpen)
+  }
+
+  function getTargetFromTrigger($trigger) {
+    var href
+    var target = $trigger.attr('data-target')
+      || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+
+    return $(target)
+  }
+
+
+  // COLLAPSE PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.collapse')
+      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data && options.toggle && /show|hide/.test(option)) options.toggle = false
+      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  var old = $.fn.collapse
+
+  $.fn.collapse             = Plugin
+  $.fn.collapse.Constructor = Collapse
+
+
+  // COLLAPSE NO CONFLICT
+  // ====================
+
+  $.fn.collapse.noConflict = function () {
+    $.fn.collapse = old
+    return this
+  }
+
+
+  // COLLAPSE DATA-API
+  // =================
+
+  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
+    var $this   = $(this)
+
+    if (!$this.attr('data-target')) e.preventDefault()
+
+    var $target = getTargetFromTrigger($this)
+    var data    = $target.data('bs.collapse')
+    var option  = data ? 'toggle' : $this.data()
+
+    Plugin.call($target, option)
+  })
+
+}(jQuery);
+</script>
+<script>
+window.initializeCodeFolding = function(show) {
+
+  // handlers for show-all and hide all
+  $("#rmd-show-all-code").click(function() {
+    // close the dropdown menu when an option is clicked
+    $("#allCodeButton").dropdown("toggle");
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('show');
+    });
+  });
+  $("#rmd-hide-all-code").click(function() {
+    // close the dropdown menu when an option is clicked
+    $("#allCodeButton").dropdown("toggle");
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('hide');
+    });
+  });
+
+  // index for unique code element ids
+  var currentIndex = 1;
+
+  // select all R code blocks
+  var rCodeBlocks = $('pre.sourceCode, pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan');
+  rCodeBlocks.each(function() {
+
+    // if code block has been labeled with class `fold-show`, show the code on init!
+    var classList = $(this).attr('class').split(/\s+/);
+    for (var i = 0; i < classList.length; i++) {
+    if (classList[i] === 'fold-show') {
+        show = true;
+      }
+      // AGB add fold-hide
+    if (classList[i] === 'fold-hide') {
+        show = false;
+      }
+    }
+    // AGB
+    // if code block has been labeled with class `fold-hide`, hide the code on init!
+//    var classList = $(this).attr('class').split(/\s+/);
+//    for (var i = 0; i < classList.length; i++) {
+//    if (classList[i] === 'fold-hide') {
+//        show = false;
+//      }
+//    }
+
+    // create a collapsable div to wrap the code in
+    var div = $('<div class="collapse r-code-collapse"></div>');
+    if (show)
+      div.addClass('in');
+    var id = 'rcode-643E0F36' + currentIndex++;
+    div.attr('id', id);
+    $(this).before(div);
+    $(this).detach().appendTo(div);
+
+    // add a show code button right above
+    var showCodeText = $('<span>' + (show ? 'Hide' : 'Code') + '</span>');
+    var showCodeButton = $('<button type="button" class="btn btn-default btn-xs code-folding-btn pull-right"></button>');
+    showCodeButton.append(showCodeText);
+    showCodeButton
+        .attr('data-toggle', 'collapse')
+        .attr('data-target', '#' + id)
+        .attr('aria-expanded', show)
+        .attr('aria-controls', id);
+
+    var buttonRow = $('<div class="row"></div>');
+    var buttonCol = $('<div class="col-md-12"></div>');
+
+    buttonCol.append(showCodeButton);
+    buttonRow.append(buttonCol);
+
+    div.before(buttonRow);
+
+    // hack: return show to false, otherwise all next codeBlocks will be shown!
+    show = true;
+
+    // update state of button on show/hide
+    div.on('hidden.bs.collapse', function () {
+      showCodeText.text('Code');
+    });
+    div.on('show.bs.collapse', function () {
+      showCodeText.text('Hide');
+    });
+  });
+
+}
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: dropdown.js v3.3.7
+ * http://getbootstrap.com/javascript/#dropdowns
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // DROPDOWN CLASS DEFINITION
+  // =========================
+
+  var backdrop = '.dropdown-backdrop'
+  var toggle   = '[data-toggle="dropdown"]'
+  var Dropdown = function (element) {
+    $(element).on('click.bs.dropdown', this.toggle)
+  }
+
+  Dropdown.VERSION = '3.3.7'
+
+  function getParent($this) {
+    var selector = $this.attr('data-target')
+
+    if (!selector) {
+      selector = $this.attr('href')
+      selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
+    }
+
+    var $parent = selector && $(selector)
+
+    return $parent && $parent.length ? $parent : $this.parent()
+  }
+
+  function clearMenus(e) {
+    if (e && e.which === 3) return
+    $(backdrop).remove()
+    $(toggle).each(function () {
+      var $this         = $(this)
+      var $parent       = getParent($this)
+      var relatedTarget = { relatedTarget: this }
+
+      if (!$parent.hasClass('open')) return
+
+      if (e && e.type == 'click' && /input|textarea/i.test(e.target.tagName) && $.contains($parent[0], e.target)) return
+
+      $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
+
+      if (e.isDefaultPrevented()) return
+
+      $this.attr('aria-expanded', 'false')
+      $parent.removeClass('open').trigger($.Event('hidden.bs.dropdown', relatedTarget))
+    })
+  }
+
+  Dropdown.prototype.toggle = function (e) {
+    var $this = $(this)
+
+    if ($this.is('.disabled, :disabled')) return
+
+    var $parent  = getParent($this)
+    var isActive = $parent.hasClass('open')
+
+    clearMenus()
+
+    if (!isActive) {
+      if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
+        // if mobile we use a backdrop because click events don't delegate
+        $(document.createElement('div'))
+          .addClass('dropdown-backdrop')
+          .insertAfter($(this))
+          .on('click', clearMenus)
+      }
+
+      var relatedTarget = { relatedTarget: this }
+      $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget))
+
+      if (e.isDefaultPrevented()) return
+
+      $this
+        .trigger('focus')
+        .attr('aria-expanded', 'true')
+
+      $parent
+        .toggleClass('open')
+        .trigger($.Event('shown.bs.dropdown', relatedTarget))
+    }
+
+    return false
+  }
+
+  Dropdown.prototype.keydown = function (e) {
+    if (!/(38|40|27|32)/.test(e.which) || /input|textarea/i.test(e.target.tagName)) return
+
+    var $this = $(this)
+
+    e.preventDefault()
+    e.stopPropagation()
+
+    if ($this.is('.disabled, :disabled')) return
+
+    var $parent  = getParent($this)
+    var isActive = $parent.hasClass('open')
+
+    if (!isActive && e.which != 27 || isActive && e.which == 27) {
+      if (e.which == 27) $parent.find(toggle).trigger('focus')
+      return $this.trigger('click')
+    }
+
+    var desc = ' li:not(.disabled):visible a'
+    var $items = $parent.find('.dropdown-menu' + desc)
+
+    if (!$items.length) return
+
+    var index = $items.index(e.target)
+
+    if (e.which == 38 && index > 0)                 index--         // up
+    if (e.which == 40 && index < $items.length - 1) index++         // down
+    if (!~index)                                    index = 0
+
+    $items.eq(index).trigger('focus')
+  }
+
+
+  // DROPDOWN PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this = $(this)
+      var data  = $this.data('bs.dropdown')
+
+      if (!data) $this.data('bs.dropdown', (data = new Dropdown(this)))
+      if (typeof option == 'string') data[option].call($this)
+    })
+  }
+
+  var old = $.fn.dropdown
+
+  $.fn.dropdown             = Plugin
+  $.fn.dropdown.Constructor = Dropdown
+
+
+  // DROPDOWN NO CONFLICT
+  // ====================
+
+  $.fn.dropdown.noConflict = function () {
+    $.fn.dropdown = old
+    return this
+  }
+
+
+  // APPLY TO STANDARD DROPDOWN ELEMENTS
+  // ===================================
+
+  $(document)
+    .on('click.bs.dropdown.data-api', clearMenus)
+    .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
+    .on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle)
+    .on('keydown.bs.dropdown.data-api', toggle, Dropdown.prototype.keydown)
+    .on('keydown.bs.dropdown.data-api', '.dropdown-menu', Dropdown.prototype.keydown)
+
+}(jQuery);
+</script>
+<style type="text/css">
+.code-folding-btn {
+  margin-bottom: 4px;
+}
+
+.row { display: flex; }
+.collapse { display: none; }
+.in { display:block }
+.pull-right > .dropdown-menu {
+    right: 0;
+    left: auto;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.open > .dropdown-menu {
+    display: block;
+    color: #ffffff;
+    background-color: #ffffff;
+    background-image: none;
+    border-color: #92897e;
+}
+
+.dropdown-menu > li > a {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #e95420;
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #e95420;
+  outline: 0;
+}
+.dropdown-menu > .disabled > a,
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  color: #aea79f;
+}
+
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  text-decoration: none;
+  cursor: not-allowed;
+  background-color: transparent;
+  background-image: none;
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+
+.btn {
+  display: inline-block;
+  margin-bottom: 1;
+  font-weight: normal;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  padding: 4px 8px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.btn:hover,
+.btn:focus,
+.btn.focus {
+  color: #ffffff;
+  text-decoration: none;
+}
+.btn:active,
+.btn.active {
+  background-image: none;
+  outline: 0;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.btn.disabled,
+.btn[disabled],
+fieldset[disabled] .btn {
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  opacity: 0.65;
+  box-shadow: none;
+}
+a.btn.disabled,
+fieldset[disabled] a.btn {
+  pointer-events: none;
+}
+.btn-default {
+  color: #ffffff;
+  background-color: #aea79f; #important
+  border-color: #aea79f;
+}
+
+.btn-default:focus,
+.btn-default.focus {
+  color: #ffffff;
+  background-color: #978e83;
+  border-color: #6f675e;
+}
+
+.btn-default:hover {
+  color: #ffffff;
+  background-color: #978e83;
+  border-color: #92897e;
+}
+.btn-default:active,
+.btn-default.active,
+.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+  border-radius: 0;
+}
+.btn-group > .btn:first-child {
+  margin-left: 0;
+}
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btn-group > .btn:last-child:not(:first-child),
+.btn-group > .dropdown-toggle:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btn-group > .btn-group {
+  float: left;
+}
+.btn-group > .btn-group:not(:first-child):not(:last-child) > .btn {
+  border-radius: 0;
+}
+.btn-group > .btn-group:first-child:not(:last-child) > .btn:last-child,
+.btn-group > .btn-group:first-child:not(:last-child) > .dropdown-toggle {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btn-group > .btn-group:last-child:not(:first-child) > .btn:first-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btn-group .dropdown-toggle:active,
+.btn-group.open .dropdown-toggle {
+  outline: 0;
+}
+.btn-group > .btn + .dropdown-toggle {
+  padding-right: 8px;
+  padding-left: 8px;
+}
+.btn-group > .btn-lg + .dropdown-toggle {
+  padding-right: 12px;
+  padding-left: 12px;
+}
+.btn-group.open .dropdown-toggle {
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.btn-group.open .dropdown-toggle.btn-link {
+  box-shadow: none;
+}
+
+</style>
+<script>
+var str = '<div class="btn-group pull-right" style="position: fixed; right: 50px; top: 10px; z-index: 200"><button type="button" class="btn btn-default btn-xs dropdown-toggle" id="allCodeButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" data-_extension-text-contrast=""><span>Code</span> <span class="caret"></span></button><ul class="dropdown-menu" style="min-width: 50px;"><li><a id="rmd-show-all-code" href="#">Show All Code</a></li><li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li></ul></div>';
+document.write(str);
+</script>
+<script>
+$(document).ready(function () {
+  // AGB add fold-hide changed === to !== to default to showing code
+  window.initializeCodeFolding("show" !== "hide");
+});
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preamble</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#technical-setup"><i class="fa fa-check"></i><b>1.1</b> Technical Setup</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#project-structure"><i class="fa fa-check"></i><b>1.1.1</b> Project Structure</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#why-use-projects-in-r"><i class="fa fa-check"></i><b>1.1.2</b> Why Use Projects in R?</a></li>
+<li class="chapter" data-level="1.1.3" data-path="index.html"><a href="index.html#why-reproducibility-matters"><i class="fa fa-check"></i><b>1.1.3</b> Why Reproducibility Matters</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html"><i class="fa fa-check"></i><b>2</b> The Measure of Time</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#big-idea"><i class="fa fa-check"></i><b>2.1</b> Big Idea</a></li>
+<li class="chapter" data-level="2.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#reading"><i class="fa fa-check"></i><b>2.2</b> Reading</a></li>
+<li class="chapter" data-level="2.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#packages"><i class="fa fa-check"></i><b>2.3</b> Packages</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#load"><i class="fa fa-check"></i><b>2.3.1</b> Load</a></li>
+<li class="chapter" data-level="2.3.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#keep-up-to-date"><i class="fa fa-check"></i><b>2.3.2</b> Keep Up to Date</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#what-kinds-of-data"><i class="fa fa-check"></i><b>2.4</b> What Kinds of Data?</a></li>
+<li class="chapter" data-level="2.5" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#the-ts-class"><i class="fa fa-check"></i><b>2.5</b> The <code>ts</code> Class</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#a-very-useful-class"><i class="fa fa-check"></i><b>2.5.1</b> A Very Useful Class</a></li>
+<li class="chapter" data-level="2.5.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#digression-describing-a-time-series"><i class="fa fa-check"></i><b>2.5.2</b> Digression: Describing a Time Series</a></li>
+<li class="chapter" data-level="2.5.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#more-on-the-ts-index"><i class="fa fa-check"></i><b>2.5.3</b> More on the <code>ts</code> Index</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#trend-in-time"><i class="fa fa-check"></i><b>2.6</b> Trend in time</a></li>
+<li class="chapter" data-level="2.7" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#the-zoo-class"><i class="fa fa-check"></i><b>2.7</b> The <code>zoo</code> Class</a></li>
+<li class="chapter" data-level="2.8" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#lubricate-the-dates"><i class="fa fa-check"></i><b>2.8</b> Lubricate the Dates</a></li>
+<li class="chapter" data-level="2.9" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#tidy-it-up"><i class="fa fa-check"></i><b>2.9</b> Tidy it Up</a></li>
+<li class="chapter" data-level="2.10" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#your-work"><i class="fa fa-check"></i><b>2.10</b> Your Work</a>
+<ul>
+<li class="chapter" data-level="2.10.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#berkeley-earth-temperature-data"><i class="fa fa-check"></i><b>2.10.1</b> Berkeley Earth Temperature Data</a></li>
+<li class="chapter" data-level="2.10.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#your-turn"><i class="fa fa-check"></i><b>2.10.2</b> Your Turn</a></li>
+<li class="chapter" data-level="2.10.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#write-up-and-reflect"><i class="fa fa-check"></i><b>2.10.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html"><i class="fa fa-check"></i><b>3</b> An Aside: Understanding Methods and Generics in R</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#youve-come-a-long-way-in-r"><i class="fa fa-check"></i><b>3.1</b> You’ve Come a Long Way in R</a></li>
+<li class="chapter" data-level="3.2" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#why-use-generics"><i class="fa fa-check"></i><b>3.2</b> Why Use Generics?</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#same-function-different-behavior-what-gives"><i class="fa fa-check"></i><b>3.2.1</b> Same Function, Different Behavior — What Gives?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#how-this-works"><i class="fa fa-check"></i><b>3.3</b> How This Works</a></li>
+<li class="chapter" data-level="3.4" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#whats-the-difference-between-a-generic-and-a-method"><i class="fa fa-check"></i><b>3.4</b> What’s the Difference Between a Generic and a Method?</a></li>
+<li class="chapter" data-level="3.5" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#common-generic-functions"><i class="fa fa-check"></i><b>3.5</b> Common Generic Functions</a></li>
+<li class="chapter" data-level="3.6" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#how-to-explore-and-understand-methods"><i class="fa fa-check"></i><b>3.6</b> How to Explore and Understand Methods</a></li>
+<li class="chapter" data-level="3.7" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#why-this-matters"><i class="fa fa-check"></i><b>3.7</b> Why This Matters</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="decomposition.html"><a href="decomposition.html"><i class="fa fa-check"></i><b>4</b> Decomposition</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="decomposition.html"><a href="decomposition.html#big-idea-1"><i class="fa fa-check"></i><b>4.1</b> Big Idea</a></li>
+<li class="chapter" data-level="4.2" data-path="decomposition.html"><a href="decomposition.html#reading-1"><i class="fa fa-check"></i><b>4.2</b> Reading</a></li>
+<li class="chapter" data-level="4.3" data-path="decomposition.html"><a href="decomposition.html#packages-1"><i class="fa fa-check"></i><b>4.3</b> Packages</a></li>
+<li class="chapter" data-level="4.4" data-path="decomposition.html"><a href="decomposition.html#seasonality-and-decomposition"><i class="fa fa-check"></i><b>4.4</b> Seasonality and decomposition</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="decomposition.html"><a href="decomposition.html#breaking-down-a-series-the-tedious-way"><i class="fa fa-check"></i><b>4.4.1</b> Breaking down a series the tedious way</a></li>
+<li class="chapter" data-level="4.4.2" data-path="decomposition.html"><a href="decomposition.html#breaking-down-a-series-the-easy-way"><i class="fa fa-check"></i><b>4.4.2</b> Breaking down a series the easy way</a></li>
+<li class="chapter" data-level="4.4.3" data-path="decomposition.html"><a href="decomposition.html#how-does-m-differ-from-the-slope-in-a-lm"><i class="fa fa-check"></i><b>4.4.3</b> How does <code>m</code> differ from the slope in a <code>lm</code>?</a></li>
+<li class="chapter" data-level="4.4.4" data-path="decomposition.html"><a href="decomposition.html#warning"><i class="fa fa-check"></i><b>4.4.4</b> Warning</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="decomposition.html"><a href="decomposition.html#stationarity"><i class="fa fa-check"></i><b>4.5</b> Stationarity</a></li>
+<li class="chapter" data-level="4.6" data-path="decomposition.html"><a href="decomposition.html#your-work-1"><i class="fa fa-check"></i><b>4.6</b> Your Work</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="decomposition.html"><a href="decomposition.html#air-passengers"><i class="fa fa-check"></i><b>4.6.1</b> Air Passengers</a></li>
+<li class="chapter" data-level="4.6.2" data-path="decomposition.html"><a href="decomposition.html#kbli"><i class="fa fa-check"></i><b>4.6.2</b> KBLI</a></li>
+<li class="chapter" data-level="4.6.3" data-path="decomposition.html"><a href="decomposition.html#write-up-and-reflect-1"><i class="fa fa-check"></i><b>4.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html"><i class="fa fa-check"></i><b>5</b> AR(p), ACF, PACF, etc.</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#big-idea-2"><i class="fa fa-check"></i><b>5.1</b> Big Idea</a></li>
+<li class="chapter" data-level="5.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#reading-2"><i class="fa fa-check"></i><b>5.2</b> Reading</a></li>
+<li class="chapter" data-level="5.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#packages-2"><i class="fa fa-check"></i><b>5.3</b> Packages</a></li>
+<li class="chapter" data-level="5.4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#correlation-and-covariance"><i class="fa fa-check"></i><b>5.4</b> Correlation and Covariance</a></li>
+<li class="chapter" data-level="5.5" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation"><i class="fa fa-check"></i><b>5.5</b> Autocorrelation</a></li>
+<li class="chapter" data-level="5.6" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation-function"><i class="fa fa-check"></i><b>5.6</b> Autocorrelation Function</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#the-very-fun-presentation"><i class="fa fa-check"></i><b>5.6.1</b> The Very Fun Presentation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#the-boring-presentation"><i class="fa fa-check"></i><b>5.7</b> The Boring Presentation</a>
+<ul>
+<li class="chapter" data-level="5.7.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#tidy"><i class="fa fa-check"></i><b>5.7.1</b> Tidy</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#partial-autocorrelation-function"><i class="fa fa-check"></i><b>5.8</b> Partial Autocorrelation Function</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#pacf"><i class="fa fa-check"></i><b>5.8.1</b> PACF</a></li>
+<li class="chapter" data-level="5.8.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#underneath-the-hood-of-pacf"><i class="fa fa-check"></i><b>5.8.2</b> Underneath the Hood of PACF</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#ar1-to-arp"><i class="fa fa-check"></i><b>5.9</b> AR(1) to AR(p)</a></li>
+<li class="chapter" data-level="5.10" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#random-walks"><i class="fa fa-check"></i><b>5.10</b> Random walks</a>
+<ul>
+<li class="chapter" data-level="5.10.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#stationarity-is-dead"><i class="fa fa-check"></i><b>5.10.1</b> Stationarity is dead</a></li>
+</ul></li>
+<li class="chapter" data-level="5.11" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation-examples-with-real-data"><i class="fa fa-check"></i><b>5.11</b> Autocorrelation examples with real data</a>
+<ul>
+<li class="chapter" data-level="5.11.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#nile"><i class="fa fa-check"></i><b>5.11.1</b> Nile</a></li>
+<li class="chapter" data-level="5.11.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#air-temperature"><i class="fa fa-check"></i><b>5.11.2</b> Air Temperature</a></li>
+<li class="chapter" data-level="5.11.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#sunspots"><i class="fa fa-check"></i><b>5.11.3</b> Sunspots</a></li>
+</ul></li>
+<li class="chapter" data-level="5.12" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#choosing-the-order-of-an-arp-model-by-aic"><i class="fa fa-check"></i><b>5.12</b> Choosing the Order of an AR(p) Model by AIC</a></li>
+<li class="chapter" data-level="5.13" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#your-work-2"><i class="fa fa-check"></i><b>5.13</b> Your work</a>
+<ul>
+<li class="chapter" data-level="5.13.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#acf-and-pacf-with-different-values-of-phi."><i class="fa fa-check"></i><b>5.13.1</b> ACF and PACF with different values of <span class="math inline">\(\phi\)</span>.</a></li>
+<li class="chapter" data-level="5.13.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#roll-your-own-ar2"><i class="fa fa-check"></i><b>5.13.2</b> Roll your own AR(2)</a></li>
+<li class="chapter" data-level="5.13.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#sockeye"><i class="fa fa-check"></i><b>5.13.3</b> Sockeye</a></li>
+<li class="chapter" data-level="5.13.4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#write-up-and-reflect-2"><i class="fa fa-check"></i><b>5.13.4</b> Write Up and Reflect</a></li>
+</ul></li>
+<li class="chapter" data-level="5.14" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#postscript-a-helpful-plotting-chunk"><i class="fa fa-check"></i><b>5.14</b> Postscript: A Helpful Plotting Chunk</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><i class="fa fa-check"></i><b>6</b> Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#introduction"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#acf-and-pacf-of-a-single-ma1-simulation"><i class="fa fa-check"></i><b>6.2</b> ACF and PACF of a Single MA(1) Simulation</a></li>
+<li class="chapter" data-level="6.3" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#simulation-study-across-many-ma1-coefficients"><i class="fa fa-check"></i><b>6.3</b> Simulation Study Across Many MA(1) Coefficients</a></li>
+<li class="chapter" data-level="6.4" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-1-pacf-lag-1-underestimates-theta"><i class="fa fa-check"></i><b>6.4</b> Insight 1: PACF Lag 1 Underestimates <span class="math inline">\(\theta\)</span></a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens"><i class="fa fa-check"></i><b>6.4.1</b> Why This Happens</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-2-pacf-lag-2-is-consistently-negative"><i class="fa fa-check"></i><b>6.5</b> Insight 2: PACF Lag 2 is Consistently Negative</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens-1"><i class="fa fa-check"></i><b>6.5.1</b> Why This Happens</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#conclusion"><i class="fa fa-check"></i><b>6.6</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="armapq.html"><a href="armapq.html"><i class="fa fa-check"></i><b>7</b> ARMA(p,q)</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="armapq.html"><a href="armapq.html#big-idea-3"><i class="fa fa-check"></i><b>7.1</b> Big Idea</a></li>
+<li class="chapter" data-level="7.2" data-path="armapq.html"><a href="armapq.html#reading-3"><i class="fa fa-check"></i><b>7.2</b> Reading</a></li>
+<li class="chapter" data-level="7.3" data-path="armapq.html"><a href="armapq.html#packages-3"><i class="fa fa-check"></i><b>7.3</b> Packages</a></li>
+<li class="chapter" data-level="7.4" data-path="armapq.html"><a href="armapq.html#arp-to-maq"><i class="fa fa-check"></i><b>7.4</b> AR(p) to MA(q)</a></li>
+<li class="chapter" data-level="7.5" data-path="armapq.html"><a href="armapq.html#armapq-1"><i class="fa fa-check"></i><b>7.5</b> ARMA(p,q)</a></li>
+<li class="chapter" data-level="7.6" data-path="armapq.html"><a href="armapq.html#what-about-arimap-d-q"><i class="fa fa-check"></i><b>7.6</b> What about ARIMA(p, d, q)?</a>
+<ul>
+<li class="chapter" data-level="7.6.1" data-path="armapq.html"><a href="armapq.html#why-do-arma-models-require-stationarity"><i class="fa fa-check"></i><b>7.6.1</b> Why Do ARMA Models Require Stationarity?</a></li>
+<li class="chapter" data-level="7.6.2" data-path="armapq.html"><a href="armapq.html#simulated-data"><i class="fa fa-check"></i><b>7.6.2</b> Simulated Data</a></li>
+</ul></li>
+<li class="chapter" data-level="7.7" data-path="armapq.html"><a href="armapq.html#evaluating-arma-models"><i class="fa fa-check"></i><b>7.7</b> Evaluating ARMA models</a>
+<ul>
+<li class="chapter" data-level="7.7.1" data-path="armapq.html"><a href="armapq.html#simulated-data-1"><i class="fa fa-check"></i><b>7.7.1</b> Simulated Data</a></li>
+<li class="chapter" data-level="7.7.2" data-path="armapq.html"><a href="armapq.html#sst-data"><i class="fa fa-check"></i><b>7.7.2</b> SST Data</a></li>
+<li class="chapter" data-level="7.7.3" data-path="armapq.html"><a href="armapq.html#how-do-you-decide-which-information-criterion-to-use"><i class="fa fa-check"></i><b>7.7.3</b> How Do You Decide Which Information Criterion to Use?</a></li>
+</ul></li>
+<li class="chapter" data-level="7.8" data-path="armapq.html"><a href="armapq.html#your-work-3"><i class="fa fa-check"></i><b>7.8</b> Your work</a>
+<ul>
+<li class="chapter" data-level="7.8.1" data-path="armapq.html"><a href="armapq.html#bunnies-and-kitties"><i class="fa fa-check"></i><b>7.8.1</b> Bunnies and Kitties</a></li>
+<li class="chapter" data-level="7.8.2" data-path="armapq.html"><a href="armapq.html#write-up-and-reflect-3"><i class="fa fa-check"></i><b>7.8.2</b> Write up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i><b>8</b> Forecasting</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="forecasting.html"><a href="forecasting.html#big-idea-4"><i class="fa fa-check"></i><b>8.1</b> Big Idea</a></li>
+<li class="chapter" data-level="8.2" data-path="forecasting.html"><a href="forecasting.html#reading-4"><i class="fa fa-check"></i><b>8.2</b> Reading</a></li>
+<li class="chapter" data-level="8.3" data-path="forecasting.html"><a href="forecasting.html#packages-4"><i class="fa fa-check"></i><b>8.3</b> Packages</a></li>
+<li class="chapter" data-level="8.4" data-path="forecasting.html"><a href="forecasting.html#introduction-1"><i class="fa fa-check"></i><b>8.4</b> Introduction</a></li>
+<li class="chapter" data-level="8.5" data-path="forecasting.html"><a href="forecasting.html#a-simple-forecast"><i class="fa fa-check"></i><b>8.5</b> A simple forecast</a>
+<ul>
+<li class="chapter" data-level="8.5.1" data-path="forecasting.html"><a href="forecasting.html#two-step-ahead-forecast"><i class="fa fa-check"></i><b>8.5.1</b> Two-step-ahead forecast</a></li>
+<li class="chapter" data-level="8.5.2" data-path="forecasting.html"><a href="forecasting.html#example"><i class="fa fa-check"></i><b>8.5.2</b> Example</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="forecasting.html"><a href="forecasting.html#using-arma-coefficients-to-forecast"><i class="fa fa-check"></i><b>8.6</b> Using ARMA coefficients to forecast</a></li>
+<li class="chapter" data-level="8.7" data-path="forecasting.html"><a href="forecasting.html#holt-winters"><i class="fa fa-check"></i><b>8.7</b> Holt-Winters</a></li>
+<li class="chapter" data-level="8.8" data-path="forecasting.html"><a href="forecasting.html#your-work-4"><i class="fa fa-check"></i><b>8.8</b> Your work</a>
+<ul>
+<li class="chapter" data-level="8.8.1" data-path="forecasting.html"><a href="forecasting.html#a-silly-prediction"><i class="fa fa-check"></i><b>8.8.1</b> A silly prediction</a></li>
+<li class="chapter" data-level="8.8.2" data-path="forecasting.html"><a href="forecasting.html#write-up-and-reflect-4"><i class="fa fa-check"></i><b>8.8.2</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="cross-correlation.html"><a href="cross-correlation.html"><i class="fa fa-check"></i><b>9</b> Cross Correlation</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="cross-correlation.html"><a href="cross-correlation.html#big-idea-5"><i class="fa fa-check"></i><b>9.1</b> Big Idea</a></li>
+<li class="chapter" data-level="9.2" data-path="cross-correlation.html"><a href="cross-correlation.html#reading-5"><i class="fa fa-check"></i><b>9.2</b> Reading</a></li>
+<li class="chapter" data-level="9.3" data-path="cross-correlation.html"><a href="cross-correlation.html#packages-5"><i class="fa fa-check"></i><b>9.3</b> Packages</a></li>
+<li class="chapter" data-level="9.4" data-path="cross-correlation.html"><a href="cross-correlation.html#lags"><i class="fa fa-check"></i><b>9.4</b> Lags</a></li>
+<li class="chapter" data-level="9.5" data-path="cross-correlation.html"><a href="cross-correlation.html#from-acf-to-ccf"><i class="fa fa-check"></i><b>9.5</b> From ACF to CCF</a></li>
+<li class="chapter" data-level="9.6" data-path="cross-correlation.html"><a href="cross-correlation.html#how-ccf-normalizes-correlations"><i class="fa fa-check"></i><b>9.6</b> How <code>Ccf()</code> Normalizes Correlations</a></li>
+<li class="chapter" data-level="9.7" data-path="cross-correlation.html"><a href="cross-correlation.html#your-work-5"><i class="fa fa-check"></i><b>9.7</b> Your work</a>
+<ul>
+<li class="chapter" data-level="9.7.1" data-path="cross-correlation.html"><a href="cross-correlation.html#write-up-and-reflect-5"><i class="fa fa-check"></i><b>9.7.1</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="regression.html"><a href="regression.html"><i class="fa fa-check"></i><b>10</b> Regression</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="regression.html"><a href="regression.html#big-idea-6"><i class="fa fa-check"></i><b>10.1</b> Big Idea</a></li>
+<li class="chapter" data-level="10.2" data-path="regression.html"><a href="regression.html#reading-6"><i class="fa fa-check"></i><b>10.2</b> Reading</a></li>
+<li class="chapter" data-level="10.3" data-path="regression.html"><a href="regression.html#packages-6"><i class="fa fa-check"></i><b>10.3</b> Packages</a></li>
+<li class="chapter" data-level="10.4" data-path="regression.html"><a href="regression.html#regression-1"><i class="fa fa-check"></i><b>10.4</b> Regression</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="regression.html"><a href="regression.html#adjusting-ols"><i class="fa fa-check"></i><b>10.4.1</b> Adjusting OLS</a></li>
+<li class="chapter" data-level="10.4.2" data-path="regression.html"><a href="regression.html#gls"><i class="fa fa-check"></i><b>10.4.2</b> GLS</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="regression.html"><a href="regression.html#your-work-6"><i class="fa fa-check"></i><b>10.5</b> Your work</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="regression.html"><a href="regression.html#what-does-generalized-mean"><i class="fa fa-check"></i><b>10.5.1</b> What Does Generalized Mean?</a></li>
+<li class="chapter" data-level="10.5.2" data-path="regression.html"><a href="regression.html#regression-simulation"><i class="fa fa-check"></i><b>10.5.2</b> Regression Simulation</a></li>
+<li class="chapter" data-level="10.5.3" data-path="regression.html"><a href="regression.html#regression-for-real"><i class="fa fa-check"></i><b>10.5.3</b> Regression for real</a></li>
+<li class="chapter" data-level="10.5.4" data-path="regression.html"><a href="regression.html#write-up-and-reflect-6"><i class="fa fa-check"></i><b>10.5.4</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html"><i class="fa fa-check"></i><b>11</b> Filtering, smoothing</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#big-idea-7"><i class="fa fa-check"></i><b>11.1</b> Big Idea</a></li>
+<li class="chapter" data-level="11.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#packages-7"><i class="fa fa-check"></i><b>11.2</b> Packages</a></li>
+<li class="chapter" data-level="11.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#filters-as-visual-aids"><i class="fa fa-check"></i><b>11.3</b> Filters as visual aids</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#moving-running-average"><i class="fa fa-check"></i><b>11.3.1</b> Moving (running) average</a></li>
+<li class="chapter" data-level="11.3.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#hanning"><i class="fa fa-check"></i><b>11.3.2</b> Hanning</a></li>
+<li class="chapter" data-level="11.3.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#smoothing-splines"><i class="fa fa-check"></i><b>11.3.3</b> Smoothing splines</a></li>
+<li class="chapter" data-level="11.3.4" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#loess"><i class="fa fa-check"></i><b>11.3.4</b> Loess</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#using-filters"><i class="fa fa-check"></i><b>11.4</b> Using filters</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#aggregating"><i class="fa fa-check"></i><b>11.4.1</b> Aggregating</a></li>
+<li class="chapter" data-level="11.4.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#removing-low-frequency-variability"><i class="fa fa-check"></i><b>11.4.2</b> Removing low frequency variability</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#the-case-of-the-poorly-launched-sensors"><i class="fa fa-check"></i><b>11.5</b> The Case of the Poorly-Launched Sensors</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#fix-time-on-temperature"><i class="fa fa-check"></i><b>11.5.1</b> Fix time on temperature</a></li>
+<li class="chapter" data-level="11.5.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#fill-missing-data-on-radiation"><i class="fa fa-check"></i><b>11.5.2</b> Fill missing data on radiation</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#your-work-7"><i class="fa fa-check"></i><b>11.6</b> Your work</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#filter"><i class="fa fa-check"></i><b>11.6.1</b> Filter</a></li>
+<li class="chapter" data-level="11.6.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#revisit-the-case-of-the-poorly-launched-sensors"><i class="fa fa-check"></i><b>11.6.2</b> Revisit the case of the poorly launched sensors</a></li>
+<li class="chapter" data-level="11.6.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#write-up-and-reflect-7"><i class="fa fa-check"></i><b>11.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html"><i class="fa fa-check"></i><b>12</b> The Freqs Come out at Night</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#big-idea-8"><i class="fa fa-check"></i><b>12.1</b> Big Idea</a></li>
+<li class="chapter" data-level="12.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#reading-7"><i class="fa fa-check"></i><b>12.2</b> Reading</a></li>
+<li class="chapter" data-level="12.3" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#packages-8"><i class="fa fa-check"></i><b>12.3</b> Packages</a></li>
+<li class="chapter" data-level="12.4" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#the-frequency-domain"><i class="fa fa-check"></i><b>12.4</b> The Frequency Domain</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#same-data-two-domains"><i class="fa fa-check"></i><b>12.4.1</b> Same Data, Two Domains</a></li>
+<li class="chapter" data-level="12.4.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#worked-example"><i class="fa fa-check"></i><b>12.4.2</b> Worked example</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#sunspot-example"><i class="fa fa-check"></i><b>12.5</b> Sunspot Example</a></li>
+<li class="chapter" data-level="12.6" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#your-work-8"><i class="fa fa-check"></i><b>12.6</b> Your work</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#generate-three-signals"><i class="fa fa-check"></i><b>12.6.1</b> Generate three signals</a></li>
+<li class="chapter" data-level="12.6.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#milankovitch"><i class="fa fa-check"></i><b>12.6.2</b> Milankovitch</a></li>
+<li class="chapter" data-level="12.6.3" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#write-up-and-reflect-8"><i class="fa fa-check"></i><b>12.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#references"><i class="fa fa-check"></i><b>12.7</b> References</a></li>
+<li class="chapter" data-level="12.8" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#postscript-a-glimpse-of-wavelets"><i class="fa fa-check"></i><b>12.8</b> Postscript: A Glimpse of Wavelets</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="references-1.html"><a href="references-1.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A collection of note for ESCI 504</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="arp-acf-pacf-etc." class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">5</span> AR(p), ACF, PACF, etc.<a href="arp-acf-pacf-etc..html#arp-acf-pacf-etc." class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="big-idea-2" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Big Idea<a href="arp-acf-pacf-etc..html#big-idea-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The values in a time series are often not independent – that can be a good thing to find out – understanding what the autocorrelation is like can often tell you a lot about what the underlying processes looks like.</p>
+</div>
+<div id="reading-2" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Reading<a href="arp-acf-pacf-etc..html#reading-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Have a look at Chapter two from <span class="citation">Cowpertwait and Metcalfe (<a href="references-1.html#ref-Cowpertwait2009">2009</a>)</span>. It’s OK to skim the readings in this book. It’s not a great book for our purposes as many of you haven’t taken linear algebra and the book occasionally goes that way. But it’s useful to hum your way through the chapter nonetheless.</p>
+</div>
+<div id="packages-2" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Packages<a href="arp-acf-pacf-etc..html#packages-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>I’ll use <code>tidyverse</code> <span class="citation">(<a href="references-1.html#ref-R-tidyverse">Wickham 2023</a>)</span> some. And we will use the <code>forecast</code> <span class="citation">(<a href="references-1.html#ref-R-forecast">Hyndman et al. 2025</a>)</span> and <code>gridExtra</code> <span class="citation">(<a href="references-1.html#ref-R-gridExtra">Auguie 2017</a>)</span> package as well.</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="arp-acf-pacf-etc..html#cb100-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb100-2"><a href="arp-acf-pacf-etc..html#cb100-2" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb100-3"><a href="arp-acf-pacf-etc..html#cb100-3" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span></code></pre></div>
+</div>
+<div id="correlation-and-covariance" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Correlation and Covariance<a href="arp-acf-pacf-etc..html#correlation-and-covariance" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The book spends a good deal of time on how to define correlation and covariance in the context of time series analysis. Read that stuff over even though you’ve covered it all before. This is important material to be aware of for a few reasons when doing time series but the biggest is the idea of stationarity. A stationary time series is one whose statistical properties such as mean and variance are constant over time and do not follow any trends. A little more formally, that means that a stationary time series is a random process whose joint probability distribution does not change over time. We will come back to this as we get into forecasting.</p>
+</div>
+<div id="autocorrelation" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> Autocorrelation<a href="arp-acf-pacf-etc..html#autocorrelation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Autocorrelation is a central feature of many time series. It means that values in a time series are correlated with each other as a function of time. For instance, tree-ring data are autocorrelated so that a measurement like ring width in year <span class="math inline">\(t\)</span> is related to year in <span class="math inline">\(t-1\)</span>, <span class="math inline">\(t-2\)</span>, etc. If you think about the biology of how rings are formed you can imagine the mechanisms at play in terms of stored photosynthate, fine root generation, etc. Here is a simple way of writing a first-order autoregressive process where the prior observation influences the current observation:
+<span class="math display">\[ y_t = \phi y_{t-1} + \epsilon_t\]</span></p>
+<p>where <span class="math inline">\(y\)</span> is a time series, <span class="math inline">\(t\)</span> is a measurement in time, <span class="math inline">\(\phi\)</span> (usually pronounced as “fie” but in Greece they’d say “fee”) is a coefficient ranging from -1 to 1, and <span class="math inline">\(\epsilon\)</span> is some other process. The term <span class="math inline">\(\epsilon\)</span> is typically called the error, the noise or the residuals but in time series lingo you’ll see it called the the random shock sometimes too. We call this a first-order autoregressive model and notate it as AR(1). Note that you’ll see this in some books written out slightly differently as <span class="math inline">\(y_t - \phi y_{t-1} = \epsilon_t\)</span>. I prefer thinking about it as a regression and so prefer the <span class="math inline">\(y\)</span> term to be by itself on the left hand side of the equation.</p>
+<p>Operationally the math works out to be easier if the series has a mean of zero. So we typically remove the mean of the data to create a mean-adjusted time series if the series has a mean not equal to zero via <span class="math inline">\(y=Y-\bar{Y}\)</span>. We’ll just stick with data that have a mean of zero for now.</p>
+<p>For now, let’s generate an AR(1) time series by hand. Later we’ll learn a better way to do this using the <code>arima.sim()</code> function, but until that happy day:</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="arp-acf-pacf-etc..html#cb101-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb101-2"><a href="arp-acf-pacf-etc..html#cb101-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb101-3"><a href="arp-acf-pacf-etc..html#cb101-3" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n,<span class="at">mean =</span> <span class="dv">0</span>,<span class="at">sd =</span> <span class="dv">1</span>) <span class="co"># white noise</span></span>
+<span id="cb101-4"><a href="arp-acf-pacf-etc..html#cb101-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> n)</span>
+<span id="cb101-5"><a href="arp-acf-pacf-etc..html#cb101-5" tabindex="-1"></a>phi <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
+<span id="cb101-6"><a href="arp-acf-pacf-etc..html#cb101-6" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n){</span>
+<span id="cb101-7"><a href="arp-acf-pacf-etc..html#cb101-7" tabindex="-1"></a>  y[i] <span class="ot">&lt;-</span> phi <span class="sc">*</span> y[i<span class="dv">-1</span>] <span class="sc">+</span> epsilon[i]  </span>
+<span id="cb101-8"><a href="arp-acf-pacf-etc..html#cb101-8" tabindex="-1"></a>}</span>
+<span id="cb101-9"><a href="arp-acf-pacf-etc..html#cb101-9" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y)) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Take a look at how we did this. We initialized with a value of zero and then started building <code>y</code> on the second value. We couldn’t start the loop at <code>i=1</code> because we needed the prior year for an AR(1) model. Keep this in mind when you get to the section for your work below. We could have started the time series with a random number instead of a zero if we were feeling adventurous. E.g., before the loop we could have set <code>y[1]=rnorm(1)</code>.</p>
+<p>Run that loop above and make the plot a half dozen or so times. Get a feel for what that time series looks like. Compare it to uncorrelated times series: <code>plot(rnorm(n),type="l")</code>.</p>
+</div>
+<div id="autocorrelation-function" class="section level2 hasAnchor" number="5.6">
+<h2><span class="header-section-number">5.6</span> Autocorrelation Function<a href="arp-acf-pacf-etc..html#autocorrelation-function" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="the-very-fun-presentation" class="section level3 hasAnchor" number="5.6.1">
+<h3><span class="header-section-number">5.6.1</span> The Very Fun Presentation<a href="arp-acf-pacf-etc..html#the-very-fun-presentation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Go read <a href="https://allisonhorst.com/time-series-acf">Allison Horst’s on autocorrelation</a> on the autocorrelation function (ACF). She is <strong>amazing</strong> and I read everything she does with awe.</p>
+<p><img src="assets/allison_horst/host_acf_images.gif" width="100%" /></p>
+</div>
+</div>
+<div id="the-boring-presentation" class="section level2 hasAnchor" number="5.7">
+<h2><span class="header-section-number">5.7</span> The Boring Presentation<a href="arp-acf-pacf-etc..html#the-boring-presentation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Fun time is over!</p>
+<p>How strongly correlated is <span class="math inline">\(y_t\)</span> with <span class="math inline">\(y_{t-1}\)</span>? The answer should be <span class="math inline">\(\rho_{y_t,y_{t-1}} \approx \phi\)</span> as above and we can calculate this via <code>cor(y[2:n],y[1:(n-1)])</code> which is 0.668 for this particular random seed. The remainder (<span class="math inline">\(\epsilon\)</span>) is white noise.</p>
+<p>This is the standard way you are used to seeing correlation between two variables (e.g., <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>) but in this case we are looking at how <span class="math inline">\(y\)</span> correlates with itself at different lags. Thus, more formally we can refer to autocorrelation of <span class="math inline">\(\rho\)</span> at lag <span class="math inline">\(k\)</span> as:</p>
+<p><span class="math display">\[\rho(k) = \frac{\frac{1}{n-k}\sum_{t=k+1}^n (y_t - \bar{y})(y_{t-k} - \bar{y})}{
+\sqrt{\frac{1}{n}\sum_{t=1}^n (y_t - \bar{y})}\sqrt{\frac{1}{n-k}\sum_{t=k+1}^n (y_{t-k} - \bar{y})}}\]</span></p>
+<p>So how do you assess autocorrelation more generally? You calculate <span class="math inline">\(\rho\)</span> for successive lags <span class="math inline">\(k\)</span> and plot it. We do this with the function <code>Acf</code> which produces a figure called a correlogram. Note that we are using the function <code>Acf</code> in <code>forecast</code> rather than the canonical <code>acf</code> function in stats. There are a few differences that you can read about (<code>?Acf</code>) but the two functions are essentially similar.</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="arp-acf-pacf-etc..html#cb102-1" tabindex="-1"></a><span class="fu">Acf</span>(y)</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>This produces a plot of the correlation (<span class="math inline">\(r\)</span>) at lags (<span class="math inline">\(k\)</span>). The autocorrelation value at the first lag (<span class="math inline">\(k=1\)</span>) is <span class="math inline">\(\phi=0.668\)</span> which is very close to the value of <span class="math inline">\(\phi\)</span> we set above. But also note that there is autocorrelation at higher lags (<span class="math inline">\(k=2, k=3\)</span>) that follows a decay of <span class="math inline">\(\phi^k\)</span> (<span class="math inline">\(\phi_2=\phi^2\)</span>, <span class="math inline">\(\phi_3=\phi^3\)</span>, etc.).</p>
+<p>The correlogram provides a great visualization into the autocorrelation structure and can also tell us whether the correlation is significantly different from zero. The assumption is that the correlation at lag <span class="math inline">\(k\)</span> should be zero if the series is an independent and identically distributed random variable. Specifically, the statistic <span class="math inline">\(r\)</span> estimates the true value of the parameter <span class="math inline">\(\rho\)</span>: <span class="math inline">\(E(\rho_k)=-1/N\)</span> and the variance is <span class="math inline">\(Var(\sigma^2_k)=1/N\)</span>. Thus, the 95% confidence limits for the statistic <span class="math inline">\(r\)</span> in the correlogram can be added to the plot (dashed lines) as <span class="math inline">\(0 \pm 1.96 / \sqrt N\)</span>. The <code>acf</code> function plots the confidence intervals at a default value of 95% using the argument <code>ci</code> via:</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="arp-acf-pacf-etc..html#cb103-1" tabindex="-1"></a>ci <span class="ot">&lt;-</span> <span class="fl">0.95</span></span>
+<span id="cb103-2"><a href="arp-acf-pacf-etc..html#cb103-2" tabindex="-1"></a><span class="fu">qnorm</span>((<span class="dv">1</span> <span class="sc">+</span> ci)<span class="sc">/</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">sqrt</span>(n)</span></code></pre></div>
+<pre><code>## [1] 0.08765225</code></pre>
+<p>Ok. You should be hip to the idea that by testing 25 lags like we did in the figure above means that having any one given lag <span class="math inline">\(k\)</span> outside the 95% confidence limits is no reason to fire off a paper to Nature. I.e., you might well see a value outside the limits even if the time series is drawn from a random population. The key is interpreting the figure according to the properties of the system. A strong significant autocorrelation at lag 1 makes good sense in many biological or physical systems while an isolated barely significant value at, say, lag 18 is unlikely to be something you should get excited about. Always think in terms of mechanism – does what you see in the data make sense?</p>
+<p>How can we can extract the actual numbers from the ACF object? Figuring out how to do so might take a little sleuthing on your part. If you look at the help page for <code>acf</code> you’ll see that the output produces an array called <code>acf</code> which contains the information on the correlations at various lags. Running <code>str</code> on the ACF object helps too. As always, <code>str</code> is your friend! Thus:</p>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="arp-acf-pacf-etc..html#cb105-1" tabindex="-1"></a>yACF <span class="ot">&lt;-</span> <span class="fu">Acf</span>(y,<span class="at">plot=</span><span class="cn">FALSE</span>)</span>
+<span id="cb105-2"><a href="arp-acf-pacf-etc..html#cb105-2" tabindex="-1"></a><span class="fu">str</span>(yACF)</span></code></pre></div>
+<pre><code>## List of 6
+##  $ acf   : num [1:27, 1, 1] 1 0.667 0.395 0.201 0.106 ...
+##  $ type  : chr &quot;correlation&quot;
+##  $ n.used: int 500
+##  $ lag   : num [1:27, 1, 1] 0 1 2 3 4 5 6 7 8 9 ...
+##  $ series: chr &quot;y&quot;
+##  $ snames: NULL
+##  - attr(*, &quot;class&quot;)= chr &quot;acf&quot;</code></pre>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="arp-acf-pacf-etc..html#cb107-1" tabindex="-1"></a>yACF<span class="sc">$</span>acf[,<span class="dv">1</span>,<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>##  [1]  1.000000000  0.667381959  0.394898921  0.201185905  0.105832323
+##  [6]  0.006835833 -0.031653516 -0.043152324  0.030731602  0.101805417
+## [11]  0.080434533  0.006901371 -0.018551768  0.002020845  0.010443740
+## [16]  0.011214921 -0.024411046 -0.032823730 -0.001342588  0.018718373
+## [21] -0.005275216 -0.036887143 -0.055374925 -0.036574252 -0.004123666
+## [26] -0.006268373  0.012301501</code></pre>
+<p>Note that value of 1.0 at lag zero. Ugh. I hate that. It shows that when you correlate <span class="math inline">\(y\)</span> to <span class="math inline">\(y\)</span>, the correlation is one. There are reasons I can explain for why that is included but it’s mostly there annoy me I think.</p>
+<p>So, the data above follow an AR(1) model and the <code>acf</code> plot lets us visualize the autocorrelation structure.</p>
+<div id="tidy" class="section level3 hasAnchor" number="5.7.1">
+<h3><span class="header-section-number">5.7.1</span> Tidy<a href="arp-acf-pacf-etc..html#tidy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Another benefit of using <code>Acf</code> over <code>acf</code> is that there is a pre-rolled <code>ggplot</code> function ready to go.</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="arp-acf-pacf-etc..html#cb109-1" tabindex="-1"></a><span class="fu">ggAcf</span>(y) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+</div>
+<div id="partial-autocorrelation-function" class="section level2 hasAnchor" number="5.8">
+<h2><span class="header-section-number">5.8</span> Partial Autocorrelation Function<a href="arp-acf-pacf-etc..html#partial-autocorrelation-function" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="pacf" class="section level3 hasAnchor" number="5.8.1">
+<h3><span class="header-section-number">5.8.1</span> PACF<a href="arp-acf-pacf-etc..html#pacf" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let’s revisit our observation above that while <span class="math inline">\(\phi\)</span> affects <span class="math inline">\(y_{t-1}\)</span> we still see autocorrelation at higher lags (<span class="math inline">\(k=2, k=3\)</span>). Why? Because if <span class="math inline">\(y_t\)</span> and <span class="math inline">\(y_{t-1}\)</span> are correlated, then <span class="math inline">\(y_{t-1}\)</span> and <span class="math inline">\(y_{t-2}\)</span> must also be correlated. Thus, <span class="math inline">\(y_{t}\)</span> and <span class="math inline">\(y_{t-2}\)</span> will be correlated because they are both connected to <span class="math inline">\(y_{t-1}\)</span>. What we’d like to do next is remove that decaying echo using partial regression.</p>
+<p>The <code>Pacf</code> function lets us look at the partial autocorrelation which shows conditional correlation at lag <span class="math inline">\(k\)</span> after we take into account effects of the the prior lags. Partial regression lets us measure the linear dependence of one variable after removing the effect of another variable. Thus at lag 2, the partial autocorrelation of measures the effect (linear dependence) of <span class="math inline">\(y_{t-2}\)</span> on <span class="math inline">\(y_t\)</span> after removing the effect of that <span class="math inline">\(y_{t-1}\)</span> has on <span class="math inline">\(y_{t-2}\)</span>.</p>
+<p>Our expectation for <code>y</code> is that after taking the AR(1) model into account the correlation at subsequent lags should fall to zero. In other words, if we have a parsimonious model for a first-order process the partial correlations should be very small. Let’s look:</p>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="arp-acf-pacf-etc..html#cb110-1" tabindex="-1"></a><span class="fu">ggPacf</span>(y) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>Interpreting ACF plots is pretty straightforward, but what does the PACF plot mean? Well, if you have an AR(1) process the remaining autocorrelation at higher lags will be near zero in your PACF plot. That is, if the true process is AR(1), all autocorrelation is removed from the model – even the residual autocorrelation from the geometric decrease seen at higher lags in the ACF plot. Thus, if you have an AR(1) process, the ACF decays geometrically while the PACF falls to zero (zero’ish) abruptly after lag 1. If you still see a geometric progression decline in a PACF plot you might be looking at different process, like an MA(1) process. We will get there next week.</p>
+</div>
+<div id="underneath-the-hood-of-pacf" class="section level3 hasAnchor" number="5.8.2">
+<h3><span class="header-section-number">5.8.2</span> Underneath the Hood of PACF<a href="arp-acf-pacf-etc..html#underneath-the-hood-of-pacf" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>How does PACF work? How does it relate to the ACF values? How you can get a feel for what PACF is all about? Good questions. So, let’s take a look under the hood of the <code>Pacf</code> function so to speak. The most straightforward answer involves unpacking the idea that the sample autocorrelations and the partial autocorrelations relate via the <a href="http://en.wikipedia.org/wiki/Levinson_recursion">Durbin-Levinson recursion</a>. But I’ll show an example here that gives the idea using the coefficients from a linear model.</p>
+<p>Recall <span class="math inline">\(y\)</span> from the last section.</p>
+<p>Now, let’s warm up by doing the autocorrelation “by hand” using the <code>cor</code> function as well as the <code>Acf</code> function:</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="arp-acf-pacf-etc..html#cb111-1" tabindex="-1"></a>yACF <span class="ot">&lt;-</span> <span class="fu">Acf</span>(y,<span class="at">plot=</span><span class="cn">FALSE</span>)</span>
+<span id="cb111-2"><a href="arp-acf-pacf-etc..html#cb111-2" tabindex="-1"></a><span class="co"># ACF for lag 1 and lag 2</span></span>
+<span id="cb111-3"><a href="arp-acf-pacf-etc..html#cb111-3" tabindex="-1"></a><span class="fu">round</span>(yACF<span class="sc">$</span>acf[<span class="dv">2</span>,,],<span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] 0.67</code></pre>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="arp-acf-pacf-etc..html#cb113-1" tabindex="-1"></a><span class="fu">round</span>(yACF<span class="sc">$</span>acf[<span class="dv">3</span>,,],<span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] 0.39</code></pre>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="arp-acf-pacf-etc..html#cb115-1" tabindex="-1"></a><span class="co"># Done by hand</span></span>
+<span id="cb115-2"><a href="arp-acf-pacf-etc..html#cb115-2" tabindex="-1"></a>yLag1 <span class="ot">&lt;-</span> <span class="fu">c</span>(y[<span class="sc">-</span><span class="dv">1</span>],<span class="cn">NA</span>)</span>
+<span id="cb115-3"><a href="arp-acf-pacf-etc..html#cb115-3" tabindex="-1"></a>yLag2 <span class="ot">&lt;-</span> <span class="fu">c</span>(y[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)],<span class="cn">NA</span>,<span class="cn">NA</span>)</span>
+<span id="cb115-4"><a href="arp-acf-pacf-etc..html#cb115-4" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(yLag1,y,<span class="at">use =</span> <span class="st">&quot;complete.obs&quot;</span>),<span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] 0.67</code></pre>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="arp-acf-pacf-etc..html#cb117-1" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(yLag2,y,<span class="at">use =</span> <span class="st">&quot;complete.obs&quot;</span>),<span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] 0.4</code></pre>
+<p>The coefs differ a little after the third decimal point due to the way that the <code>cor</code> calculates the degrees of freedom vs <code>Acf</code> (I think). But the differences are small.</p>
+<p>We can put this into a loop and create the ACF plot.</p>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="arp-acf-pacf-etc..html#cb119-1" tabindex="-1"></a>yACFv2 <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> <span class="dv">25</span>)</span>
+<span id="cb119-2"><a href="arp-acf-pacf-etc..html#cb119-2" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>){</span>
+<span id="cb119-3"><a href="arp-acf-pacf-etc..html#cb119-3" tabindex="-1"></a>  yLag <span class="ot">&lt;-</span> y[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>i)]</span>
+<span id="cb119-4"><a href="arp-acf-pacf-etc..html#cb119-4" tabindex="-1"></a>  yClip <span class="ot">&lt;-</span> y[<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(yLag)]</span>
+<span id="cb119-5"><a href="arp-acf-pacf-etc..html#cb119-5" tabindex="-1"></a>  yACFv2[i] <span class="ot">&lt;-</span> <span class="fu">cor</span>(yClip, yLag)  </span>
+<span id="cb119-6"><a href="arp-acf-pacf-etc..html#cb119-6" tabindex="-1"></a>}</span>
+<span id="cb119-7"><a href="arp-acf-pacf-etc..html#cb119-7" tabindex="-1"></a></span>
+<span id="cb119-8"><a href="arp-acf-pacf-etc..html#cb119-8" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfcol=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb119-9"><a href="arp-acf-pacf-etc..html#cb119-9" tabindex="-1"></a><span class="fu">Acf</span>(y,<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.1</span>,<span class="fl">0.8</span>),<span class="at">main=</span><span class="st">&quot;ACF done via `Acf`&quot;</span>)</span>
+<span id="cb119-10"><a href="arp-acf-pacf-etc..html#cb119-10" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>,yACFv2,<span class="at">type=</span><span class="st">&quot;h&quot;</span>,<span class="at">main=</span><span class="st">&quot;ACF done by hand&quot;</span>,<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.1</span>,<span class="fl">0.8</span>))</span>
+<span id="cb119-11"><a href="arp-acf-pacf-etc..html#cb119-11" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>)</span>
+<span id="cb119-12"><a href="arp-acf-pacf-etc..html#cb119-12" tabindex="-1"></a>cis <span class="ot">&lt;-</span> <span class="fu">qnorm</span>((<span class="dv">1</span> <span class="sc">+</span> <span class="fl">0.95</span>)<span class="sc">/</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">sqrt</span>(n)</span>
+<span id="cb119-13"><a href="arp-acf-pacf-etc..html#cb119-13" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="fu">c</span>(<span class="sc">-</span>cis,cis),<span class="at">lty=</span><span class="st">&quot;dashed&quot;</span>,<span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>Now we can do the same for the partial coefficients which we get using a regression analysis through the origin.</p>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="arp-acf-pacf-etc..html#cb120-1" tabindex="-1"></a>yPACF <span class="ot">&lt;-</span> <span class="fu">Pacf</span>(y,<span class="at">plot=</span><span class="cn">FALSE</span>)</span>
+<span id="cb120-2"><a href="arp-acf-pacf-etc..html#cb120-2" tabindex="-1"></a><span class="co"># PACF coefs for lag 1 and lag 2</span></span>
+<span id="cb120-3"><a href="arp-acf-pacf-etc..html#cb120-3" tabindex="-1"></a><span class="fu">round</span>(yPACF<span class="sc">$</span>acf[<span class="dv">1</span>,,],<span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] 0.67</code></pre>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="arp-acf-pacf-etc..html#cb122-1" tabindex="-1"></a><span class="fu">round</span>(yPACF<span class="sc">$</span>acf[<span class="dv">2</span>,,],<span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] -0.09</code></pre>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="arp-acf-pacf-etc..html#cb124-1" tabindex="-1"></a><span class="co"># Done by hand</span></span>
+<span id="cb124-2"><a href="arp-acf-pacf-etc..html#cb124-2" tabindex="-1"></a>yPACF_Lag1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> yLag1 <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb124-3"><a href="arp-acf-pacf-etc..html#cb124-3" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(yPACF_Lag1)[<span class="dv">1</span>],<span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## yLag1 
+##  0.67</code></pre>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="arp-acf-pacf-etc..html#cb126-1" tabindex="-1"></a>yPACF_Lag2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> yLag1 <span class="sc">+</span> yLag2 <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb126-2"><a href="arp-acf-pacf-etc..html#cb126-2" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(yPACF_Lag2)[<span class="dv">2</span>],<span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## yLag2 
+## -0.09</code></pre>
+<p>We can recreate the PACF plot as well. It’s a little more involved. Walk through it and you’ll figure it out. But the key is that we have to build a matrix of lagged predictors as we increase the order.</p>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="arp-acf-pacf-etc..html#cb128-1" tabindex="-1"></a>yPACFv2 <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> <span class="dv">25</span>)</span>
+<span id="cb128-2"><a href="arp-acf-pacf-etc..html#cb128-2" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">25</span>){</span>
+<span id="cb128-3"><a href="arp-acf-pacf-etc..html#cb128-3" tabindex="-1"></a>  nCols <span class="ot">&lt;-</span> j</span>
+<span id="cb128-4"><a href="arp-acf-pacf-etc..html#cb128-4" tabindex="-1"></a>  nRows <span class="ot">&lt;-</span> <span class="fu">length</span>(y) <span class="sc">-</span> j <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb128-5"><a href="arp-acf-pacf-etc..html#cb128-5" tabindex="-1"></a>  </span>
+<span id="cb128-6"><a href="arp-acf-pacf-etc..html#cb128-6" tabindex="-1"></a>  yLagMat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, nRows, j)</span>
+<span id="cb128-7"><a href="arp-acf-pacf-etc..html#cb128-7" tabindex="-1"></a>  </span>
+<span id="cb128-8"><a href="arp-acf-pacf-etc..html#cb128-8" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nCols){</span>
+<span id="cb128-9"><a href="arp-acf-pacf-etc..html#cb128-9" tabindex="-1"></a>    yLagMat[ ,i] <span class="ot">&lt;-</span> y[i <span class="sc">:</span> (i <span class="sc">+</span> nRows <span class="sc">-</span> <span class="dv">1</span>)]</span>
+<span id="cb128-10"><a href="arp-acf-pacf-etc..html#cb128-10" tabindex="-1"></a>  }</span>
+<span id="cb128-11"><a href="arp-acf-pacf-etc..html#cb128-11" tabindex="-1"></a>  lm1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(yLagMat[,<span class="dv">1</span>] <span class="sc">~</span> yLagMat[,<span class="sc">-</span><span class="dv">1</span>] <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb128-12"><a href="arp-acf-pacf-etc..html#cb128-12" tabindex="-1"></a>  yPACFv2[j] <span class="ot">&lt;-</span> <span class="fu">coef</span>(lm1)[j <span class="sc">-</span> <span class="dv">1</span>]</span>
+<span id="cb128-13"><a href="arp-acf-pacf-etc..html#cb128-13" tabindex="-1"></a>}</span>
+<span id="cb128-14"><a href="arp-acf-pacf-etc..html#cb128-14" tabindex="-1"></a></span>
+<span id="cb128-15"><a href="arp-acf-pacf-etc..html#cb128-15" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfcol=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb128-16"><a href="arp-acf-pacf-etc..html#cb128-16" tabindex="-1"></a><span class="fu">Pacf</span>(y,<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.1</span>,<span class="fl">0.8</span>),<span class="at">main=</span><span class="st">&quot;PACF done via `Pacf`&quot;</span>)</span>
+<span id="cb128-17"><a href="arp-acf-pacf-etc..html#cb128-17" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>,yPACFv2,<span class="at">type=</span><span class="st">&quot;h&quot;</span>,<span class="at">main=</span><span class="st">&quot;PACF done by hand&quot;</span>,<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.1</span>,<span class="fl">0.8</span>))</span>
+<span id="cb128-18"><a href="arp-acf-pacf-etc..html#cb128-18" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>)</span>
+<span id="cb128-19"><a href="arp-acf-pacf-etc..html#cb128-19" tabindex="-1"></a>cis <span class="ot">&lt;-</span> <span class="fu">qnorm</span>((<span class="dv">1</span> <span class="sc">+</span> <span class="fl">0.95</span>)<span class="sc">/</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">sqrt</span>(n)</span>
+<span id="cb128-20"><a href="arp-acf-pacf-etc..html#cb128-20" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="fu">c</span>(<span class="sc">-</span>cis,cis),<span class="at">lty=</span><span class="st">&quot;dashed&quot;</span>,<span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Just in case anybody <strong>really</strong> wants the details, the function <code>pacf</code> does this with linear algebra by solving the Toeplitz matrix. The details of this are significantly past the level of detail we typically go into:</p>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="arp-acf-pacf-etc..html#cb129-1" tabindex="-1"></a>yACFcoef <span class="ot">&lt;-</span> yACF<span class="sc">$</span>acf[,,<span class="dv">1</span>]</span>
+<span id="cb129-2"><a href="arp-acf-pacf-etc..html#cb129-2" tabindex="-1"></a>yPACFv3 <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> <span class="dv">26</span>)</span>
+<span id="cb129-3"><a href="arp-acf-pacf-etc..html#cb129-3" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">26</span>){</span>
+<span id="cb129-4"><a href="arp-acf-pacf-etc..html#cb129-4" tabindex="-1"></a>  yPACFv3[i] <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">toeplitz</span>(yACFcoef[<span class="dv">1</span><span class="sc">:</span>i]), yACFcoef[<span class="dv">2</span><span class="sc">:</span>(i<span class="sc">+</span><span class="dv">1</span>)])[i]  </span>
+<span id="cb129-5"><a href="arp-acf-pacf-etc..html#cb129-5" tabindex="-1"></a>}</span>
+<span id="cb129-6"><a href="arp-acf-pacf-etc..html#cb129-6" tabindex="-1"></a>yPACFv3 <span class="co"># PACF by hand version 3</span></span></code></pre></div>
+<pre><code>##  [1]  0.667381959 -0.091055966 -0.046528939  0.025185709 -0.091022904
+##  [6]  0.015966667 -0.001923789  0.121385775  0.063258196 -0.089661989
+## [11] -0.073835268  0.023019938  0.053175213  0.003885418  0.013368725
+## [16] -0.069177973 -0.015116848  0.042310786  0.015775388 -0.020538866
+## [21] -0.040782006 -0.038322575  0.023721661  0.043779099 -0.013104062
+## [26]  0.045485723</code></pre>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb131-1"><a href="arp-acf-pacf-etc..html#cb131-1" tabindex="-1"></a>yPACF<span class="sc">$</span>acf[,,<span class="dv">1</span>] <span class="co"># and the original from the pacf function</span></span></code></pre></div>
+<pre><code>##  [1]  0.667381959 -0.091055966 -0.046528939  0.025185709 -0.091022904
+##  [6]  0.015966667 -0.001923789  0.121385775  0.063258196 -0.089661989
+## [11] -0.073835268  0.023019938  0.053175213  0.003885418  0.013368725
+## [16] -0.069177973 -0.015116848  0.042310786  0.015775388 -0.020538866
+## [21] -0.040782006 -0.038322575  0.023721661  0.043779099 -0.013104062
+## [26]  0.045485723</code></pre>
+</div>
+</div>
+<div id="ar1-to-arp" class="section level2 hasAnchor" number="5.9">
+<h2><span class="header-section-number">5.9</span> AR(1) to AR(p)<a href="arp-acf-pacf-etc..html#ar1-to-arp" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The AR(1) concept is extendable as an AR(p) model to incorporate multiple time steps as:
+<span class="math display">\[ y_t = \sum\limits_{i=1}^p \phi_i y_{t-i} + \epsilon_t \]</span></p>
+<p>where <span class="math inline">\(p\)</span> denotes the order of the model. So an AR(2) model would be <span class="math inline">\(y_t = \phi_1 y_{t-1} + \phi_2 y_{t-2} + \epsilon_t\)</span> and if <span class="math inline">\(p=3\)</span> we’d have <span class="math inline">\(y_t = \phi_1 y_{t-1} + \phi_2 y_{t-2} + \phi_3 y_{t-3} + \epsilon_t\)</span>. We’ll do more on higher order models later including how to fit them and how to interpret them. But for now get used to the idea that higher order models have more memory.</p>
+</div>
+<div id="random-walks" class="section level2 hasAnchor" number="5.10">
+<h2><span class="header-section-number">5.10</span> Random walks<a href="arp-acf-pacf-etc..html#random-walks" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A random walk is a special kind of AR1 autocorrelation where the observation at <span class="math inline">\(t-1\)</span> is the jumping off point for the observation at <span class="math inline">\(t\)</span>. That means <span class="math inline">\(\phi=1\)</span> and the time series is not stationary. Rather, the time series “walks.” Because <span class="math inline">\(\phi=1\)</span> we can leave it out of the equation:</p>
+<p><span class="math display">\[ y_t = y_{t-1} + \epsilon_t\]</span></p>
+<p>A drift term, <span class="math inline">\(\delta\)</span>, can be added so that a random walk model with drift is:</p>
+<p><span class="math display">\[ y_t = \delta + y_{t-1} + \epsilon_t\]</span></p>
+<p>Run this code a few times and appreciate the plots. Are these models stationary?</p>
+<p>Here is a random walk without drift:</p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="arp-acf-pacf-etc..html#cb133-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb133-2"><a href="arp-acf-pacf-etc..html#cb133-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb133-3"><a href="arp-acf-pacf-etc..html#cb133-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> n)</span>
+<span id="cb133-4"><a href="arp-acf-pacf-etc..html#cb133-4" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n){</span>
+<span id="cb133-5"><a href="arp-acf-pacf-etc..html#cb133-5" tabindex="-1"></a>  y[i] <span class="ot">&lt;-</span> y[i<span class="dv">-1</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)  </span>
+<span id="cb133-6"><a href="arp-acf-pacf-etc..html#cb133-6" tabindex="-1"></a>}</span>
+<span id="cb133-7"><a href="arp-acf-pacf-etc..html#cb133-7" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y))</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>And with drift:</p>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="arp-acf-pacf-etc..html#cb134-1" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> n)</span>
+<span id="cb134-2"><a href="arp-acf-pacf-etc..html#cb134-2" tabindex="-1"></a>drift <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb134-3"><a href="arp-acf-pacf-etc..html#cb134-3" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n){</span>
+<span id="cb134-4"><a href="arp-acf-pacf-etc..html#cb134-4" tabindex="-1"></a>  y[i] <span class="ot">&lt;-</span> drift <span class="sc">+</span> y[i<span class="dv">-1</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb134-5"><a href="arp-acf-pacf-etc..html#cb134-5" tabindex="-1"></a>}</span>
+<span id="cb134-6"><a href="arp-acf-pacf-etc..html#cb134-6" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y))</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>Oh, here is a question for you to answer – you should be able to spit this answer out without having to calculate anything. What would the <code>Acf()</code> and <code>Pacf()</code> plots look like for these data? How would it change if you increase <span class="math inline">\(n\)</span>?</p>
+<div id="stationarity-is-dead" class="section level3 hasAnchor" number="5.10.1">
+<h3><span class="header-section-number">5.10.1</span> Stationarity is dead<a href="arp-acf-pacf-etc..html#stationarity-is-dead" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>That’s the title of a famous <a href="https://science.sciencemag.org/content/319/5863/573">paper</a> in hydrology. It’s controversial and something that has influenced a lot of discussion in the global change community. Look back up at the random walk section above. A random walk is not stationary. Use some very simple algebra (just rearrange) and show with an equation how make <span class="math inline">\(y_t = y_{t-1} + \epsilon_t\)</span> stationary. Why is stationarity desirable?</p>
+</div>
+</div>
+<div id="autocorrelation-examples-with-real-data" class="section level2 hasAnchor" number="5.11">
+<h2><span class="header-section-number">5.11</span> Autocorrelation examples with real data<a href="arp-acf-pacf-etc..html#autocorrelation-examples-with-real-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Let’s look a at few examples of autocorrelation with data sets that are already part of <code>R</code>. You’ll work with your own later.</p>
+<div id="nile" class="section level3 hasAnchor" number="5.11.1">
+<h3><span class="header-section-number">5.11.1</span> Nile<a href="arp-acf-pacf-etc..html#nile" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>First, let’s look at the <code>Nile</code> data which has measurements of the annual flow of the river Nile from 1871–1970. The units are in 10<span class="math inline">\(^8\)</span> m<span class="math inline">\(^3\)</span>.</p>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="arp-acf-pacf-etc..html#cb135-1" tabindex="-1"></a><span class="fu">data</span>(Nile)</span>
+<span id="cb135-2"><a href="arp-acf-pacf-etc..html#cb135-2" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(Nile) <span class="sc">%&gt;%</span> </span>
+<span id="cb135-3"><a href="arp-acf-pacf-etc..html#cb135-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>index,<span class="at">y=</span>value)) <span class="sc">+</span> </span>
+<span id="cb135-4"><a href="arp-acf-pacf-etc..html#cb135-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb135-5"><a href="arp-acf-pacf-etc..html#cb135-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Date&quot;</span>,<span class="at">y=</span><span class="fu">expression</span>(<span class="dv">10</span><span class="sc">^</span><span class="dv">8</span><span class="sc">~</span>m<span class="sc">^</span><span class="dv">3</span>),</span>
+<span id="cb135-6"><a href="arp-acf-pacf-etc..html#cb135-6" tabindex="-1"></a>       <span class="at">title=</span><span class="st">&quot;River Nile Flow&quot;</span>) <span class="sc">+</span></span>
+<span id="cb135-7"><a href="arp-acf-pacf-etc..html#cb135-7" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>Is this river flow record autocorrelated?</p>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="arp-acf-pacf-etc..html#cb136-1" tabindex="-1"></a><span class="fu">ggAcf</span>(Nile) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>And the PACF</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="arp-acf-pacf-etc..html#cb137-1" tabindex="-1"></a><span class="fu">ggPacf</span>(Nile) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>Looking at the plot of the original time series it does look like its possible that high flow years follow high flow years and low years follow low years (positive autocorrelation) but it’s hard to say for sure. However the ACF and PACF plots show that there is an AR(1) model at play here. Like our simulated data above the PACF shows no significant autocorrelation at a lag of two years after accounting for the lag at one year. Thus, we can probably say that this record follows a process: <span class="math inline">\(y_t = \phi_1 y_{t-1} + \epsilon_t\)</span>.</p>
+</div>
+<div id="air-temperature" class="section level3 hasAnchor" number="5.11.2">
+<h3><span class="header-section-number">5.11.2</span> Air Temperature<a href="arp-acf-pacf-etc..html#air-temperature" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Next, there is a data set of mean annual temperature in degrees Fahrenheit in New Haven, Connecticut, from 1912 to 1971.</p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="arp-acf-pacf-etc..html#cb138-1" tabindex="-1"></a><span class="fu">data</span>(nhtemp)</span>
+<span id="cb138-2"><a href="arp-acf-pacf-etc..html#cb138-2" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(nhtemp) <span class="sc">%&gt;%</span> </span>
+<span id="cb138-3"><a href="arp-acf-pacf-etc..html#cb138-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>index,<span class="at">y=</span>value)) <span class="sc">+</span> </span>
+<span id="cb138-4"><a href="arp-acf-pacf-etc..html#cb138-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb138-5"><a href="arp-acf-pacf-etc..html#cb138-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Date&quot;</span>,<span class="at">y=</span><span class="fu">expression</span>(degree<span class="sc">~</span>F),</span>
+<span id="cb138-6"><a href="arp-acf-pacf-etc..html#cb138-6" tabindex="-1"></a>       <span class="at">title=</span><span class="st">&quot;Mean Annual Temp, New Haven, Connecticut&quot;</span>) <span class="sc">+</span></span>
+<span id="cb138-7"><a href="arp-acf-pacf-etc..html#cb138-7" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>Is this temperature record autocorrelated?</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="arp-acf-pacf-etc..html#cb139-1" tabindex="-1"></a><span class="fu">ggAcf</span>(nhtemp) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>And the PACF</p>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="arp-acf-pacf-etc..html#cb140-1" tabindex="-1"></a><span class="fu">ggPacf</span>(nhtemp) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p>Unlike what we have above, the ACF and PACF plots show that there is likely an AR(2) model at play here. Note that the PACF shows significant autocorrelation at a lag of two years even after accounting for the lag at one year. Thus, we can probably say that this temperature record follows a process: <span class="math inline">\(y_t = \phi_1 y_{t-1} + \phi_2 y_{t-2} + \epsilon_t\)</span>. See below for how we might estimate those coefficients.</p>
+</div>
+<div id="sunspots" class="section level3 hasAnchor" number="5.11.3">
+<h3><span class="header-section-number">5.11.3</span> Sunspots<a href="arp-acf-pacf-etc..html#sunspots" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>That stuff above is all pretty straightforward. But what about a time series with a cyclical nature? Take a look at a data set of annual sunspot counts from 1700 to 1988. Load and plot the data.</p>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="arp-acf-pacf-etc..html#cb141-1" tabindex="-1"></a><span class="fu">data</span>(sunspot.year)</span>
+<span id="cb141-2"><a href="arp-acf-pacf-etc..html#cb141-2" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(sunspot.year) <span class="sc">%&gt;%</span> </span>
+<span id="cb141-3"><a href="arp-acf-pacf-etc..html#cb141-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>index,<span class="at">y=</span>value)) <span class="sc">+</span> </span>
+<span id="cb141-4"><a href="arp-acf-pacf-etc..html#cb141-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb141-5"><a href="arp-acf-pacf-etc..html#cb141-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Date&quot;</span>,<span class="at">y=</span><span class="st">&quot;n&quot;</span>,</span>
+<span id="cb141-6"><a href="arp-acf-pacf-etc..html#cb141-6" tabindex="-1"></a>       <span class="at">title=</span><span class="st">&quot;Annual Sunspot Count&quot;</span>) <span class="sc">+</span></span>
+<span id="cb141-7"><a href="arp-acf-pacf-etc..html#cb141-7" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>This is a whole different level of autocorrelation! Note how the series goes up and then down in a cycle. This means that there will be both positive and negative autocorrelation depending on the lag.</p>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="arp-acf-pacf-etc..html#cb142-1" tabindex="-1"></a><span class="fu">ggAcf</span>(sunspot.year)</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>Take some time to wrap your head around this idea. The data are positively autocorrelated for a few years, then negatively autocorrelated, and so on. It should make sense once you realize that sunspots numbers go up and down on an approximately 11-year cycle due to internal hydromagnetic processes. Figuring out what the dominant periodicities are in a time series falls under the realm of studying time series in the frequency domain. We’ll get to that later.</p>
+</div>
+</div>
+<div id="choosing-the-order-of-an-arp-model-by-aic" class="section level2 hasAnchor" number="5.12">
+<h2><span class="header-section-number">5.12</span> Choosing the Order of an AR(p) Model by AIC<a href="arp-acf-pacf-etc..html#choosing-the-order-of-an-arp-model-by-aic" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Above, we used the ACF and PACF plots to get a feel for the appropriate order p for an AR(p) model. This graphical approach is important for building intuition.</p>
+<p>However, you do not have to guess the order just by eye.<br />
+You can formally select the best model using a criterion like AIC.</p>
+<p>Before we move on, it is important to be clear about what the ACF and an AR(p) model are actually estimating:</p>
+<ul>
+<li>The ACF shows correlations between observations at different lags. It measures how strongly <span class="math inline">\(y_t\)</span> and <span class="math inline">\(y_{t-k}\)</span> move together.</li>
+<li>An AR(p) model fits regression coefficients. It estimates how much past values predict <span class="math inline">\(y_t\)</span>, accounting for the effects of earlier lags.</li>
+</ul>
+<p>Although correlation and regression are related, they are not the same:
+- A correlation measures association without controlling for anything else.
+- A regression coefficient measures the direct effect of one predictor while controlling for other predictors.</p>
+<p>In an AR(p) model, each coefficient shows the effect of a lagged value after adjusting for the others.</p>
+<p>In R, the <code>ar</code> function fits an AR model and selects the order <code>p</code> automatically:</p>
+<ul>
+<li>By default, it uses maximum likelihood estimation (MLE) to fit the model (get the coefficients).</li>
+<li>It chooses the order that minimizes the AIC.</li>
+</ul>
+<p>Among other things, the <code>ar</code> function returns:</p>
+<ul>
+<li>The selected order.</li>
+<li>The estimated AR coefficients.</li>
+</ul>
+<p>For example, we can fit an AR model to the <code>nhtemp</code> data:</p>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="arp-acf-pacf-etc..html#cb143-1" tabindex="-1"></a><span class="co"># Fit an AR model to nhtemp</span></span>
+<span id="cb143-2"><a href="arp-acf-pacf-etc..html#cb143-2" tabindex="-1"></a>ar_nhtemp <span class="ot">&lt;-</span> <span class="fu">ar</span>(nhtemp)</span>
+<span id="cb143-3"><a href="arp-acf-pacf-etc..html#cb143-3" tabindex="-1"></a>ar_nhtemp</span></code></pre></div>
+<pre><code>## 
+## Call:
+## ar(x = nhtemp)
+## 
+## Coefficients:
+##      1       2  
+## 0.2183  0.3067  
+## 
+## Order selected 2  sigma^2 estimated as  1.353</code></pre>
+<p>In this case, <code>ar</code> uses AIC to select the “best” <code>p</code> and estimates the corresponding regression coefficients. Compare that to the ACF plot above for the <code>nhtemp</code> data.</p>
+<p>Note:<br />
+The <code>ar</code> function will estimate the coefficients in several different ways. Typically you have learned to use OLS in regression. For reasons we don’t need to get into <code>ar</code> uses MLE.</p>
+<p>MLE and OLS both estimate AR models, but they differ slightly:</p>
+<ul>
+<li>OLS fits by minimizing the sum of squared residuals.</li>
+<li>MLE fits by maximizing the likelihood of the observed data under the model, assuming a normal distribution. MLE is generally more efficient, especially for small samples.</li>
+</ul>
+<p>I strongly recommend reading the help page for <code>ar</code>.</p>
+</div>
+<div id="your-work-2" class="section level2 hasAnchor" number="5.13">
+<h2><span class="header-section-number">5.13</span> Your work<a href="arp-acf-pacf-etc..html#your-work-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="acf-and-pacf-with-different-values-of-phi." class="section level3 hasAnchor" number="5.13.1">
+<h3><span class="header-section-number">5.13.1</span> ACF and PACF with different values of <span class="math inline">\(\phi\)</span>.<a href="arp-acf-pacf-etc..html#acf-and-pacf-with-different-values-of-phi." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The code below will simulate four different AR(1) time series with different values of <span class="math inline">\(\phi\)</span>. All of the time series have the exact same residuals (<span class="math inline">\(\epsilon\)</span>). Plot each series and then plot the ACF and PACF plots for each (12 plots total). Think about your expectations for the graphs before you plot them. Interpret.</p>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="arp-acf-pacf-etc..html#cb145-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb145-2"><a href="arp-acf-pacf-etc..html#cb145-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb145-3"><a href="arp-acf-pacf-etc..html#cb145-3" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n,<span class="at">mean =</span> <span class="dv">0</span>,<span class="at">sd =</span> <span class="dv">1</span>) <span class="co"># white noise</span></span>
+<span id="cb145-4"><a href="arp-acf-pacf-etc..html#cb145-4" tabindex="-1"></a>y1 <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> n)</span>
+<span id="cb145-5"><a href="arp-acf-pacf-etc..html#cb145-5" tabindex="-1"></a>y2 <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> n)</span>
+<span id="cb145-6"><a href="arp-acf-pacf-etc..html#cb145-6" tabindex="-1"></a>y3 <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> n)</span>
+<span id="cb145-7"><a href="arp-acf-pacf-etc..html#cb145-7" tabindex="-1"></a>y4 <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> n)</span>
+<span id="cb145-8"><a href="arp-acf-pacf-etc..html#cb145-8" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n){</span>
+<span id="cb145-9"><a href="arp-acf-pacf-etc..html#cb145-9" tabindex="-1"></a>  y1[i] <span class="ot">&lt;-</span> <span class="fl">0.95</span> <span class="sc">*</span> y1[i<span class="dv">-1</span>] <span class="sc">+</span> epsilon[i]  </span>
+<span id="cb145-10"><a href="arp-acf-pacf-etc..html#cb145-10" tabindex="-1"></a>  y2[i] <span class="ot">&lt;-</span> <span class="fl">0.75</span> <span class="sc">*</span> y2[i<span class="dv">-1</span>] <span class="sc">+</span> epsilon[i]  </span>
+<span id="cb145-11"><a href="arp-acf-pacf-etc..html#cb145-11" tabindex="-1"></a>  y3[i] <span class="ot">&lt;-</span> <span class="fl">0.50</span> <span class="sc">*</span> y3[i<span class="dv">-1</span>] <span class="sc">+</span> epsilon[i]  </span>
+<span id="cb145-12"><a href="arp-acf-pacf-etc..html#cb145-12" tabindex="-1"></a>  y4[i] <span class="ot">&lt;-</span> <span class="fl">0.25</span> <span class="sc">*</span> y4[i<span class="dv">-1</span>] <span class="sc">+</span> epsilon[i]  </span>
+<span id="cb145-13"><a href="arp-acf-pacf-etc..html#cb145-13" tabindex="-1"></a>}</span></code></pre></div>
+<div id="extra-challenge" class="section level4 hasAnchor" number="5.13.1.1">
+<h4><span class="header-section-number">5.13.1.1</span> Extra challenge<a href="arp-acf-pacf-etc..html#extra-challenge" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Can you generate the same kind of AR(1) simulation for <code>y1</code>, <code>y2</code>, <code>y3</code>,and <code>y4</code> using the <code>arima.sim</code> function?</p>
+</div>
+</div>
+<div id="roll-your-own-ar2" class="section level3 hasAnchor" number="5.13.2">
+<h3><span class="header-section-number">5.13.2</span> Roll your own AR(2)<a href="arp-acf-pacf-etc..html#roll-your-own-ar2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Use a loop and simulate your own AR(2) time series with <span class="math inline">\(\mu=0,\sigma=1\)</span>. You’ll need variables <span class="math inline">\(\phi_1\)</span> and <span class="math inline">\(\phi_2\)</span>. Set them to <span class="math inline">\(\phi_1=0.3\)</span> and <span class="math inline">\(\phi_2=0.5\)</span> to start. Then play with those values. Plot the series and look at the <code>acf</code> and <code>pacf</code>. Think about your expectations for the graphs before you plot them. Interpret.</p>
+<div id="extra-challenge-1" class="section level4 hasAnchor" number="5.13.2.1">
+<h4><span class="header-section-number">5.13.2.1</span> Extra challenge<a href="arp-acf-pacf-etc..html#extra-challenge-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Fit a model to your AR(2) using <code>ar</code>.</p>
+</div>
+</div>
+<div id="sockeye" class="section level3 hasAnchor" number="5.13.3">
+<h3><span class="header-section-number">5.13.3</span> Sockeye<a href="arp-acf-pacf-etc..html#sockeye" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>I’ve been lucky enough to get involved in a ridiculously awesome project in Alaska that looks at how <a href="https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecy.2453">returning salmon fertilize</a> the riparian areas surrounding the stream. As part of that project, <a href="https://www.washington.edu/news/2018/10/23/sockeye-carcasses-tossed-on-shore-over-two-decades-spur-tree-growth/">which invovled multiple decades of throwing dead salmon around</a>, I became aware of this incredibly detailed time series of sockeye salmon <a href="https://en.wikipedia.org/wiki/Salmon_escapement">escapement</a> data at Hansen Creek. Hansen Creek is a small (about 4m wide and 10cm deep) in the Wood River system of Bristol Bay, southwestern Alaska, USA (<a href="https://goo.gl/maps/n8UPCAW16j3X96zi7">59.317 N,-158.695 E</a>).</p>
+<p>These data show the total number of salmon returning to spawn in the creek from 1950 onward. The file <code>HansenSockeye.rds</code> is on Canvas. These data are class <code>ts</code> with frequency of one. You read it in with the <code>readRDS</code> function e.g. <code>sock &lt;- readRDS("data/HansenSockeye.rds")</code>.</p>
+<p>Take a look at the time series and it’s autocorrelation patterns. As a cool hint as to what is going on, sockeye salmon spend 2-3 years in the ocean plus 1-2 years in freshwater to return as 3-5 year-olds to spawn. It’s unclear whether the choice to spend three or five years before returning to spawn is a function of ocean conditions, local population biology/behavior, or some combination, However, <a href="https://en.wikipedia.org/wiki/Otolith">otoliths</a> from the fish caresses at Hansen Creek suggest that most of the salmon that are returning four years old. What can you infer about this record in terms of the intersection between the fish ecology and the escapement time-series properties?</p>
+</div>
+<div id="write-up-and-reflect-2" class="section level3 hasAnchor" number="5.13.4">
+<h3><span class="header-section-number">5.13.4</span> Write Up and Reflect<a href="arp-acf-pacf-etc..html#write-up-and-reflect-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Pass in a R Markdown doc with your analysis. Leave all code visible, although you may quiet messages and warnings if desired. Turn in your knitted html. The last section of your document should include a reflection where you explain how it all went. What triumphs did you have? What is still confusing?</p>
+</div>
+</div>
+<div id="postscript-a-helpful-plotting-chunk" class="section level2 hasAnchor" number="5.14">
+<h2><span class="header-section-number">5.14</span> Postscript: A Helpful Plotting Chunk<a href="arp-acf-pacf-etc..html#postscript-a-helpful-plotting-chunk" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Here is a simple way of making a plot of a time series and its respective ACF and PACF plots. It uses the <code>gridExtra</code> package to put the three plots all together. There are lots of ways of doing this. I will often use the <code>cowplot</code> <span class="citation">(<a href="references-1.html#ref-R-cowplot">Wilke 2024</a>)</span> package and there are many other options.</p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="arp-acf-pacf-etc..html#cb146-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb146-2"><a href="arp-acf-pacf-etc..html#cb146-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb146-3"><a href="arp-acf-pacf-etc..html#cb146-3" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n,<span class="at">mean =</span> <span class="dv">0</span>,<span class="at">sd =</span> <span class="dv">1</span>) <span class="co"># white noise</span></span>
+<span id="cb146-4"><a href="arp-acf-pacf-etc..html#cb146-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> n)</span>
+<span id="cb146-5"><a href="arp-acf-pacf-etc..html#cb146-5" tabindex="-1"></a>phi <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
+<span id="cb146-6"><a href="arp-acf-pacf-etc..html#cb146-6" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n){</span>
+<span id="cb146-7"><a href="arp-acf-pacf-etc..html#cb146-7" tabindex="-1"></a>  y[i] <span class="ot">&lt;-</span> phi <span class="sc">*</span> y[i<span class="dv">-1</span>] <span class="sc">+</span> epsilon[i]  </span>
+<span id="cb146-8"><a href="arp-acf-pacf-etc..html#cb146-8" tabindex="-1"></a>}</span>
+<span id="cb146-9"><a href="arp-acf-pacf-etc..html#cb146-9" tabindex="-1"></a></span>
+<span id="cb146-10"><a href="arp-acf-pacf-etc..html#cb146-10" tabindex="-1"></a>simpleLayoutMatrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>),<span class="at">nrow =</span> <span class="dv">2</span>,<span class="at">ncol =</span> <span class="dv">2</span>,<span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb146-11"><a href="arp-acf-pacf-etc..html#cb146-11" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y)) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;time&quot;</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span>
+<span id="cb146-12"><a href="arp-acf-pacf-etc..html#cb146-12" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggAcf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>()) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span>
+<span id="cb146-13"><a href="arp-acf-pacf-etc..html#cb146-13" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggPacf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>()) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span>
+<span id="cb146-14"><a href="arp-acf-pacf-etc..html#cb146-14" tabindex="-1"></a><span class="fu">grid.arrange</span>(p1,p2,p3,</span>
+<span id="cb146-15"><a href="arp-acf-pacf-etc..html#cb146-15" tabindex="-1"></a>             <span class="at">layout_matrix=</span>simpleLayoutMatrix)</span></code></pre></div>
+<p><img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="decomposition.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section",
+    "scroll_highlight": true
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

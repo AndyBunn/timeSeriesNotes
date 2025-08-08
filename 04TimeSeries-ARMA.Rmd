@@ -1,0 +1,456 @@
+# ARMA(p,q)
+
+```{r,echo=FALSE}
+set.seed(872)
+#knitr::purl("04TimeSeries-ARMA.Rmd")
+```
+
+## Big Idea
+The values in a time series are often not independent -- that can be a good thing to find out -- understanding what the autocorrelation is like can often tell you a lot about what the underlying processes looks like.
+
+## Reading
+Have a look at Chapter six from @Cowpertwait2009. It's OK to skim the readings in this book. It's not a great book for our purposes as many of you haven't taken linear algebra and the book occasionally goes that way. But it's useful to hum your way through the chapter nonetheless.
+
+## Packages
+I'll use `tidyverse` [@R-tidyverse] some. And we will use the `forecast` [@R-forecast] package as well. I'll grab a function or two from `gridExtra` [@R-gridExtra] and `broom` [@R-broom] as well.
+
+```{r,message=FALSE}
+library(tidyverse)
+library(forecast)
+```
+
+## AR(p) to MA(q)
+Last week, we described the auto regressive AR($p$) model where the values of $y$ are a function of the prior values of $y$. We can extend this to more time steps and call this an autoregressive model of order $p$ as AR($p$):
+
+$$ y_t = \sum\limits_{i=1}^p \phi_i y_{t-i} + \epsilon_t $$
+
+Thus, an AR(2) model would be $y_t = \phi_1 y_{t-1} + \phi_2 y_{t-2} + \epsilon_t$ where parameters are as we've previously defined them. 
+
+The moving average (MA) model is a similar concept to the AR($p$) model but this time the coefficient ($\theta$ instead of $\phi$) affects the residuals and not $y$ itself. The time series therefore is an unevenly weighted moving average of the residuals $\epsilon_t$. The first-order moving average, or MA(1), model is given by $y_t = \theta_1 e_{t-1} + \epsilon_t$ where $\theta$ is a coefficient ranging from -1 to 1. 
+
+ $$y_t = \theta \epsilon_{t-1} + \epsilon_t$$
+But, we can never observe the values of  $\epsilon_t$ in real time (they are errors, right?), so it is not really a regression in the usual sense.
+
+Let's look at an implementation of a MA(1) process with a loop. I'm going to plot the data, the ACF and the PACF all in one figure.
+
+```{r}
+n <- 100
+x <- 1:n
+theta <- 0.8
+epsilon <- rnorm(n=n)
+y <- numeric(length = n)
+
+for(i in 2:n){
+  y[i] <- theta * epsilon[i-1] + epsilon[i]  
+}
+simpleLayoutMatrix <- matrix(c(1,1,2,3),nrow = 2,ncol = 2,byrow = TRUE)
+p1 <- ggplot() + geom_line(aes(x=x,y=y)) + labs(x="Time")
+p2 <- ggAcf(y) + labs(title=element_blank())
+p3 <- ggPacf(y) + labs(title=element_blank())
+gridExtra::grid.arrange(p1,p2,p3,
+                        layout_matrix=simpleLayoutMatrix)
+```
+
+This is an interesting pattern and characteristic of a MA(1) model. Note the strong first order autocorrelation. It doesn't have the decay that you have in an AR(1) model. That is characteristic of the MA processes. The PACF shows a strong negative correlation at lag 2 and then oscillates. This is characteristic behavior of the MA process as well but the reasons take a little work to wrap your head around. [This](https://stats.stackexchange.com/questions/281666/how-does-acf-pacf-identify-the-order-of-ma-and-ar-terms) is the best explanation I've seen for why this occurs that doesn't invovle a bunch of linear algebra. 
+
+As with AR($p$), we can extend this to longer lags and call this MA($q$):
+$$ y_t = \sum\limits_{i=1}^q \theta_i \epsilon_{t-i} + \epsilon_t$$
+
+## ARMA(p,q)
+What's next? You guessed it an ARMA($p,q$). The ARMA model is simply the merger between AR($p$) and MA($q$) models. The order of the ARMA model is given in parentheses where $p$ is the autoregressive order and $q$ the moving-average order. A common model is the ARMA(1,1) model $y_t = \phi_1 y_{t-1} + \theta_1 \epsilon_{t-1} + \epsilon_t$. But this can be extended to longer lags as above:
+$$ y_t = \sum\limits_{i=1}^p \phi_i y_{t-i} + \sum\limits_{i=1}^q \theta_i \epsilon_{t-i} + \epsilon_t$$
+
+Let's look at an ARMA(1,1) model via simulation:
+```{r}
+n <- 100
+x <- 1:n
+epsilon <- rnorm(n=n)
+y <- numeric(length = n)
+
+phi <- 0.5
+theta <- 0.8
+
+for(i in 2:n){
+  y[i] <- phi * y[i-1] + theta * epsilon[i-1] + epsilon[i]  
+}
+```
+
+Here is a plot of the time series, the ACF and the PACF.
+
+```{r}
+p1 <- ggplot() + geom_line(aes(x=x,y=y)) + labs(x="Time")
+p2 <- ggAcf(y) + labs(title=element_blank())
+p3 <- ggPacf(y) + labs(title=element_blank())
+gridExtra::grid.arrange(p1,p2,p3,layout_matrix=simpleLayoutMatrix)
+```
+
+
+Now, in general we like to use models like this so that we can better understand the system by revealing something about the mechanisms that create the persistence in the data. In the case of the ARMA(1,1) model you can imagine a situation where $y_t$ has an *internal* dynamic that creates an AR(1) process and something *external* that creates the MA(1) process. For instance, let's imagine that we are measuring the growth of a perennial plant that requires a long growing season in $t-1$ to condition growth the following year ($t$). Perhaps it requires a lot of growing degree days in the current year $t$, and its internal biological needs rely on last year's stored energy $t-1$ for kicking off growth at the beginning of the year $t$. If growing degrees themselves are autocorrelated, perhaps because of atmospheric dynamics, you'd have internal autocorrelation and external autocorrelation. This might well create an ARMA(1,1) process in growth.
+
+As we get into higher order models this kind of understanding can be difficult to develop -- so don't overfit models! Just because a long time series (large $n$) fits a high order model (like an AR(20)), it doesn't mean that is the best model if there is no plausible mechanism to explain it. 
+
+Never forget the sage words of Box: "...essentially, all models are wrong, but some are useful."
+
+## What about ARIMA(p, d, q)?
+
+So far, we’ve worked with AR($p$) and MA($q$) models, and their combination: ARMA($p, q$) models. These assume the time series is **stationary**—its properties (like mean, variance, and autocorrelation) don’t change over time.
+
+### Why Do ARMA Models Require Stationarity?
+
+ARMA (Autoregressive Moving Average) models require **stationarity** because their structure assumes that the statistical properties of the time series remain constant over time. This includes a constant mean, constant variance, and a constant autocorrelation structure.
+
+#### Parameter Stability
+The coefficients in ARMA models are fixed and describe how current values depend on past values (AR terms) and past errors (MA terms). If the time series is non-stationary, these relationships may change over time, making the model unreliable.
+
+#### Meaningful Lag Relationships
+The AR terms relate a value to its previous values, and the MA terms relate it to previous shocks (errors). These relationships are only meaningful when the process is consistent over time—i.e., stationary.
+
+#### Inference and Forecasting
+The validity of statistical inference and forecasting depends on the assumption that the underlying process does not change. Non-stationarity undermines this assumption and can lead to misleading predictions.
+
+#### Mathematical Properties
+The theoretical behavior of the autocorrelation function (ACF) and partial autocorrelation function (PACF) in ARMA models is derived under the assumption of stationarity. Without it, these properties may not be stable or interpretable.
+
+
+In practice, if a time series is non-stationary, we typically difference the data to induce stationarity before fitting an ARMA model. This leads to the ARIMA model, where the "I" stands for "Integrated" (i.e., differenced).
+
+Many environmental time series show **non-stationarity**. For example:
+
+- Long-term trends in temperature or sea level,
+
+- Gradual shifts in nutrient concentrations,
+
+- Snowpack accumulation over the season.
+
+In those cases, ARMA models are often not appropriate becasue the structure they rely on doesn’t hold.
+
+To deal with that, we often **difference** the series:  
+$$
+y'_t = y_t - y_{t-1}
+$$
+
+This removes linear trends and helps stabilize the mean (refer to last week's **Stationarity is dead** section). If the differenced series is stationary, we can model it using ARMA tools. That’s the idea behind ARIMA models.
+
+We aren't going to go into too much depth on ARIMA but we will see the acronym a lot and it's good to aware of differencing as a tool. The important take away is that ARIMA($p, d, q$) means:
+
+- Difference the series **d** times,
+
+- Then fit an **ARMA(p, q)** model to the result.
+
+This is why ARIMA models are often described as **ARMA models applied to differenced data**.
+
+### Simulated Data
+
+We’ll simulate a process with an AR(1) and MA(1) component, plus a **drifting mean**, so it’s non-stationary. This mimics a situation where ARMA wouldn’t work directly but an ARIMA model might.
+
+```{r}
+set.seed(123)
+n <- 100
+x <- 1:n
+y <- numeric(n)
+epsilon <- rnorm(n)
+phi <- 0.9    # AR(1)
+theta <- 0.2  # MA(1)
+drift <- 0.8  # linear trend (makes the process non-stationary)
+
+# Simulate ARMA(1,1) with drift - aka ARIMA(1,1,1)
+y[1] <- 0
+for (i in 2:n) {
+  y[i] <- drift + phi * y[i-1] + theta * epsilon[i-1] + epsilon[i]
+}
+ggplot() + geom_line(aes(x=x,y=y)) +
+  labs(x="time", title = "Simulated Non-Stationary ARMA(1,1) with Drift")
+```
+
+You’ll see the series drifts upward over time—it’s not stationary.
+
+Now difference it:
+
+```{r}
+y_diff <- diff(y) # note length of y compared to y_diff!
+ggplot() + geom_line(aes(x=x[-1],y=y_diff)) +
+  labs(x="time", title = "Differenced Series (Looks Stationary)")
+```
+
+The differenced version appears stationary. At this point, we could try fitting an ARMA model to it.
+
+> We won’t go further into ARIMA models in this course, but understanding that they extend ARMA by **differencing non-stationary series** gives you a strong foundation for future time series work.
+
+## Evaluating ARMA models
+### Simulated Data
+So given that quick intro to ARMA let's try a baby example of fitting an ARMA model and finding the least bad one. We'll use the `arima.sim` function to simulate a ARMA(1,1) time series.
+
+```{r}
+n <- 500
+x <- 1:n
+y <- arima.sim(list(ar = 0.8, ma = 0.6), n = n)
+```
+
+And a plot.
+
+```{r}
+p1 <- broom::tidy(y) %>% ggplot(mapping = aes(x=index,y=value)) +  
+  geom_line() +
+  labs(x="Time")
+p2 <- ggAcf(y) + labs(title=element_blank())
+p3 <- ggPacf(y) + labs(title=element_blank())
+gridExtra::grid.arrange(p1,p2,p3,layout_matrix=simpleLayoutMatrix)
+```
+
+Now let's do some modeling of that series with several different formulations of the ARMA process. Here we are going to fit parameters (e.g., $\phi$ and $\theta$) to a time series ($y$) for a specified model (e.g., an ARMA(1,1) model). The parameters are fit by maximum likelihood (typically) and just like with most models we can assess the goodness of fit. Here we will use the `Arima` function in `forecast` (which is just a slightly fancier version of the `arima` function in the `stats` package).
+
+We will try to fit ARMA($p$,$q$) with $p$ and $q$ ranging from zero to two. Note that we are leaving a zero for the differencing term because $y$ is stationary.
+
+```{r}
+arma00 <- Arima(y,order = c(0,0,0))
+arma10 <- Arima(y,order = c(1,0,0))
+arma20 <- Arima(y,order = c(2,0,0))
+arma01 <- Arima(y,order = c(0,0,1))
+arma02 <- Arima(y,order = c(0,0,2))
+arma11 <- Arima(y,order = c(1,0,1))
+arma21 <- Arima(y,order = c(2,0,1))
+arma12 <- Arima(y,order = c(1,0,2))
+arma22 <- Arima(y,order = c(2,0,2))
+```
+
+Here is what the ARMA(1,0) aka AR(1) spits out.
+
+```{r}
+arma10
+```
+
+Note that we get estimates of the coefficients (here $\phi_1$ and a constant) and their standard errors. We also get the log likelihood ($l$) which is a measure of how strongly the model fits the data with smaller numbers indicating a better fit. With the number of parameters in the model we can get the AIC ($-2l + 2k$, where $k$ is the number of parameters in the model) and with the sample size ($n$) we can get BIC ($-2l + ln(n)k$). The AIC and BIC penalize the log likelihood for more complex models. I like thinking of AIC as saying, "Look friend, find me a model that fits well but isn't overfit just because I threw it a lot of parameters." BIC says something similar but adds in the sample size, "Look friend, find me a model that fits well but isn't overfit just because I threw it a lot of parameters and had a huge sample size." In our models above the sample sizes were all the same so the AIC and BIC will be proportional. When comparing models, the smaller the AIC or BIC the better. There is [a lot more](https://www.methodology.psu.edu/resources/AIC-vs-BIC/#:~:text=As%20you%20know%2C%20AIC%20and,are%20both%20penalized%2Dlikelihood%20criteria.&text=But%20despite%20various%20subtle%20theoretical,a%20larger%20model%20than%20BIC.) you can read about on this stuff but we can leave it alone for now.
+
+Let's see how the ARMA(1,0) fits these data visually.
+
+```{r}
+dat <- tibble(x=x,y=arma10$x,yhat=arma10$fitted)
+dat %>% pivot_longer(cols=2:3) %>% 
+  ggplot(mapping = aes(x=x,y=value,color=name)) +  
+  geom_line() + 
+  labs(x="Time")
+```
+
+Wow! Pretty impressive. The R$^2$ on that model is excellent at `r round(cor(arma10$x,fitted(arma10))^2,2)`^[We haven't subjected that to any kind of training/testing scheme so we shouldn't get too excited].
+
+Let's evaluate each of those models using BIC.
+
+```{r}
+armaBIC <- BIC(arma00,arma10,arma20,arma01,arma02,arma11,arma21,arma12,arma22)
+armaBIC
+```
+
+From the BIC values it looks like the ARMA(1,1) model is one to investigate. 
+
+```{r}
+arma11
+```
+
+Those coefs are very close to what we used in our simulation. Let's take a closer look at the residuals. If they look clean of structure, we will know that our model accounting for temporal structure in the data. First let's look at the ACF and PACF of the residuals:
+
+```{r}
+y <- arma11$residuals
+p1 <- broom::tidy(y) %>% ggplot(mapping = aes(x=index,y=value)) + 
+  geom_line() +
+  labs(x="Time")
+p2 <- ggAcf(y) + labs(title=element_blank())
+p3 <- ggPacf(y) + labs(title=element_blank())
+gridExtra::grid.arrange(p1,p2,p3,layout_matrix=simpleLayoutMatrix)
+```
+
+Those look lovely. And we can use the `tsdiag` function. That gives the same info as the residual plots above but also plots the p-values from the Ljung–Box test. Larger values of `p` suggest independence at that lag. It's an ugly plot but a useful one:
+
+```{r}
+tsdiag(arma11)
+```
+
+Let's see how the ARMA(1,1) fits these data visually.
+
+```{r}
+dat <- tibble(x=x,y=arma11$x,yhat=arma10$fitted)
+dat %>% pivot_longer(cols=2:3) %>% 
+  ggplot(mapping = aes(x=x,y=value,color=name)) +  
+  geom_line() +
+  labs(x="Time")
+```
+
+Wow! Pretty impressive. The R$^2$ on that model is excellent at `r round(cor(arma11$x,fitted(arma11))^2,2)`^[Again, we haven't subjected that to any kind of training/testing scheme. We will talk about the challenges of training and testing data for time series models later in the course.]
+
+Note that while the BIC values indicated ARMA(1,1), some of those other models look pretty good! Why pick ARMA(1,1) over a different model?  There is often not a "right" and we often have to be content with the "least wrong" model. Look at the ACF and PACF of the residuals of some of the other models. In general, simpler is better than more complicated. It all gets down to specifying this annoying question, "What are you trying to answer?"
+
+### SST Data
+Real data is always messier than simulated data. Let's take a look at some.
+
+Catherine Pfister and colleagues wrote a very nice paper in the Journal of Ecology a few years back. In the paper they looked at spatial and temporal autocorrelation in Salish Sea kelp abundance and linked it to oceanic drivers like sea surface temperatures. We might delve into that paper in more depth later -- it's a lovely study. See [here](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2745.12908) for the paper and the data are archived [here](https://datadryad.org/stash/dataset/doi:10.5061/dryad.vk42h). I pulled out the sea surface temperature from Race Rocks, Canada which goes back to 1921 and is a great long, local time series. Let's look at the temporal structure in these data.
+
+```{r}
+sst <- readRDS("data/RaceRocksSST.rds")
+
+p1 <- broom::tidy(sst) %>% ggplot(mapping = aes(x=index,y=value)) +  
+  geom_line() + labs(x="Year",y=expression(degree~C),
+                     title="Sea Surface Temperatures, Race Rocks, Canada")
+p2 <- ggAcf(sst) + labs(title=element_blank())
+p3 <- ggPacf(sst) + labs(title=element_blank())
+gridExtra::grid.arrange(p1,p2,p3,layout_matrix=simpleLayoutMatrix)
+```
+
+That is a complicated picture we have from the ACF and PACF plots. It certainly looks like there is a trend in the data so let's difference it first and then fit some ARMA models. 
+
+
+```{r}
+sst_diff <- diff(sst)
+p1 <- broom::tidy(sst_diff) %>% ggplot(mapping = aes(x=index,y=value)) +  
+  geom_line() + labs(x="Year",y=expression(degree~C~Anomoly),
+                     title="Differenced Sea Surface Temperatures, Race Rocks, Canada")
+p2 <- ggAcf(sst_diff) + labs(title=element_blank())
+p3 <- ggPacf(sst_diff) + labs(title=element_blank())
+gridExtra::grid.arrange(p1,p2,p3,layout_matrix=simpleLayoutMatrix)
+```
+
+Still a complicated picture we have from the ACF and PACF plots with the differencing. Now for some ARMA models. 
+
+
+```{r}
+arma00 <- Arima(sst_diff,order = c(0,0,0))
+arma10 <- Arima(sst_diff,order = c(1,0,0))
+arma20 <- Arima(sst_diff,order = c(2,0,0))
+arma01 <- Arima(sst_diff,order = c(0,0,1))
+arma02 <- Arima(sst_diff,order = c(0,0,2))
+arma11 <- Arima(sst_diff,order = c(1,0,1))
+arma21 <- Arima(sst_diff,order = c(2,0,1))
+arma12 <- Arima(sst_diff,order = c(1,0,2))
+arma22 <- Arima(sst_diff,order = c(2,0,2))
+```
+
+Note that we could have used the undifferenced data above and included a $d$ term in the call to `Arima`. E.g., an AR(1) model with differencing would be `Arima(sst,order = c(1,1,0))` which is the same as `Arima(sst_diff,order = c(1,0,0))`. I chose to do the differencing manually to be consistent with what we did above.
+
+We can then evaluate each model by BIC.
+
+```{r}
+armaBIC <- BIC(arma10,arma20,arma01,arma02,arma11,arma21,arma12,arma22,arma00)
+armaBIC
+```
+
+From the BIC values it looks like the ARMA(0,2) model and the ARMA(1,1) models are both quite good. And ARMA(0,1) is appealing too.
+
+Here is the ARMA(1,1) model.
+
+```{r}
+arma02
+```
+
+Let's take a closer look. First let's look at the ACF and PACF of the residuals for the ARMA(0,2).
+
+```{r}
+y <- arma02$residuals
+p1 <- broom::tidy(y) %>% ggplot(mapping = aes(x=index,y=value)) + 
+  geom_line() +
+  labs(x="Time")
+p2 <- ggAcf(y) + labs(title=element_blank())
+p3 <- ggPacf(y) + labs(title=element_blank())
+gridExtra::grid.arrange(p1,p2,p3,layout_matrix=simpleLayoutMatrix)
+```
+
+Those are clean.
+
+So what do we do with this information? It does appear that these data follow a fairly complicated time-series model. Which one? Well there isn't one right answer. The BIC indicated and ARMA(0,2) model and gives clean residuals. But the ARMA(1,1) has a good fit as does the ARMA(0,1). I think you can make an argument for any of those models here. 
+
+If these were my data, I'd really want to know more about the mechanisms that might create the patterns we see in the data. Pattern is all well and good but process is cooler.
+
+### How Do You Decide Which Information Criterion to Use?
+
+When fitting ARMA models, you're often faced with multiple competing options — all with decent fits. So how the heck do you decide which information criterion (IC) to use? AIC? BIC? AICc? Each one has its own logic and use case. Here's a quick guide to help you choose:
+
+| Criterion | Penalty for Complexity | Best For | Notes |
+|:----------|:-----------------------|:---------|:------|
+| **AIC** (Akaike Information Criterion) | \(2k\) | Prediction | May overfit; balances fit and complexity |
+| **BIC** (Bayesian Information Criterion) | \(k \cdot \log(n)\) | Finding the "true" model | Stronger penalty on complexity |
+| **AICc** (Corrected AIC) | AIC + small-sample correction | Small samples | Recommended when \( n / k < 40 \) |
+
+In general:
+
+- AICc is often preferred for **small sample sizes**
+- AIC or BIC can be used for **larger samples**, depending on whether the focus is on prediction (AIC) or parsimony/inference (BIC). I like to fool myself into thinking I can get the "true" model. But, as in life, there isn't one answer.
+
+- **Use AIC**:
+  - For predictive performance
+  - When \( n \) is moderate to large
+
+- **Use BIC**:
+  - When aiming to identify the "true" model
+  - When sample size is large
+
+- **Use AICc**:
+  - When sample size is small (typically \( n < 50 \))
+  - To avoid overfitting in small-sample contexts
+
+
+```{r, echo=FALSE, eval=FALSE}
+
+# should have them redo hansen creek?
+sock <- readRDS("../03Autocorrelation/HansenSockeye.rds")
+ggAcf(sock)
+ggPacf(sock)
+arma40 <- Arima(sock,order = c(4,0,0))
+arma50 <- Arima(sock,order = c(5,0,0))
+arma01 <- Arima(sock,order = c(0,0,1))
+arma02 <- Arima(sock,order = c(0,0,2))
+arma11 <- Arima(sock,order = c(1,0,1))
+arma21 <- Arima(sock,order = c(2,0,1))
+arma12 <- Arima(sock,order = c(1,0,2))
+arma22 <- Arima(sock,order = c(2,0,2))
+arma00 <- Arima(sock,order = c(0,0,0))
+armaBIC <- BIC(arma40,arma50,arma01,arma02,arma11,arma21,arma12,arma22,arma00)
+foo <- armaBIC
+foo[order(foo$BIC),]
+  
+
+lynx<-LynxHare[,2]
+auto.arima(lynx,ic="bic") #2,1
+
+#For the RW
+n <- 100
+x <- 1:n
+epsilon <- rnorm(n=n)
+
+# random walk
+y <- numeric(length = n)
+for(i in 2:n){
+  y[i] <- y[i-1] + epsilon[i]  
+}
+
+simpleLayoutMatrix <- matrix(c(1,1,2,3),nrow = 2,ncol = 2,byrow = TRUE)
+p1 <- ggplot() + geom_line(aes(x=x,y=y))
+p2 <- ggAcf(y) + labs(title=element_blank())
+p3 <- ggPacf(y) + labs(title=element_blank())
+gridExtra::grid.arrange(p1,p2,p3,
+                        layout_matrix=simpleLayoutMatrix)
+# make it stationary by subtracting y_t-1 from y_t
+y2 <- y - lag(y)
+p1 <- ggplot() + geom_line(aes(x=x,y=y2))
+p2 <- ggAcf(y2) + labs(title=element_blank())
+p3 <- ggPacf(y2) + labs(title=element_blank())
+gridExtra::grid.arrange(p1,p2,p3,
+                        layout_matrix=simpleLayoutMatrix)
+#Note that y2 is now equal to epsilon
+cbind(epsilon,y2)
+```
+
+## Your work
+### Bunnies and Kitties
+You all recall the famous Lynx and Hare data from when you took ecology and learned about predator-prey interactions and [Lotka-Volterra equations](https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations) I bet. I grabbed these data from the `ecostudy` package and have them as a `ts` object. The data give the number of pelts (in thousands) for Lynx and Hare traded with the Hudson Bay Trading Company in 1845 to 1935.
+
+```{r}
+LynxHare <- readRDS("data/LynxHare.rds")
+str(LynxHare)
+plot(LynxHare,main="Annual numbers of pelts in tousands")
+```
+
+The adorable Snowshoe Hare is the primary food of the Canada Lynx and the these two species are closely linked by their population biology. Take a moment and write down how you can think about their population cycles in terms of their time-series properties. Can we try to understand how those populations might vary in terms of AR and MA processes? Do some wild and irresponsible speculation.
+
+Now, model the Lynx pelt data as an ARMA process. Do some further wild and irresponsible speculation about what you found. How does your thinking about this famous data fit into your understanding of an ARMA model?
+
+
+### Write up and Reflect
+Write it all up and pass in a knitted R Markdown document. The last section of your document should include a reflection where you explain how it all went. What triumphs did you have? What is still confusing?
+

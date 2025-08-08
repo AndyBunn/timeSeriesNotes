@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>7 ARMA(p,q) | A collection of note for ESCI 504</title>
+  <meta name="description" content="Helpful materials for ESCI 504" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="7 ARMA(p,q) | A collection of note for ESCI 504" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Helpful materials for ESCI 504" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="7 ARMA(p,q) | A collection of note for ESCI 504" />
+  
+  <meta name="twitter:description" content="Helpful materials for ESCI 504" />
+  
+
+<meta name="author" content="Andy Bunn" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"/>
+<link rel="next" href="forecasting.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.33/datatables.js"></script>
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+<script>
+/* ========================================================================
+ * Bootstrap: transition.js v3.3.7
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
+
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
+
+    var transEndEventNames = {
+      WebkitTransition : 'webkitTransitionEnd',
+      MozTransition    : 'transitionend',
+      OTransition      : 'oTransitionEnd otransitionend',
+      transition       : 'transitionend'
+    }
+
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
+
+    return false // explicit for ie8 (  ._.)
+  }
+
+  // http://blog.alexmaccaw.com/css-transitions
+  $.fn.emulateTransitionEnd = function (duration) {
+    var called = false
+    var $el = this
+    $(this).one('bsTransitionEnd', function () { called = true })
+    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+    setTimeout(callback, duration)
+    return this
+  }
+
+  $(function () {
+    $.support.transition = transitionEnd()
+
+    if (!$.support.transition) return
+
+    $.event.special.bsTransitionEnd = {
+      bindType: $.support.transition.end,
+      delegateType: $.support.transition.end,
+      handle: function (e) {
+        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+      }
+    }
+  })
+
+}(jQuery);
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: collapse.js v3.3.7
+ * http://getbootstrap.com/javascript/#collapse
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+/* jshint latedef: false */
+
++function ($) {
+  'use strict';
+
+  // COLLAPSE PUBLIC CLASS DEFINITION
+  // ================================
+
+  var Collapse = function (element, options) {
+    this.$element      = $(element)
+    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+    this.$trigger      = $('[data-toggle="collapse"][href="#' + element.id + '"],' +
+                           '[data-toggle="collapse"][data-target="#' + element.id + '"]')
+    this.transitioning = null
+
+    if (this.options.parent) {
+      this.$parent = this.getParent()
+    } else {
+      this.addAriaAndCollapsedClass(this.$element, this.$trigger)
+    }
+
+    if (this.options.toggle) this.toggle()
+  }
+
+  Collapse.VERSION  = '3.3.7'
+
+  Collapse.TRANSITION_DURATION = 350
+
+  Collapse.DEFAULTS = {
+    toggle: true
+  }
+
+  Collapse.prototype.dimension = function () {
+    var hasWidth = this.$element.hasClass('width')
+    return hasWidth ? 'width' : 'height'
+  }
+
+  Collapse.prototype.show = function () {
+    if (this.transitioning || this.$element.hasClass('in')) return
+
+    var activesData
+    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+
+    if (actives && actives.length) {
+      activesData = actives.data('bs.collapse')
+      if (activesData && activesData.transitioning) return
+    }
+
+    var startEvent = $.Event('show.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    if (actives && actives.length) {
+      Plugin.call(actives, 'hide')
+      activesData || actives.data('bs.collapse', null)
+    }
+
+    var dimension = this.dimension()
+
+    this.$element
+      .removeClass('collapse')
+      .addClass('collapsing')[dimension](0)
+      .attr('aria-expanded', true)
+
+    this.$trigger
+      .removeClass('collapsed')
+      .attr('aria-expanded', true)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse in')[dimension]('')
+      this.transitioning = 0
+      this.$element
+        .trigger('shown.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+    this.$element
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
+  }
+
+  Collapse.prototype.hide = function () {
+    if (this.transitioning || !this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('hide.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var dimension = this.dimension()
+
+    this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+
+    this.$element
+      .addClass('collapsing')
+      .removeClass('collapse in')
+      .attr('aria-expanded', false)
+
+    this.$trigger
+      .addClass('collapsed')
+      .attr('aria-expanded', false)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.transitioning = 0
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse')
+        .trigger('hidden.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    this.$element
+      [dimension](0)
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
+  }
+
+  Collapse.prototype.toggle = function () {
+    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+  }
+
+  Collapse.prototype.getParent = function () {
+    return $(this.options.parent)
+      .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
+      .each($.proxy(function (i, element) {
+        var $element = $(element)
+        this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
+      }, this))
+      .end()
+  }
+
+  Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
+    var isOpen = $element.hasClass('in')
+
+    $element.attr('aria-expanded', isOpen)
+    $trigger
+      .toggleClass('collapsed', !isOpen)
+      .attr('aria-expanded', isOpen)
+  }
+
+  function getTargetFromTrigger($trigger) {
+    var href
+    var target = $trigger.attr('data-target')
+      || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+
+    return $(target)
+  }
+
+
+  // COLLAPSE PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.collapse')
+      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data && options.toggle && /show|hide/.test(option)) options.toggle = false
+      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  var old = $.fn.collapse
+
+  $.fn.collapse             = Plugin
+  $.fn.collapse.Constructor = Collapse
+
+
+  // COLLAPSE NO CONFLICT
+  // ====================
+
+  $.fn.collapse.noConflict = function () {
+    $.fn.collapse = old
+    return this
+  }
+
+
+  // COLLAPSE DATA-API
+  // =================
+
+  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
+    var $this   = $(this)
+
+    if (!$this.attr('data-target')) e.preventDefault()
+
+    var $target = getTargetFromTrigger($this)
+    var data    = $target.data('bs.collapse')
+    var option  = data ? 'toggle' : $this.data()
+
+    Plugin.call($target, option)
+  })
+
+}(jQuery);
+</script>
+<script>
+window.initializeCodeFolding = function(show) {
+
+  // handlers for show-all and hide all
+  $("#rmd-show-all-code").click(function() {
+    // close the dropdown menu when an option is clicked
+    $("#allCodeButton").dropdown("toggle");
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('show');
+    });
+  });
+  $("#rmd-hide-all-code").click(function() {
+    // close the dropdown menu when an option is clicked
+    $("#allCodeButton").dropdown("toggle");
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('hide');
+    });
+  });
+
+  // index for unique code element ids
+  var currentIndex = 1;
+
+  // select all R code blocks
+  var rCodeBlocks = $('pre.sourceCode, pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan');
+  rCodeBlocks.each(function() {
+
+    // if code block has been labeled with class `fold-show`, show the code on init!
+    var classList = $(this).attr('class').split(/\s+/);
+    for (var i = 0; i < classList.length; i++) {
+    if (classList[i] === 'fold-show') {
+        show = true;
+      }
+      // AGB add fold-hide
+    if (classList[i] === 'fold-hide') {
+        show = false;
+      }
+    }
+    // AGB
+    // if code block has been labeled with class `fold-hide`, hide the code on init!
+//    var classList = $(this).attr('class').split(/\s+/);
+//    for (var i = 0; i < classList.length; i++) {
+//    if (classList[i] === 'fold-hide') {
+//        show = false;
+//      }
+//    }
+
+    // create a collapsable div to wrap the code in
+    var div = $('<div class="collapse r-code-collapse"></div>');
+    if (show)
+      div.addClass('in');
+    var id = 'rcode-643E0F36' + currentIndex++;
+    div.attr('id', id);
+    $(this).before(div);
+    $(this).detach().appendTo(div);
+
+    // add a show code button right above
+    var showCodeText = $('<span>' + (show ? 'Hide' : 'Code') + '</span>');
+    var showCodeButton = $('<button type="button" class="btn btn-default btn-xs code-folding-btn pull-right"></button>');
+    showCodeButton.append(showCodeText);
+    showCodeButton
+        .attr('data-toggle', 'collapse')
+        .attr('data-target', '#' + id)
+        .attr('aria-expanded', show)
+        .attr('aria-controls', id);
+
+    var buttonRow = $('<div class="row"></div>');
+    var buttonCol = $('<div class="col-md-12"></div>');
+
+    buttonCol.append(showCodeButton);
+    buttonRow.append(buttonCol);
+
+    div.before(buttonRow);
+
+    // hack: return show to false, otherwise all next codeBlocks will be shown!
+    show = true;
+
+    // update state of button on show/hide
+    div.on('hidden.bs.collapse', function () {
+      showCodeText.text('Code');
+    });
+    div.on('show.bs.collapse', function () {
+      showCodeText.text('Hide');
+    });
+  });
+
+}
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: dropdown.js v3.3.7
+ * http://getbootstrap.com/javascript/#dropdowns
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // DROPDOWN CLASS DEFINITION
+  // =========================
+
+  var backdrop = '.dropdown-backdrop'
+  var toggle   = '[data-toggle="dropdown"]'
+  var Dropdown = function (element) {
+    $(element).on('click.bs.dropdown', this.toggle)
+  }
+
+  Dropdown.VERSION = '3.3.7'
+
+  function getParent($this) {
+    var selector = $this.attr('data-target')
+
+    if (!selector) {
+      selector = $this.attr('href')
+      selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
+    }
+
+    var $parent = selector && $(selector)
+
+    return $parent && $parent.length ? $parent : $this.parent()
+  }
+
+  function clearMenus(e) {
+    if (e && e.which === 3) return
+    $(backdrop).remove()
+    $(toggle).each(function () {
+      var $this         = $(this)
+      var $parent       = getParent($this)
+      var relatedTarget = { relatedTarget: this }
+
+      if (!$parent.hasClass('open')) return
+
+      if (e && e.type == 'click' && /input|textarea/i.test(e.target.tagName) && $.contains($parent[0], e.target)) return
+
+      $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
+
+      if (e.isDefaultPrevented()) return
+
+      $this.attr('aria-expanded', 'false')
+      $parent.removeClass('open').trigger($.Event('hidden.bs.dropdown', relatedTarget))
+    })
+  }
+
+  Dropdown.prototype.toggle = function (e) {
+    var $this = $(this)
+
+    if ($this.is('.disabled, :disabled')) return
+
+    var $parent  = getParent($this)
+    var isActive = $parent.hasClass('open')
+
+    clearMenus()
+
+    if (!isActive) {
+      if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
+        // if mobile we use a backdrop because click events don't delegate
+        $(document.createElement('div'))
+          .addClass('dropdown-backdrop')
+          .insertAfter($(this))
+          .on('click', clearMenus)
+      }
+
+      var relatedTarget = { relatedTarget: this }
+      $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget))
+
+      if (e.isDefaultPrevented()) return
+
+      $this
+        .trigger('focus')
+        .attr('aria-expanded', 'true')
+
+      $parent
+        .toggleClass('open')
+        .trigger($.Event('shown.bs.dropdown', relatedTarget))
+    }
+
+    return false
+  }
+
+  Dropdown.prototype.keydown = function (e) {
+    if (!/(38|40|27|32)/.test(e.which) || /input|textarea/i.test(e.target.tagName)) return
+
+    var $this = $(this)
+
+    e.preventDefault()
+    e.stopPropagation()
+
+    if ($this.is('.disabled, :disabled')) return
+
+    var $parent  = getParent($this)
+    var isActive = $parent.hasClass('open')
+
+    if (!isActive && e.which != 27 || isActive && e.which == 27) {
+      if (e.which == 27) $parent.find(toggle).trigger('focus')
+      return $this.trigger('click')
+    }
+
+    var desc = ' li:not(.disabled):visible a'
+    var $items = $parent.find('.dropdown-menu' + desc)
+
+    if (!$items.length) return
+
+    var index = $items.index(e.target)
+
+    if (e.which == 38 && index > 0)                 index--         // up
+    if (e.which == 40 && index < $items.length - 1) index++         // down
+    if (!~index)                                    index = 0
+
+    $items.eq(index).trigger('focus')
+  }
+
+
+  // DROPDOWN PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this = $(this)
+      var data  = $this.data('bs.dropdown')
+
+      if (!data) $this.data('bs.dropdown', (data = new Dropdown(this)))
+      if (typeof option == 'string') data[option].call($this)
+    })
+  }
+
+  var old = $.fn.dropdown
+
+  $.fn.dropdown             = Plugin
+  $.fn.dropdown.Constructor = Dropdown
+
+
+  // DROPDOWN NO CONFLICT
+  // ====================
+
+  $.fn.dropdown.noConflict = function () {
+    $.fn.dropdown = old
+    return this
+  }
+
+
+  // APPLY TO STANDARD DROPDOWN ELEMENTS
+  // ===================================
+
+  $(document)
+    .on('click.bs.dropdown.data-api', clearMenus)
+    .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
+    .on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle)
+    .on('keydown.bs.dropdown.data-api', toggle, Dropdown.prototype.keydown)
+    .on('keydown.bs.dropdown.data-api', '.dropdown-menu', Dropdown.prototype.keydown)
+
+}(jQuery);
+</script>
+<style type="text/css">
+.code-folding-btn {
+  margin-bottom: 4px;
+}
+
+.row { display: flex; }
+.collapse { display: none; }
+.in { display:block }
+.pull-right > .dropdown-menu {
+    right: 0;
+    left: auto;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.open > .dropdown-menu {
+    display: block;
+    color: #ffffff;
+    background-color: #ffffff;
+    background-image: none;
+    border-color: #92897e;
+}
+
+.dropdown-menu > li > a {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #e95420;
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #e95420;
+  outline: 0;
+}
+.dropdown-menu > .disabled > a,
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  color: #aea79f;
+}
+
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  text-decoration: none;
+  cursor: not-allowed;
+  background-color: transparent;
+  background-image: none;
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+
+.btn {
+  display: inline-block;
+  margin-bottom: 1;
+  font-weight: normal;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  padding: 4px 8px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.btn:hover,
+.btn:focus,
+.btn.focus {
+  color: #ffffff;
+  text-decoration: none;
+}
+.btn:active,
+.btn.active {
+  background-image: none;
+  outline: 0;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.btn.disabled,
+.btn[disabled],
+fieldset[disabled] .btn {
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  opacity: 0.65;
+  box-shadow: none;
+}
+a.btn.disabled,
+fieldset[disabled] a.btn {
+  pointer-events: none;
+}
+.btn-default {
+  color: #ffffff;
+  background-color: #aea79f; #important
+  border-color: #aea79f;
+}
+
+.btn-default:focus,
+.btn-default.focus {
+  color: #ffffff;
+  background-color: #978e83;
+  border-color: #6f675e;
+}
+
+.btn-default:hover {
+  color: #ffffff;
+  background-color: #978e83;
+  border-color: #92897e;
+}
+.btn-default:active,
+.btn-default.active,
+.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+  border-radius: 0;
+}
+.btn-group > .btn:first-child {
+  margin-left: 0;
+}
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btn-group > .btn:last-child:not(:first-child),
+.btn-group > .dropdown-toggle:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btn-group > .btn-group {
+  float: left;
+}
+.btn-group > .btn-group:not(:first-child):not(:last-child) > .btn {
+  border-radius: 0;
+}
+.btn-group > .btn-group:first-child:not(:last-child) > .btn:last-child,
+.btn-group > .btn-group:first-child:not(:last-child) > .dropdown-toggle {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btn-group > .btn-group:last-child:not(:first-child) > .btn:first-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btn-group .dropdown-toggle:active,
+.btn-group.open .dropdown-toggle {
+  outline: 0;
+}
+.btn-group > .btn + .dropdown-toggle {
+  padding-right: 8px;
+  padding-left: 8px;
+}
+.btn-group > .btn-lg + .dropdown-toggle {
+  padding-right: 12px;
+  padding-left: 12px;
+}
+.btn-group.open .dropdown-toggle {
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.btn-group.open .dropdown-toggle.btn-link {
+  box-shadow: none;
+}
+
+</style>
+<script>
+var str = '<div class="btn-group pull-right" style="position: fixed; right: 50px; top: 10px; z-index: 200"><button type="button" class="btn btn-default btn-xs dropdown-toggle" id="allCodeButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" data-_extension-text-contrast=""><span>Code</span> <span class="caret"></span></button><ul class="dropdown-menu" style="min-width: 50px;"><li><a id="rmd-show-all-code" href="#">Show All Code</a></li><li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li></ul></div>';
+document.write(str);
+</script>
+<script>
+$(document).ready(function () {
+  // AGB add fold-hide changed === to !== to default to showing code
+  window.initializeCodeFolding("show" !== "hide");
+});
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preamble</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#technical-setup"><i class="fa fa-check"></i><b>1.1</b> Technical Setup</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#project-structure"><i class="fa fa-check"></i><b>1.1.1</b> Project Structure</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#why-use-projects-in-r"><i class="fa fa-check"></i><b>1.1.2</b> Why Use Projects in R?</a></li>
+<li class="chapter" data-level="1.1.3" data-path="index.html"><a href="index.html#why-reproducibility-matters"><i class="fa fa-check"></i><b>1.1.3</b> Why Reproducibility Matters</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html"><i class="fa fa-check"></i><b>2</b> The Measure of Time</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#big-idea"><i class="fa fa-check"></i><b>2.1</b> Big Idea</a></li>
+<li class="chapter" data-level="2.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#reading"><i class="fa fa-check"></i><b>2.2</b> Reading</a></li>
+<li class="chapter" data-level="2.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#packages"><i class="fa fa-check"></i><b>2.3</b> Packages</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#load"><i class="fa fa-check"></i><b>2.3.1</b> Load</a></li>
+<li class="chapter" data-level="2.3.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#keep-up-to-date"><i class="fa fa-check"></i><b>2.3.2</b> Keep Up to Date</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#what-kinds-of-data"><i class="fa fa-check"></i><b>2.4</b> What Kinds of Data?</a></li>
+<li class="chapter" data-level="2.5" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#the-ts-class"><i class="fa fa-check"></i><b>2.5</b> The <code>ts</code> Class</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#a-very-useful-class"><i class="fa fa-check"></i><b>2.5.1</b> A Very Useful Class</a></li>
+<li class="chapter" data-level="2.5.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#digression-describing-a-time-series"><i class="fa fa-check"></i><b>2.5.2</b> Digression: Describing a Time Series</a></li>
+<li class="chapter" data-level="2.5.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#more-on-the-ts-index"><i class="fa fa-check"></i><b>2.5.3</b> More on the <code>ts</code> Index</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#trend-in-time"><i class="fa fa-check"></i><b>2.6</b> Trend in time</a></li>
+<li class="chapter" data-level="2.7" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#the-zoo-class"><i class="fa fa-check"></i><b>2.7</b> The <code>zoo</code> Class</a></li>
+<li class="chapter" data-level="2.8" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#lubricate-the-dates"><i class="fa fa-check"></i><b>2.8</b> Lubricate the Dates</a></li>
+<li class="chapter" data-level="2.9" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#tidy-it-up"><i class="fa fa-check"></i><b>2.9</b> Tidy it Up</a></li>
+<li class="chapter" data-level="2.10" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#your-work"><i class="fa fa-check"></i><b>2.10</b> Your Work</a>
+<ul>
+<li class="chapter" data-level="2.10.1" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#berkeley-earth-temperature-data"><i class="fa fa-check"></i><b>2.10.1</b> Berkeley Earth Temperature Data</a></li>
+<li class="chapter" data-level="2.10.2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#your-turn"><i class="fa fa-check"></i><b>2.10.2</b> Your Turn</a></li>
+<li class="chapter" data-level="2.10.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#write-up-and-reflect"><i class="fa fa-check"></i><b>2.10.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html"><i class="fa fa-check"></i><b>3</b> An Aside: Understanding Methods and Generics in R</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#youve-come-a-long-way-in-r"><i class="fa fa-check"></i><b>3.1</b> You’ve Come a Long Way in R</a></li>
+<li class="chapter" data-level="3.2" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#why-use-generics"><i class="fa fa-check"></i><b>3.2</b> Why Use Generics?</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#same-function-different-behavior-what-gives"><i class="fa fa-check"></i><b>3.2.1</b> Same Function, Different Behavior — What Gives?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#how-this-works"><i class="fa fa-check"></i><b>3.3</b> How This Works</a></li>
+<li class="chapter" data-level="3.4" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#whats-the-difference-between-a-generic-and-a-method"><i class="fa fa-check"></i><b>3.4</b> What’s the Difference Between a Generic and a Method?</a></li>
+<li class="chapter" data-level="3.5" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#common-generic-functions"><i class="fa fa-check"></i><b>3.5</b> Common Generic Functions</a></li>
+<li class="chapter" data-level="3.6" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#how-to-explore-and-understand-methods"><i class="fa fa-check"></i><b>3.6</b> How to Explore and Understand Methods</a></li>
+<li class="chapter" data-level="3.7" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#why-this-matters"><i class="fa fa-check"></i><b>3.7</b> Why This Matters</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="decomposition.html"><a href="decomposition.html"><i class="fa fa-check"></i><b>4</b> Decomposition</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="decomposition.html"><a href="decomposition.html#big-idea-1"><i class="fa fa-check"></i><b>4.1</b> Big Idea</a></li>
+<li class="chapter" data-level="4.2" data-path="decomposition.html"><a href="decomposition.html#reading-1"><i class="fa fa-check"></i><b>4.2</b> Reading</a></li>
+<li class="chapter" data-level="4.3" data-path="decomposition.html"><a href="decomposition.html#packages-1"><i class="fa fa-check"></i><b>4.3</b> Packages</a></li>
+<li class="chapter" data-level="4.4" data-path="decomposition.html"><a href="decomposition.html#seasonality-and-decomposition"><i class="fa fa-check"></i><b>4.4</b> Seasonality and decomposition</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="decomposition.html"><a href="decomposition.html#breaking-down-a-series-the-tedious-way"><i class="fa fa-check"></i><b>4.4.1</b> Breaking down a series the tedious way</a></li>
+<li class="chapter" data-level="4.4.2" data-path="decomposition.html"><a href="decomposition.html#breaking-down-a-series-the-easy-way"><i class="fa fa-check"></i><b>4.4.2</b> Breaking down a series the easy way</a></li>
+<li class="chapter" data-level="4.4.3" data-path="decomposition.html"><a href="decomposition.html#how-does-m-differ-from-the-slope-in-a-lm"><i class="fa fa-check"></i><b>4.4.3</b> How does <code>m</code> differ from the slope in a <code>lm</code>?</a></li>
+<li class="chapter" data-level="4.4.4" data-path="decomposition.html"><a href="decomposition.html#warning"><i class="fa fa-check"></i><b>4.4.4</b> Warning</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="decomposition.html"><a href="decomposition.html#stationarity"><i class="fa fa-check"></i><b>4.5</b> Stationarity</a></li>
+<li class="chapter" data-level="4.6" data-path="decomposition.html"><a href="decomposition.html#your-work-1"><i class="fa fa-check"></i><b>4.6</b> Your Work</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="decomposition.html"><a href="decomposition.html#air-passengers"><i class="fa fa-check"></i><b>4.6.1</b> Air Passengers</a></li>
+<li class="chapter" data-level="4.6.2" data-path="decomposition.html"><a href="decomposition.html#kbli"><i class="fa fa-check"></i><b>4.6.2</b> KBLI</a></li>
+<li class="chapter" data-level="4.6.3" data-path="decomposition.html"><a href="decomposition.html#write-up-and-reflect-1"><i class="fa fa-check"></i><b>4.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html"><i class="fa fa-check"></i><b>5</b> AR(p), ACF, PACF, etc.</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#big-idea-2"><i class="fa fa-check"></i><b>5.1</b> Big Idea</a></li>
+<li class="chapter" data-level="5.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#reading-2"><i class="fa fa-check"></i><b>5.2</b> Reading</a></li>
+<li class="chapter" data-level="5.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#packages-2"><i class="fa fa-check"></i><b>5.3</b> Packages</a></li>
+<li class="chapter" data-level="5.4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#correlation-and-covariance"><i class="fa fa-check"></i><b>5.4</b> Correlation and Covariance</a></li>
+<li class="chapter" data-level="5.5" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation"><i class="fa fa-check"></i><b>5.5</b> Autocorrelation</a></li>
+<li class="chapter" data-level="5.6" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation-function"><i class="fa fa-check"></i><b>5.6</b> Autocorrelation Function</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#the-very-fun-presentation"><i class="fa fa-check"></i><b>5.6.1</b> The Very Fun Presentation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#the-boring-presentation"><i class="fa fa-check"></i><b>5.7</b> The Boring Presentation</a>
+<ul>
+<li class="chapter" data-level="5.7.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#tidy"><i class="fa fa-check"></i><b>5.7.1</b> Tidy</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#partial-autocorrelation-function"><i class="fa fa-check"></i><b>5.8</b> Partial Autocorrelation Function</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#pacf"><i class="fa fa-check"></i><b>5.8.1</b> PACF</a></li>
+<li class="chapter" data-level="5.8.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#underneath-the-hood-of-pacf"><i class="fa fa-check"></i><b>5.8.2</b> Underneath the Hood of PACF</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#ar1-to-arp"><i class="fa fa-check"></i><b>5.9</b> AR(1) to AR(p)</a></li>
+<li class="chapter" data-level="5.10" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#random-walks"><i class="fa fa-check"></i><b>5.10</b> Random walks</a>
+<ul>
+<li class="chapter" data-level="5.10.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#stationarity-is-dead"><i class="fa fa-check"></i><b>5.10.1</b> Stationarity is dead</a></li>
+</ul></li>
+<li class="chapter" data-level="5.11" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation-examples-with-real-data"><i class="fa fa-check"></i><b>5.11</b> Autocorrelation examples with real data</a>
+<ul>
+<li class="chapter" data-level="5.11.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#nile"><i class="fa fa-check"></i><b>5.11.1</b> Nile</a></li>
+<li class="chapter" data-level="5.11.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#air-temperature"><i class="fa fa-check"></i><b>5.11.2</b> Air Temperature</a></li>
+<li class="chapter" data-level="5.11.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#sunspots"><i class="fa fa-check"></i><b>5.11.3</b> Sunspots</a></li>
+</ul></li>
+<li class="chapter" data-level="5.12" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#choosing-the-order-of-an-arp-model-by-aic"><i class="fa fa-check"></i><b>5.12</b> Choosing the Order of an AR(p) Model by AIC</a></li>
+<li class="chapter" data-level="5.13" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#your-work-2"><i class="fa fa-check"></i><b>5.13</b> Your work</a>
+<ul>
+<li class="chapter" data-level="5.13.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#acf-and-pacf-with-different-values-of-phi."><i class="fa fa-check"></i><b>5.13.1</b> ACF and PACF with different values of <span class="math inline">\(\phi\)</span>.</a></li>
+<li class="chapter" data-level="5.13.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#roll-your-own-ar2"><i class="fa fa-check"></i><b>5.13.2</b> Roll your own AR(2)</a></li>
+<li class="chapter" data-level="5.13.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#sockeye"><i class="fa fa-check"></i><b>5.13.3</b> Sockeye</a></li>
+<li class="chapter" data-level="5.13.4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#write-up-and-reflect-2"><i class="fa fa-check"></i><b>5.13.4</b> Write Up and Reflect</a></li>
+</ul></li>
+<li class="chapter" data-level="5.14" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#postscript-a-helpful-plotting-chunk"><i class="fa fa-check"></i><b>5.14</b> Postscript: A Helpful Plotting Chunk</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><i class="fa fa-check"></i><b>6</b> Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#introduction"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#acf-and-pacf-of-a-single-ma1-simulation"><i class="fa fa-check"></i><b>6.2</b> ACF and PACF of a Single MA(1) Simulation</a></li>
+<li class="chapter" data-level="6.3" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#simulation-study-across-many-ma1-coefficients"><i class="fa fa-check"></i><b>6.3</b> Simulation Study Across Many MA(1) Coefficients</a></li>
+<li class="chapter" data-level="6.4" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-1-pacf-lag-1-underestimates-theta"><i class="fa fa-check"></i><b>6.4</b> Insight 1: PACF Lag 1 Underestimates <span class="math inline">\(\theta\)</span></a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens"><i class="fa fa-check"></i><b>6.4.1</b> Why This Happens</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-2-pacf-lag-2-is-consistently-negative"><i class="fa fa-check"></i><b>6.5</b> Insight 2: PACF Lag 2 is Consistently Negative</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens-1"><i class="fa fa-check"></i><b>6.5.1</b> Why This Happens</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#conclusion"><i class="fa fa-check"></i><b>6.6</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="armapq.html"><a href="armapq.html"><i class="fa fa-check"></i><b>7</b> ARMA(p,q)</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="armapq.html"><a href="armapq.html#big-idea-3"><i class="fa fa-check"></i><b>7.1</b> Big Idea</a></li>
+<li class="chapter" data-level="7.2" data-path="armapq.html"><a href="armapq.html#reading-3"><i class="fa fa-check"></i><b>7.2</b> Reading</a></li>
+<li class="chapter" data-level="7.3" data-path="armapq.html"><a href="armapq.html#packages-3"><i class="fa fa-check"></i><b>7.3</b> Packages</a></li>
+<li class="chapter" data-level="7.4" data-path="armapq.html"><a href="armapq.html#arp-to-maq"><i class="fa fa-check"></i><b>7.4</b> AR(p) to MA(q)</a></li>
+<li class="chapter" data-level="7.5" data-path="armapq.html"><a href="armapq.html#armapq-1"><i class="fa fa-check"></i><b>7.5</b> ARMA(p,q)</a></li>
+<li class="chapter" data-level="7.6" data-path="armapq.html"><a href="armapq.html#what-about-arimap-d-q"><i class="fa fa-check"></i><b>7.6</b> What about ARIMA(p, d, q)?</a>
+<ul>
+<li class="chapter" data-level="7.6.1" data-path="armapq.html"><a href="armapq.html#why-do-arma-models-require-stationarity"><i class="fa fa-check"></i><b>7.6.1</b> Why Do ARMA Models Require Stationarity?</a></li>
+<li class="chapter" data-level="7.6.2" data-path="armapq.html"><a href="armapq.html#simulated-data"><i class="fa fa-check"></i><b>7.6.2</b> Simulated Data</a></li>
+</ul></li>
+<li class="chapter" data-level="7.7" data-path="armapq.html"><a href="armapq.html#evaluating-arma-models"><i class="fa fa-check"></i><b>7.7</b> Evaluating ARMA models</a>
+<ul>
+<li class="chapter" data-level="7.7.1" data-path="armapq.html"><a href="armapq.html#simulated-data-1"><i class="fa fa-check"></i><b>7.7.1</b> Simulated Data</a></li>
+<li class="chapter" data-level="7.7.2" data-path="armapq.html"><a href="armapq.html#sst-data"><i class="fa fa-check"></i><b>7.7.2</b> SST Data</a></li>
+<li class="chapter" data-level="7.7.3" data-path="armapq.html"><a href="armapq.html#how-do-you-decide-which-information-criterion-to-use"><i class="fa fa-check"></i><b>7.7.3</b> How Do You Decide Which Information Criterion to Use?</a></li>
+</ul></li>
+<li class="chapter" data-level="7.8" data-path="armapq.html"><a href="armapq.html#your-work-3"><i class="fa fa-check"></i><b>7.8</b> Your work</a>
+<ul>
+<li class="chapter" data-level="7.8.1" data-path="armapq.html"><a href="armapq.html#bunnies-and-kitties"><i class="fa fa-check"></i><b>7.8.1</b> Bunnies and Kitties</a></li>
+<li class="chapter" data-level="7.8.2" data-path="armapq.html"><a href="armapq.html#write-up-and-reflect-3"><i class="fa fa-check"></i><b>7.8.2</b> Write up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i><b>8</b> Forecasting</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="forecasting.html"><a href="forecasting.html#big-idea-4"><i class="fa fa-check"></i><b>8.1</b> Big Idea</a></li>
+<li class="chapter" data-level="8.2" data-path="forecasting.html"><a href="forecasting.html#reading-4"><i class="fa fa-check"></i><b>8.2</b> Reading</a></li>
+<li class="chapter" data-level="8.3" data-path="forecasting.html"><a href="forecasting.html#packages-4"><i class="fa fa-check"></i><b>8.3</b> Packages</a></li>
+<li class="chapter" data-level="8.4" data-path="forecasting.html"><a href="forecasting.html#introduction-1"><i class="fa fa-check"></i><b>8.4</b> Introduction</a></li>
+<li class="chapter" data-level="8.5" data-path="forecasting.html"><a href="forecasting.html#a-simple-forecast"><i class="fa fa-check"></i><b>8.5</b> A simple forecast</a>
+<ul>
+<li class="chapter" data-level="8.5.1" data-path="forecasting.html"><a href="forecasting.html#two-step-ahead-forecast"><i class="fa fa-check"></i><b>8.5.1</b> Two-step-ahead forecast</a></li>
+<li class="chapter" data-level="8.5.2" data-path="forecasting.html"><a href="forecasting.html#example"><i class="fa fa-check"></i><b>8.5.2</b> Example</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="forecasting.html"><a href="forecasting.html#using-arma-coefficients-to-forecast"><i class="fa fa-check"></i><b>8.6</b> Using ARMA coefficients to forecast</a></li>
+<li class="chapter" data-level="8.7" data-path="forecasting.html"><a href="forecasting.html#holt-winters"><i class="fa fa-check"></i><b>8.7</b> Holt-Winters</a></li>
+<li class="chapter" data-level="8.8" data-path="forecasting.html"><a href="forecasting.html#your-work-4"><i class="fa fa-check"></i><b>8.8</b> Your work</a>
+<ul>
+<li class="chapter" data-level="8.8.1" data-path="forecasting.html"><a href="forecasting.html#a-silly-prediction"><i class="fa fa-check"></i><b>8.8.1</b> A silly prediction</a></li>
+<li class="chapter" data-level="8.8.2" data-path="forecasting.html"><a href="forecasting.html#write-up-and-reflect-4"><i class="fa fa-check"></i><b>8.8.2</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="cross-correlation.html"><a href="cross-correlation.html"><i class="fa fa-check"></i><b>9</b> Cross Correlation</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="cross-correlation.html"><a href="cross-correlation.html#big-idea-5"><i class="fa fa-check"></i><b>9.1</b> Big Idea</a></li>
+<li class="chapter" data-level="9.2" data-path="cross-correlation.html"><a href="cross-correlation.html#reading-5"><i class="fa fa-check"></i><b>9.2</b> Reading</a></li>
+<li class="chapter" data-level="9.3" data-path="cross-correlation.html"><a href="cross-correlation.html#packages-5"><i class="fa fa-check"></i><b>9.3</b> Packages</a></li>
+<li class="chapter" data-level="9.4" data-path="cross-correlation.html"><a href="cross-correlation.html#lags"><i class="fa fa-check"></i><b>9.4</b> Lags</a></li>
+<li class="chapter" data-level="9.5" data-path="cross-correlation.html"><a href="cross-correlation.html#from-acf-to-ccf"><i class="fa fa-check"></i><b>9.5</b> From ACF to CCF</a></li>
+<li class="chapter" data-level="9.6" data-path="cross-correlation.html"><a href="cross-correlation.html#how-ccf-normalizes-correlations"><i class="fa fa-check"></i><b>9.6</b> How <code>Ccf()</code> Normalizes Correlations</a></li>
+<li class="chapter" data-level="9.7" data-path="cross-correlation.html"><a href="cross-correlation.html#your-work-5"><i class="fa fa-check"></i><b>9.7</b> Your work</a>
+<ul>
+<li class="chapter" data-level="9.7.1" data-path="cross-correlation.html"><a href="cross-correlation.html#write-up-and-reflect-5"><i class="fa fa-check"></i><b>9.7.1</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="regression.html"><a href="regression.html"><i class="fa fa-check"></i><b>10</b> Regression</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="regression.html"><a href="regression.html#big-idea-6"><i class="fa fa-check"></i><b>10.1</b> Big Idea</a></li>
+<li class="chapter" data-level="10.2" data-path="regression.html"><a href="regression.html#reading-6"><i class="fa fa-check"></i><b>10.2</b> Reading</a></li>
+<li class="chapter" data-level="10.3" data-path="regression.html"><a href="regression.html#packages-6"><i class="fa fa-check"></i><b>10.3</b> Packages</a></li>
+<li class="chapter" data-level="10.4" data-path="regression.html"><a href="regression.html#regression-1"><i class="fa fa-check"></i><b>10.4</b> Regression</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="regression.html"><a href="regression.html#adjusting-ols"><i class="fa fa-check"></i><b>10.4.1</b> Adjusting OLS</a></li>
+<li class="chapter" data-level="10.4.2" data-path="regression.html"><a href="regression.html#gls"><i class="fa fa-check"></i><b>10.4.2</b> GLS</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="regression.html"><a href="regression.html#your-work-6"><i class="fa fa-check"></i><b>10.5</b> Your work</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="regression.html"><a href="regression.html#what-does-generalized-mean"><i class="fa fa-check"></i><b>10.5.1</b> What Does Generalized Mean?</a></li>
+<li class="chapter" data-level="10.5.2" data-path="regression.html"><a href="regression.html#regression-simulation"><i class="fa fa-check"></i><b>10.5.2</b> Regression Simulation</a></li>
+<li class="chapter" data-level="10.5.3" data-path="regression.html"><a href="regression.html#regression-for-real"><i class="fa fa-check"></i><b>10.5.3</b> Regression for real</a></li>
+<li class="chapter" data-level="10.5.4" data-path="regression.html"><a href="regression.html#write-up-and-reflect-6"><i class="fa fa-check"></i><b>10.5.4</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html"><i class="fa fa-check"></i><b>11</b> Filtering, smoothing</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#big-idea-7"><i class="fa fa-check"></i><b>11.1</b> Big Idea</a></li>
+<li class="chapter" data-level="11.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#packages-7"><i class="fa fa-check"></i><b>11.2</b> Packages</a></li>
+<li class="chapter" data-level="11.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#filters-as-visual-aids"><i class="fa fa-check"></i><b>11.3</b> Filters as visual aids</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#moving-running-average"><i class="fa fa-check"></i><b>11.3.1</b> Moving (running) average</a></li>
+<li class="chapter" data-level="11.3.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#hanning"><i class="fa fa-check"></i><b>11.3.2</b> Hanning</a></li>
+<li class="chapter" data-level="11.3.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#smoothing-splines"><i class="fa fa-check"></i><b>11.3.3</b> Smoothing splines</a></li>
+<li class="chapter" data-level="11.3.4" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#loess"><i class="fa fa-check"></i><b>11.3.4</b> Loess</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#using-filters"><i class="fa fa-check"></i><b>11.4</b> Using filters</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#aggregating"><i class="fa fa-check"></i><b>11.4.1</b> Aggregating</a></li>
+<li class="chapter" data-level="11.4.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#removing-low-frequency-variability"><i class="fa fa-check"></i><b>11.4.2</b> Removing low frequency variability</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#the-case-of-the-poorly-launched-sensors"><i class="fa fa-check"></i><b>11.5</b> The Case of the Poorly-Launched Sensors</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#fix-time-on-temperature"><i class="fa fa-check"></i><b>11.5.1</b> Fix time on temperature</a></li>
+<li class="chapter" data-level="11.5.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#fill-missing-data-on-radiation"><i class="fa fa-check"></i><b>11.5.2</b> Fill missing data on radiation</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#your-work-7"><i class="fa fa-check"></i><b>11.6</b> Your work</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#filter"><i class="fa fa-check"></i><b>11.6.1</b> Filter</a></li>
+<li class="chapter" data-level="11.6.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#revisit-the-case-of-the-poorly-launched-sensors"><i class="fa fa-check"></i><b>11.6.2</b> Revisit the case of the poorly launched sensors</a></li>
+<li class="chapter" data-level="11.6.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#write-up-and-reflect-7"><i class="fa fa-check"></i><b>11.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html"><i class="fa fa-check"></i><b>12</b> The Freqs Come out at Night</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#big-idea-8"><i class="fa fa-check"></i><b>12.1</b> Big Idea</a></li>
+<li class="chapter" data-level="12.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#reading-7"><i class="fa fa-check"></i><b>12.2</b> Reading</a></li>
+<li class="chapter" data-level="12.3" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#packages-8"><i class="fa fa-check"></i><b>12.3</b> Packages</a></li>
+<li class="chapter" data-level="12.4" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#the-frequency-domain"><i class="fa fa-check"></i><b>12.4</b> The Frequency Domain</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#same-data-two-domains"><i class="fa fa-check"></i><b>12.4.1</b> Same Data, Two Domains</a></li>
+<li class="chapter" data-level="12.4.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#worked-example"><i class="fa fa-check"></i><b>12.4.2</b> Worked example</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#sunspot-example"><i class="fa fa-check"></i><b>12.5</b> Sunspot Example</a></li>
+<li class="chapter" data-level="12.6" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#your-work-8"><i class="fa fa-check"></i><b>12.6</b> Your work</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#generate-three-signals"><i class="fa fa-check"></i><b>12.6.1</b> Generate three signals</a></li>
+<li class="chapter" data-level="12.6.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#milankovitch"><i class="fa fa-check"></i><b>12.6.2</b> Milankovitch</a></li>
+<li class="chapter" data-level="12.6.3" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#write-up-and-reflect-8"><i class="fa fa-check"></i><b>12.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#references"><i class="fa fa-check"></i><b>12.7</b> References</a></li>
+<li class="chapter" data-level="12.8" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#postscript-a-glimpse-of-wavelets"><i class="fa fa-check"></i><b>12.8</b> Postscript: A Glimpse of Wavelets</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="references-1.html"><a href="references-1.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A collection of note for ESCI 504</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="armapq" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">7</span> ARMA(p,q)<a href="armapq.html#armapq" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="big-idea-3" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> Big Idea<a href="armapq.html#big-idea-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The values in a time series are often not independent – that can be a good thing to find out – understanding what the autocorrelation is like can often tell you a lot about what the underlying processes looks like.</p>
+</div>
+<div id="reading-3" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> Reading<a href="armapq.html#reading-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Have a look at Chapter six from <span class="citation">Cowpertwait and Metcalfe (<a href="references-1.html#ref-Cowpertwait2009">2009</a>)</span>. It’s OK to skim the readings in this book. It’s not a great book for our purposes as many of you haven’t taken linear algebra and the book occasionally goes that way. But it’s useful to hum your way through the chapter nonetheless.</p>
+</div>
+<div id="packages-3" class="section level2 hasAnchor" number="7.3">
+<h2><span class="header-section-number">7.3</span> Packages<a href="armapq.html#packages-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>I’ll use <code>tidyverse</code> <span class="citation">(<a href="references-1.html#ref-R-tidyverse">Wickham 2023</a>)</span> some. And we will use the <code>forecast</code> <span class="citation">(<a href="references-1.html#ref-R-forecast">Hyndman et al. 2025</a>)</span> package as well. I’ll grab a function or two from <code>gridExtra</code> <span class="citation">(<a href="references-1.html#ref-R-gridExtra">Auguie 2017</a>)</span> and <code>broom</code> <span class="citation">(<a href="references-1.html#ref-R-broom">Robinson, Hayes, and Couch 2025</a>)</span> as well.</p>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="armapq.html#cb153-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb153-2"><a href="armapq.html#cb153-2" tabindex="-1"></a><span class="fu">library</span>(forecast)</span></code></pre></div>
+</div>
+<div id="arp-to-maq" class="section level2 hasAnchor" number="7.4">
+<h2><span class="header-section-number">7.4</span> AR(p) to MA(q)<a href="armapq.html#arp-to-maq" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Last week, we described the auto regressive AR(<span class="math inline">\(p\)</span>) model where the values of <span class="math inline">\(y\)</span> are a function of the prior values of <span class="math inline">\(y\)</span>. We can extend this to more time steps and call this an autoregressive model of order <span class="math inline">\(p\)</span> as AR(<span class="math inline">\(p\)</span>):</p>
+<p><span class="math display">\[ y_t = \sum\limits_{i=1}^p \phi_i y_{t-i} + \epsilon_t \]</span></p>
+<p>Thus, an AR(2) model would be <span class="math inline">\(y_t = \phi_1 y_{t-1} + \phi_2 y_{t-2} + \epsilon_t\)</span> where parameters are as we’ve previously defined them.</p>
+<p>The moving average (MA) model is a similar concept to the AR(<span class="math inline">\(p\)</span>) model but this time the coefficient (<span class="math inline">\(\theta\)</span> instead of <span class="math inline">\(\phi\)</span>) affects the residuals and not <span class="math inline">\(y\)</span> itself. The time series therefore is an unevenly weighted moving average of the residuals <span class="math inline">\(\epsilon_t\)</span>. The first-order moving average, or MA(1), model is given by <span class="math inline">\(y_t = \theta_1 e_{t-1} + \epsilon_t\)</span> where <span class="math inline">\(\theta\)</span> is a coefficient ranging from -1 to 1.</p>
+<p><span class="math display">\[y_t = \theta \epsilon_{t-1} + \epsilon_t\]</span>
+But, we can never observe the values of <span class="math inline">\(\epsilon_t\)</span> in real time (they are errors, right?), so it is not really a regression in the usual sense.</p>
+<p>Let’s look at an implementation of a MA(1) process with a loop. I’m going to plot the data, the ACF and the PACF all in one figure.</p>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="armapq.html#cb154-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb154-2"><a href="armapq.html#cb154-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb154-3"><a href="armapq.html#cb154-3" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
+<span id="cb154-4"><a href="armapq.html#cb154-4" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span>n)</span>
+<span id="cb154-5"><a href="armapq.html#cb154-5" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> n)</span>
+<span id="cb154-6"><a href="armapq.html#cb154-6" tabindex="-1"></a></span>
+<span id="cb154-7"><a href="armapq.html#cb154-7" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n){</span>
+<span id="cb154-8"><a href="armapq.html#cb154-8" tabindex="-1"></a>  y[i] <span class="ot">&lt;-</span> theta <span class="sc">*</span> epsilon[i<span class="dv">-1</span>] <span class="sc">+</span> epsilon[i]  </span>
+<span id="cb154-9"><a href="armapq.html#cb154-9" tabindex="-1"></a>}</span>
+<span id="cb154-10"><a href="armapq.html#cb154-10" tabindex="-1"></a>simpleLayoutMatrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>),<span class="at">nrow =</span> <span class="dv">2</span>,<span class="at">ncol =</span> <span class="dv">2</span>,<span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb154-11"><a href="armapq.html#cb154-11" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y)) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Time&quot;</span>)</span>
+<span id="cb154-12"><a href="armapq.html#cb154-12" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggAcf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>())</span>
+<span id="cb154-13"><a href="armapq.html#cb154-13" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggPacf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>())</span>
+<span id="cb154-14"><a href="armapq.html#cb154-14" tabindex="-1"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(p1,p2,p3,</span>
+<span id="cb154-15"><a href="armapq.html#cb154-15" tabindex="-1"></a>                        <span class="at">layout_matrix=</span>simpleLayoutMatrix)</span></code></pre></div>
+<p><img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>This is an interesting pattern and characteristic of a MA(1) model. Note the strong first order autocorrelation. It doesn’t have the decay that you have in an AR(1) model. That is characteristic of the MA processes. The PACF shows a strong negative correlation at lag 2 and then oscillates. This is characteristic behavior of the MA process as well but the reasons take a little work to wrap your head around. <a href="https://stats.stackexchange.com/questions/281666/how-does-acf-pacf-identify-the-order-of-ma-and-ar-terms">This</a> is the best explanation I’ve seen for why this occurs that doesn’t invovle a bunch of linear algebra.</p>
+<p>As with AR(<span class="math inline">\(p\)</span>), we can extend this to longer lags and call this MA(<span class="math inline">\(q\)</span>):
+<span class="math display">\[ y_t = \sum\limits_{i=1}^q \theta_i \epsilon_{t-i} + \epsilon_t\]</span></p>
+</div>
+<div id="armapq-1" class="section level2 hasAnchor" number="7.5">
+<h2><span class="header-section-number">7.5</span> ARMA(p,q)<a href="armapq.html#armapq-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>What’s next? You guessed it an ARMA(<span class="math inline">\(p,q\)</span>). The ARMA model is simply the merger between AR(<span class="math inline">\(p\)</span>) and MA(<span class="math inline">\(q\)</span>) models. The order of the ARMA model is given in parentheses where <span class="math inline">\(p\)</span> is the autoregressive order and <span class="math inline">\(q\)</span> the moving-average order. A common model is the ARMA(1,1) model <span class="math inline">\(y_t = \phi_1 y_{t-1} + \theta_1 \epsilon_{t-1} + \epsilon_t\)</span>. But this can be extended to longer lags as above:
+<span class="math display">\[ y_t = \sum\limits_{i=1}^p \phi_i y_{t-i} + \sum\limits_{i=1}^q \theta_i \epsilon_{t-i} + \epsilon_t\]</span></p>
+<p>Let’s look at an ARMA(1,1) model via simulation:</p>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="armapq.html#cb155-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb155-2"><a href="armapq.html#cb155-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb155-3"><a href="armapq.html#cb155-3" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span>n)</span>
+<span id="cb155-4"><a href="armapq.html#cb155-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> n)</span>
+<span id="cb155-5"><a href="armapq.html#cb155-5" tabindex="-1"></a></span>
+<span id="cb155-6"><a href="armapq.html#cb155-6" tabindex="-1"></a>phi <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb155-7"><a href="armapq.html#cb155-7" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
+<span id="cb155-8"><a href="armapq.html#cb155-8" tabindex="-1"></a></span>
+<span id="cb155-9"><a href="armapq.html#cb155-9" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n){</span>
+<span id="cb155-10"><a href="armapq.html#cb155-10" tabindex="-1"></a>  y[i] <span class="ot">&lt;-</span> phi <span class="sc">*</span> y[i<span class="dv">-1</span>] <span class="sc">+</span> theta <span class="sc">*</span> epsilon[i<span class="dv">-1</span>] <span class="sc">+</span> epsilon[i]  </span>
+<span id="cb155-11"><a href="armapq.html#cb155-11" tabindex="-1"></a>}</span></code></pre></div>
+<p>Here is a plot of the time series, the ACF and the PACF.</p>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="armapq.html#cb156-1" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y)) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Time&quot;</span>)</span>
+<span id="cb156-2"><a href="armapq.html#cb156-2" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggAcf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>())</span>
+<span id="cb156-3"><a href="armapq.html#cb156-3" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggPacf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>())</span>
+<span id="cb156-4"><a href="armapq.html#cb156-4" tabindex="-1"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(p1,p2,p3,<span class="at">layout_matrix=</span>simpleLayoutMatrix)</span></code></pre></div>
+<p><img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Now, in general we like to use models like this so that we can better understand the system by revealing something about the mechanisms that create the persistence in the data. In the case of the ARMA(1,1) model you can imagine a situation where <span class="math inline">\(y_t\)</span> has an <em>internal</em> dynamic that creates an AR(1) process and something <em>external</em> that creates the MA(1) process. For instance, let’s imagine that we are measuring the growth of a perennial plant that requires a long growing season in <span class="math inline">\(t-1\)</span> to condition growth the following year (<span class="math inline">\(t\)</span>). Perhaps it requires a lot of growing degree days in the current year <span class="math inline">\(t\)</span>, and its internal biological needs rely on last year’s stored energy <span class="math inline">\(t-1\)</span> for kicking off growth at the beginning of the year <span class="math inline">\(t\)</span>. If growing degrees themselves are autocorrelated, perhaps because of atmospheric dynamics, you’d have internal autocorrelation and external autocorrelation. This might well create an ARMA(1,1) process in growth.</p>
+<p>As we get into higher order models this kind of understanding can be difficult to develop – so don’t overfit models! Just because a long time series (large <span class="math inline">\(n\)</span>) fits a high order model (like an AR(20)), it doesn’t mean that is the best model if there is no plausible mechanism to explain it.</p>
+<p>Never forget the sage words of Box: “…essentially, all models are wrong, but some are useful.”</p>
+</div>
+<div id="what-about-arimap-d-q" class="section level2 hasAnchor" number="7.6">
+<h2><span class="header-section-number">7.6</span> What about ARIMA(p, d, q)?<a href="armapq.html#what-about-arimap-d-q" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>So far, we’ve worked with AR(<span class="math inline">\(p\)</span>) and MA(<span class="math inline">\(q\)</span>) models, and their combination: ARMA(<span class="math inline">\(p, q\)</span>) models. These assume the time series is <strong>stationary</strong>—its properties (like mean, variance, and autocorrelation) don’t change over time.</p>
+<div id="why-do-arma-models-require-stationarity" class="section level3 hasAnchor" number="7.6.1">
+<h3><span class="header-section-number">7.6.1</span> Why Do ARMA Models Require Stationarity?<a href="armapq.html#why-do-arma-models-require-stationarity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>ARMA (Autoregressive Moving Average) models require <strong>stationarity</strong> because their structure assumes that the statistical properties of the time series remain constant over time. This includes a constant mean, constant variance, and a constant autocorrelation structure.</p>
+<div id="parameter-stability" class="section level4 hasAnchor" number="7.6.1.1">
+<h4><span class="header-section-number">7.6.1.1</span> Parameter Stability<a href="armapq.html#parameter-stability" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The coefficients in ARMA models are fixed and describe how current values depend on past values (AR terms) and past errors (MA terms). If the time series is non-stationary, these relationships may change over time, making the model unreliable.</p>
+</div>
+<div id="meaningful-lag-relationships" class="section level4 hasAnchor" number="7.6.1.2">
+<h4><span class="header-section-number">7.6.1.2</span> Meaningful Lag Relationships<a href="armapq.html#meaningful-lag-relationships" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The AR terms relate a value to its previous values, and the MA terms relate it to previous shocks (errors). These relationships are only meaningful when the process is consistent over time—i.e., stationary.</p>
+</div>
+<div id="inference-and-forecasting" class="section level4 hasAnchor" number="7.6.1.3">
+<h4><span class="header-section-number">7.6.1.3</span> Inference and Forecasting<a href="armapq.html#inference-and-forecasting" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The validity of statistical inference and forecasting depends on the assumption that the underlying process does not change. Non-stationarity undermines this assumption and can lead to misleading predictions.</p>
+</div>
+<div id="mathematical-properties" class="section level4 hasAnchor" number="7.6.1.4">
+<h4><span class="header-section-number">7.6.1.4</span> Mathematical Properties<a href="armapq.html#mathematical-properties" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The theoretical behavior of the autocorrelation function (ACF) and partial autocorrelation function (PACF) in ARMA models is derived under the assumption of stationarity. Without it, these properties may not be stable or interpretable.</p>
+<p>In practice, if a time series is non-stationary, we typically difference the data to induce stationarity before fitting an ARMA model. This leads to the ARIMA model, where the “I” stands for “Integrated” (i.e., differenced).</p>
+<p>Many environmental time series show <strong>non-stationarity</strong>. For example:</p>
+<ul>
+<li><p>Long-term trends in temperature or sea level,</p></li>
+<li><p>Gradual shifts in nutrient concentrations,</p></li>
+<li><p>Snowpack accumulation over the season.</p></li>
+</ul>
+<p>In those cases, ARMA models are often not appropriate becasue the structure they rely on doesn’t hold.</p>
+<p>To deal with that, we often <strong>difference</strong> the series:<br />
+<span class="math display">\[
+y&#39;_t = y_t - y_{t-1}
+\]</span></p>
+<p>This removes linear trends and helps stabilize the mean (refer to last week’s <strong>Stationarity is dead</strong> section). If the differenced series is stationary, we can model it using ARMA tools. That’s the idea behind ARIMA models.</p>
+<p>We aren’t going to go into too much depth on ARIMA but we will see the acronym a lot and it’s good to aware of differencing as a tool. The important take away is that ARIMA(<span class="math inline">\(p, d, q\)</span>) means:</p>
+<ul>
+<li><p>Difference the series <strong>d</strong> times,</p></li>
+<li><p>Then fit an <strong>ARMA(p, q)</strong> model to the result.</p></li>
+</ul>
+<p>This is why ARIMA models are often described as <strong>ARMA models applied to differenced data</strong>.</p>
+</div>
+</div>
+<div id="simulated-data" class="section level3 hasAnchor" number="7.6.2">
+<h3><span class="header-section-number">7.6.2</span> Simulated Data<a href="armapq.html#simulated-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We’ll simulate a process with an AR(1) and MA(1) component, plus a <strong>drifting mean</strong>, so it’s non-stationary. This mimics a situation where ARMA wouldn’t work directly but an ARIMA model might.</p>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="armapq.html#cb157-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb157-2"><a href="armapq.html#cb157-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb157-3"><a href="armapq.html#cb157-3" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb157-4"><a href="armapq.html#cb157-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb157-5"><a href="armapq.html#cb157-5" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb157-6"><a href="armapq.html#cb157-6" tabindex="-1"></a>phi <span class="ot">&lt;-</span> <span class="fl">0.9</span>    <span class="co"># AR(1)</span></span>
+<span id="cb157-7"><a href="armapq.html#cb157-7" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fl">0.2</span>  <span class="co"># MA(1)</span></span>
+<span id="cb157-8"><a href="armapq.html#cb157-8" tabindex="-1"></a>drift <span class="ot">&lt;-</span> <span class="fl">0.8</span>  <span class="co"># linear trend (makes the process non-stationary)</span></span>
+<span id="cb157-9"><a href="armapq.html#cb157-9" tabindex="-1"></a></span>
+<span id="cb157-10"><a href="armapq.html#cb157-10" tabindex="-1"></a><span class="co"># Simulate ARMA(1,1) with drift - aka ARIMA(1,1,1)</span></span>
+<span id="cb157-11"><a href="armapq.html#cb157-11" tabindex="-1"></a>y[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb157-12"><a href="armapq.html#cb157-12" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n) {</span>
+<span id="cb157-13"><a href="armapq.html#cb157-13" tabindex="-1"></a>  y[i] <span class="ot">&lt;-</span> drift <span class="sc">+</span> phi <span class="sc">*</span> y[i<span class="dv">-1</span>] <span class="sc">+</span> theta <span class="sc">*</span> epsilon[i<span class="dv">-1</span>] <span class="sc">+</span> epsilon[i]</span>
+<span id="cb157-14"><a href="armapq.html#cb157-14" tabindex="-1"></a>}</span>
+<span id="cb157-15"><a href="armapq.html#cb157-15" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y)) <span class="sc">+</span></span>
+<span id="cb157-16"><a href="armapq.html#cb157-16" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;time&quot;</span>, <span class="at">title =</span> <span class="st">&quot;Simulated Non-Stationary ARMA(1,1) with Drift&quot;</span>)</span></code></pre></div>
+<p><img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>You’ll see the series drifts upward over time—it’s not stationary.</p>
+<p>Now difference it:</p>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="armapq.html#cb158-1" tabindex="-1"></a>y_diff <span class="ot">&lt;-</span> <span class="fu">diff</span>(y) <span class="co"># note length of y compared to y_diff!</span></span>
+<span id="cb158-2"><a href="armapq.html#cb158-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>x[<span class="sc">-</span><span class="dv">1</span>],<span class="at">y=</span>y_diff)) <span class="sc">+</span></span>
+<span id="cb158-3"><a href="armapq.html#cb158-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;time&quot;</span>, <span class="at">title =</span> <span class="st">&quot;Differenced Series (Looks Stationary)&quot;</span>)</span></code></pre></div>
+<p><img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>The differenced version appears stationary. At this point, we could try fitting an ARMA model to it.</p>
+<blockquote>
+<p>We won’t go further into ARIMA models in this course, but understanding that they extend ARMA by <strong>differencing non-stationary series</strong> gives you a strong foundation for future time series work.</p>
+</blockquote>
+</div>
+</div>
+<div id="evaluating-arma-models" class="section level2 hasAnchor" number="7.7">
+<h2><span class="header-section-number">7.7</span> Evaluating ARMA models<a href="armapq.html#evaluating-arma-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="simulated-data-1" class="section level3 hasAnchor" number="7.7.1">
+<h3><span class="header-section-number">7.7.1</span> Simulated Data<a href="armapq.html#simulated-data-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>So given that quick intro to ARMA let’s try a baby example of fitting an ARMA model and finding the least bad one. We’ll use the <code>arima.sim</code> function to simulate a ARMA(1,1) time series.</p>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="armapq.html#cb159-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb159-2"><a href="armapq.html#cb159-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb159-3"><a href="armapq.html#cb159-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="fu">list</span>(<span class="at">ar =</span> <span class="fl">0.8</span>, <span class="at">ma =</span> <span class="fl">0.6</span>), <span class="at">n =</span> n)</span></code></pre></div>
+<p>And a plot.</p>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="armapq.html#cb160-1" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(y) <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>index,<span class="at">y=</span>value)) <span class="sc">+</span>  </span>
+<span id="cb160-2"><a href="armapq.html#cb160-2" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb160-3"><a href="armapq.html#cb160-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Time&quot;</span>)</span>
+<span id="cb160-4"><a href="armapq.html#cb160-4" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggAcf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>())</span>
+<span id="cb160-5"><a href="armapq.html#cb160-5" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggPacf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>())</span>
+<span id="cb160-6"><a href="armapq.html#cb160-6" tabindex="-1"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(p1,p2,p3,<span class="at">layout_matrix=</span>simpleLayoutMatrix)</span></code></pre></div>
+<p><img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Now let’s do some modeling of that series with several different formulations of the ARMA process. Here we are going to fit parameters (e.g., <span class="math inline">\(\phi\)</span> and <span class="math inline">\(\theta\)</span>) to a time series (<span class="math inline">\(y\)</span>) for a specified model (e.g., an ARMA(1,1) model). The parameters are fit by maximum likelihood (typically) and just like with most models we can assess the goodness of fit. Here we will use the <code>Arima</code> function in <code>forecast</code> (which is just a slightly fancier version of the <code>arima</code> function in the <code>stats</code> package).</p>
+<p>We will try to fit ARMA(<span class="math inline">\(p\)</span>,<span class="math inline">\(q\)</span>) with <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> ranging from zero to two. Note that we are leaving a zero for the differencing term because <span class="math inline">\(y\)</span> is stationary.</p>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="armapq.html#cb161-1" tabindex="-1"></a>arma00 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(y,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb161-2"><a href="armapq.html#cb161-2" tabindex="-1"></a>arma10 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(y,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb161-3"><a href="armapq.html#cb161-3" tabindex="-1"></a>arma20 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(y,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb161-4"><a href="armapq.html#cb161-4" tabindex="-1"></a>arma01 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(y,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb161-5"><a href="armapq.html#cb161-5" tabindex="-1"></a>arma02 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(y,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">2</span>))</span>
+<span id="cb161-6"><a href="armapq.html#cb161-6" tabindex="-1"></a>arma11 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(y,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb161-7"><a href="armapq.html#cb161-7" tabindex="-1"></a>arma21 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(y,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb161-8"><a href="armapq.html#cb161-8" tabindex="-1"></a>arma12 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(y,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">2</span>))</span>
+<span id="cb161-9"><a href="armapq.html#cb161-9" tabindex="-1"></a>arma22 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(y,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">2</span>))</span></code></pre></div>
+<p>Here is what the ARMA(1,0) aka AR(1) spits out.</p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="armapq.html#cb162-1" tabindex="-1"></a>arma10</span></code></pre></div>
+<pre><code>## Series: y 
+## ARIMA(1,0,0) with non-zero mean 
+## 
+## Coefficients:
+##          ar1    mean
+##       0.8547  0.0392
+## s.e.  0.0231  0.3389
+## 
+## sigma^2 = 1.246:  log likelihood = -764.01
+## AIC=1534.03   AICc=1534.08   BIC=1546.67</code></pre>
+<p>Note that we get estimates of the coefficients (here <span class="math inline">\(\phi_1\)</span> and a constant) and their standard errors. We also get the log likelihood (<span class="math inline">\(l\)</span>) which is a measure of how strongly the model fits the data with smaller numbers indicating a better fit. With the number of parameters in the model we can get the AIC (<span class="math inline">\(-2l + 2k\)</span>, where <span class="math inline">\(k\)</span> is the number of parameters in the model) and with the sample size (<span class="math inline">\(n\)</span>) we can get BIC (<span class="math inline">\(-2l + ln(n)k\)</span>). The AIC and BIC penalize the log likelihood for more complex models. I like thinking of AIC as saying, “Look friend, find me a model that fits well but isn’t overfit just because I threw it a lot of parameters.” BIC says something similar but adds in the sample size, “Look friend, find me a model that fits well but isn’t overfit just because I threw it a lot of parameters and had a huge sample size.” In our models above the sample sizes were all the same so the AIC and BIC will be proportional. When comparing models, the smaller the AIC or BIC the better. There is <a href="https://www.methodology.psu.edu/resources/AIC-vs-BIC/#:~:text=As%20you%20know%2C%20AIC%20and,are%20both%20penalized%2Dlikelihood%20criteria.&amp;text=But%20despite%20various%20subtle%20theoretical,a%20larger%20model%20than%20BIC.">a lot more</a> you can read about on this stuff but we can leave it alone for now.</p>
+<p>Let’s see how the ARMA(1,0) fits these data visually.</p>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="armapq.html#cb164-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x=</span>x,<span class="at">y=</span>arma10<span class="sc">$</span>x,<span class="at">yhat=</span>arma10<span class="sc">$</span>fitted)</span>
+<span id="cb164-2"><a href="armapq.html#cb164-2" tabindex="-1"></a>dat <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb164-3"><a href="armapq.html#cb164-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>value,<span class="at">color=</span>name)) <span class="sc">+</span>  </span>
+<span id="cb164-4"><a href="armapq.html#cb164-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb164-5"><a href="armapq.html#cb164-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Time&quot;</span>)</span></code></pre></div>
+<p><img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Wow! Pretty impressive. The R<span class="math inline">\(^2\)</span> on that model is excellent at 0.73<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
+<p>Let’s evaluate each of those models using BIC.</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="armapq.html#cb165-1" tabindex="-1"></a>armaBIC <span class="ot">&lt;-</span> <span class="fu">BIC</span>(arma00,arma10,arma20,arma01,arma02,arma11,arma21,arma12,arma22)</span>
+<span id="cb165-2"><a href="armapq.html#cb165-2" tabindex="-1"></a>armaBIC</span></code></pre></div>
+<pre><code>##        df      BIC
+## arma00  2 2194.669
+## arma10  3 1546.671
+## arma20  4 1467.577
+## arma01  3 1704.234
+## arma02  4 1537.683
+## arma11  4 1431.581
+## arma21  5 1437.788
+## arma12  5 1437.789
+## arma22  6 1442.821</code></pre>
+<p>From the BIC values it looks like the ARMA(1,1) model is one to investigate.</p>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="armapq.html#cb167-1" tabindex="-1"></a>arma11</span></code></pre></div>
+<pre><code>## Series: y 
+## ARIMA(1,0,1) with non-zero mean 
+## 
+## Coefficients:
+##          ar1     ma1    mean
+##       0.7298  0.5939  0.0541
+## s.e.  0.0332  0.0396  0.2586
+## 
+## sigma^2 = 0.978:  log likelihood = -703.36
+## AIC=1414.72   AICc=1414.8   BIC=1431.58</code></pre>
+<p>Those coefs are very close to what we used in our simulation. Let’s take a closer look at the residuals. If they look clean of structure, we will know that our model accounting for temporal structure in the data. First let’s look at the ACF and PACF of the residuals:</p>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="armapq.html#cb169-1" tabindex="-1"></a>y <span class="ot">&lt;-</span> arma11<span class="sc">$</span>residuals</span>
+<span id="cb169-2"><a href="armapq.html#cb169-2" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(y) <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>index,<span class="at">y=</span>value)) <span class="sc">+</span> </span>
+<span id="cb169-3"><a href="armapq.html#cb169-3" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb169-4"><a href="armapq.html#cb169-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Time&quot;</span>)</span>
+<span id="cb169-5"><a href="armapq.html#cb169-5" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggAcf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>())</span>
+<span id="cb169-6"><a href="armapq.html#cb169-6" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggPacf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>())</span>
+<span id="cb169-7"><a href="armapq.html#cb169-7" tabindex="-1"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(p1,p2,p3,<span class="at">layout_matrix=</span>simpleLayoutMatrix)</span></code></pre></div>
+<p><img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Those look lovely. And we can use the <code>tsdiag</code> function. That gives the same info as the residual plots above but also plots the p-values from the Ljung–Box test. Larger values of <code>p</code> suggest independence at that lag. It’s an ugly plot but a useful one:</p>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="armapq.html#cb170-1" tabindex="-1"></a><span class="fu">tsdiag</span>(arma11)</span></code></pre></div>
+<p><img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>Let’s see how the ARMA(1,1) fits these data visually.</p>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="armapq.html#cb171-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x=</span>x,<span class="at">y=</span>arma11<span class="sc">$</span>x,<span class="at">yhat=</span>arma10<span class="sc">$</span>fitted)</span>
+<span id="cb171-2"><a href="armapq.html#cb171-2" tabindex="-1"></a>dat <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb171-3"><a href="armapq.html#cb171-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>value,<span class="at">color=</span>name)) <span class="sc">+</span>  </span>
+<span id="cb171-4"><a href="armapq.html#cb171-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb171-5"><a href="armapq.html#cb171-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Time&quot;</span>)</span></code></pre></div>
+<p><img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Wow! Pretty impressive. The R<span class="math inline">\(^2\)</span> on that model is excellent at 0.79<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<p>Note that while the BIC values indicated ARMA(1,1), some of those other models look pretty good! Why pick ARMA(1,1) over a different model? There is often not a “right” and we often have to be content with the “least wrong” model. Look at the ACF and PACF of the residuals of some of the other models. In general, simpler is better than more complicated. It all gets down to specifying this annoying question, “What are you trying to answer?”</p>
+</div>
+<div id="sst-data" class="section level3 hasAnchor" number="7.7.2">
+<h3><span class="header-section-number">7.7.2</span> SST Data<a href="armapq.html#sst-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Real data is always messier than simulated data. Let’s take a look at some.</p>
+<p>Catherine Pfister and colleagues wrote a very nice paper in the Journal of Ecology a few years back. In the paper they looked at spatial and temporal autocorrelation in Salish Sea kelp abundance and linked it to oceanic drivers like sea surface temperatures. We might delve into that paper in more depth later – it’s a lovely study. See <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2745.12908">here</a> for the paper and the data are archived <a href="https://datadryad.org/stash/dataset/doi:10.5061/dryad.vk42h">here</a>. I pulled out the sea surface temperature from Race Rocks, Canada which goes back to 1921 and is a great long, local time series. Let’s look at the temporal structure in these data.</p>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="armapq.html#cb172-1" tabindex="-1"></a>sst <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/RaceRocksSST.rds&quot;</span>)</span>
+<span id="cb172-2"><a href="armapq.html#cb172-2" tabindex="-1"></a></span>
+<span id="cb172-3"><a href="armapq.html#cb172-3" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(sst) <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>index,<span class="at">y=</span>value)) <span class="sc">+</span>  </span>
+<span id="cb172-4"><a href="armapq.html#cb172-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Year&quot;</span>,<span class="at">y=</span><span class="fu">expression</span>(degree<span class="sc">~</span>C),</span>
+<span id="cb172-5"><a href="armapq.html#cb172-5" tabindex="-1"></a>                     <span class="at">title=</span><span class="st">&quot;Sea Surface Temperatures, Race Rocks, Canada&quot;</span>)</span>
+<span id="cb172-6"><a href="armapq.html#cb172-6" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggAcf</span>(sst) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>())</span>
+<span id="cb172-7"><a href="armapq.html#cb172-7" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggPacf</span>(sst) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>())</span>
+<span id="cb172-8"><a href="armapq.html#cb172-8" tabindex="-1"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(p1,p2,p3,<span class="at">layout_matrix=</span>simpleLayoutMatrix)</span></code></pre></div>
+<p><img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>That is a complicated picture we have from the ACF and PACF plots. It certainly looks like there is a trend in the data so let’s difference it first and then fit some ARMA models.</p>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="armapq.html#cb173-1" tabindex="-1"></a>sst_diff <span class="ot">&lt;-</span> <span class="fu">diff</span>(sst)</span>
+<span id="cb173-2"><a href="armapq.html#cb173-2" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(sst_diff) <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>index,<span class="at">y=</span>value)) <span class="sc">+</span>  </span>
+<span id="cb173-3"><a href="armapq.html#cb173-3" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Year&quot;</span>,<span class="at">y=</span><span class="fu">expression</span>(degree<span class="sc">~</span>C<span class="sc">~</span>Anomoly),</span>
+<span id="cb173-4"><a href="armapq.html#cb173-4" tabindex="-1"></a>                     <span class="at">title=</span><span class="st">&quot;Differenced Sea Surface Temperatures, Race Rocks, Canada&quot;</span>)</span>
+<span id="cb173-5"><a href="armapq.html#cb173-5" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggAcf</span>(sst_diff) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>())</span>
+<span id="cb173-6"><a href="armapq.html#cb173-6" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggPacf</span>(sst_diff) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>())</span>
+<span id="cb173-7"><a href="armapq.html#cb173-7" tabindex="-1"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(p1,p2,p3,<span class="at">layout_matrix=</span>simpleLayoutMatrix)</span></code></pre></div>
+<p><img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>Still a complicated picture we have from the ACF and PACF plots with the differencing. Now for some ARMA models.</p>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="armapq.html#cb174-1" tabindex="-1"></a>arma00 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(sst_diff,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb174-2"><a href="armapq.html#cb174-2" tabindex="-1"></a>arma10 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(sst_diff,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb174-3"><a href="armapq.html#cb174-3" tabindex="-1"></a>arma20 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(sst_diff,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb174-4"><a href="armapq.html#cb174-4" tabindex="-1"></a>arma01 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(sst_diff,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb174-5"><a href="armapq.html#cb174-5" tabindex="-1"></a>arma02 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(sst_diff,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">2</span>))</span>
+<span id="cb174-6"><a href="armapq.html#cb174-6" tabindex="-1"></a>arma11 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(sst_diff,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb174-7"><a href="armapq.html#cb174-7" tabindex="-1"></a>arma21 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(sst_diff,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb174-8"><a href="armapq.html#cb174-8" tabindex="-1"></a>arma12 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(sst_diff,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">2</span>))</span>
+<span id="cb174-9"><a href="armapq.html#cb174-9" tabindex="-1"></a>arma22 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(sst_diff,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">2</span>))</span></code></pre></div>
+<p>Note that we could have used the undifferenced data above and included a <span class="math inline">\(d\)</span> term in the call to <code>Arima</code>. E.g., an AR(1) model with differencing would be <code>Arima(sst,order = c(1,1,0))</code> which is the same as <code>Arima(sst_diff,order = c(1,0,0))</code>. I chose to do the differencing manually to be consistent with what we did above.</p>
+<p>We can then evaluate each model by BIC.</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="armapq.html#cb175-1" tabindex="-1"></a>armaBIC <span class="ot">&lt;-</span> <span class="fu">BIC</span>(arma10,arma20,arma01,arma02,arma11,arma21,arma12,arma22,arma00)</span>
+<span id="cb175-2"><a href="armapq.html#cb175-2" tabindex="-1"></a>armaBIC</span></code></pre></div>
+<pre><code>##        df       BIC
+## arma10  3 115.73152
+## arma20  4 104.65047
+## arma01  3  96.01018
+## arma02  4  94.13930
+## arma11  4  95.68852
+## arma21  5  99.32558
+## arma12  5  96.53865
+## arma22  6 100.78066
+## arma00  2 119.76488</code></pre>
+<p>From the BIC values it looks like the ARMA(0,2) model and the ARMA(1,1) models are both quite good. And ARMA(0,1) is appealing too.</p>
+<p>Here is the ARMA(1,1) model.</p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="armapq.html#cb177-1" tabindex="-1"></a>arma02</span></code></pre></div>
+<pre><code>## Series: sst_diff 
+## ARIMA(0,0,2) with non-zero mean 
+## 
+## Coefficients:
+##           ma1      ma2    mean
+##       -0.5718  -0.3205  0.0082
+## s.e.   0.1145   0.1217  0.0046
+## 
+## sigma^2 = 0.1336:  log likelihood = -37.98
+## AIC=83.97   AICc=84.42   BIC=94.14</code></pre>
+<p>Let’s take a closer look. First let’s look at the ACF and PACF of the residuals for the ARMA(0,2).</p>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="armapq.html#cb179-1" tabindex="-1"></a>y <span class="ot">&lt;-</span> arma02<span class="sc">$</span>residuals</span>
+<span id="cb179-2"><a href="armapq.html#cb179-2" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(y) <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>index,<span class="at">y=</span>value)) <span class="sc">+</span> </span>
+<span id="cb179-3"><a href="armapq.html#cb179-3" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb179-4"><a href="armapq.html#cb179-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Time&quot;</span>)</span>
+<span id="cb179-5"><a href="armapq.html#cb179-5" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggAcf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>())</span>
+<span id="cb179-6"><a href="armapq.html#cb179-6" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggPacf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">element_blank</span>())</span>
+<span id="cb179-7"><a href="armapq.html#cb179-7" tabindex="-1"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(p1,p2,p3,<span class="at">layout_matrix=</span>simpleLayoutMatrix)</span></code></pre></div>
+<p><img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>Those are clean.</p>
+<p>So what do we do with this information? It does appear that these data follow a fairly complicated time-series model. Which one? Well there isn’t one right answer. The BIC indicated and ARMA(0,2) model and gives clean residuals. But the ARMA(1,1) has a good fit as does the ARMA(0,1). I think you can make an argument for any of those models here.</p>
+<p>If these were my data, I’d really want to know more about the mechanisms that might create the patterns we see in the data. Pattern is all well and good but process is cooler.</p>
+</div>
+<div id="how-do-you-decide-which-information-criterion-to-use" class="section level3 hasAnchor" number="7.7.3">
+<h3><span class="header-section-number">7.7.3</span> How Do You Decide Which Information Criterion to Use?<a href="armapq.html#how-do-you-decide-which-information-criterion-to-use" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When fitting ARMA models, you’re often faced with multiple competing options — all with decent fits. So how the heck do you decide which information criterion (IC) to use? AIC? BIC? AICc? Each one has its own logic and use case. Here’s a quick guide to help you choose:</p>
+<table>
+<colgroup>
+<col width="21%" />
+<col width="46%" />
+<col width="19%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Criterion</th>
+<th align="left">Penalty for Complexity</th>
+<th align="left">Best For</th>
+<th align="left">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>AIC</strong> (Akaike Information Criterion)</td>
+<td align="left"><span class="math inline">\(2k\)</span></td>
+<td align="left">Prediction</td>
+<td align="left">May overfit; balances fit and complexity</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>BIC</strong> (Bayesian Information Criterion)</td>
+<td align="left"><span class="math inline">\(k \cdot \log(n)\)</span></td>
+<td align="left">Finding the “true” model</td>
+<td align="left">Stronger penalty on complexity</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>AICc</strong> (Corrected AIC)</td>
+<td align="left">AIC + small-sample correction</td>
+<td align="left">Small samples</td>
+<td align="left">Recommended when <span class="math inline">\(n / k &lt; 40\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>In general:</p>
+<ul>
+<li><p>AICc is often preferred for <strong>small sample sizes</strong></p></li>
+<li><p>AIC or BIC can be used for <strong>larger samples</strong>, depending on whether the focus is on prediction (AIC) or parsimony/inference (BIC). I like to fool myself into thinking I can get the “true” model. But, as in life, there isn’t one answer.</p></li>
+<li><p><strong>Use AIC</strong>:</p>
+<ul>
+<li>For predictive performance</li>
+<li>When <span class="math inline">\(n\)</span> is moderate to large</li>
+</ul></li>
+<li><p><strong>Use BIC</strong>:</p>
+<ul>
+<li>When aiming to identify the “true” model</li>
+<li>When sample size is large</li>
+</ul></li>
+<li><p><strong>Use AICc</strong>:</p>
+<ul>
+<li>When sample size is small (typically <span class="math inline">\(n &lt; 50\)</span>)</li>
+<li>To avoid overfitting in small-sample contexts</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="your-work-3" class="section level2 hasAnchor" number="7.8">
+<h2><span class="header-section-number">7.8</span> Your work<a href="armapq.html#your-work-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="bunnies-and-kitties" class="section level3 hasAnchor" number="7.8.1">
+<h3><span class="header-section-number">7.8.1</span> Bunnies and Kitties<a href="armapq.html#bunnies-and-kitties" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>You all recall the famous Lynx and Hare data from when you took ecology and learned about predator-prey interactions and <a href="https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations">Lotka-Volterra equations</a> I bet. I grabbed these data from the <code>ecostudy</code> package and have them as a <code>ts</code> object. The data give the number of pelts (in thousands) for Lynx and Hare traded with the Hudson Bay Trading Company in 1845 to 1935.</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="armapq.html#cb180-1" tabindex="-1"></a>LynxHare <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/LynxHare.rds&quot;</span>)</span>
+<span id="cb180-2"><a href="armapq.html#cb180-2" tabindex="-1"></a><span class="fu">str</span>(LynxHare)</span></code></pre></div>
+<pre><code>##  Time-Series [1:91, 1:2] from 1845 to 1935: 19.6 19.6 19.6 12 28 ...
+##  - attr(*, &quot;dimnames&quot;)=List of 2
+##   ..$ : NULL
+##   ..$ : chr [1:2] &quot;Hare&quot; &quot;Lynx&quot;</code></pre>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb182-1"><a href="armapq.html#cb182-1" tabindex="-1"></a><span class="fu">plot</span>(LynxHare,<span class="at">main=</span><span class="st">&quot;Annual numbers of pelts in tousands&quot;</span>)</span></code></pre></div>
+<p><img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>The adorable Snowshoe Hare is the primary food of the Canada Lynx and the these two species are closely linked by their population biology. Take a moment and write down how you can think about their population cycles in terms of their time-series properties. Can we try to understand how those populations might vary in terms of AR and MA processes? Do some wild and irresponsible speculation.</p>
+<p>Now, model the Lynx pelt data as an ARMA process. Do some further wild and irresponsible speculation about what you found. How does your thinking about this famous data fit into your understanding of an ARMA model?</p>
+</div>
+<div id="write-up-and-reflect-3" class="section level3 hasAnchor" number="7.8.2">
+<h3><span class="header-section-number">7.8.2</span> Write up and Reflect<a href="armapq.html#write-up-and-reflect-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Write it all up and pass in a knitted R Markdown document. The last section of your document should include a reflection where you explain how it all went. What triumphs did you have? What is still confusing?</p>
+
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="2">
+<li id="fn2"><p>We haven’t subjected that to any kind of training/testing scheme so we shouldn’t get too excited<a href="armapq.html#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Again, we haven’t subjected that to any kind of training/testing scheme. We will talk about the challenges of training and testing data for time series models later in the course.<a href="armapq.html#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="forecasting.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section",
+    "scroll_highlight": true
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

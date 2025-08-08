@@ -1,0 +1,359 @@
+# Decomposition
+
+```{r,echo=FALSE,message=FALSE,quiet=TRUE}
+set.seed(872)
+#knitr::purl("02DecompTrends.Rmd")
+```
+
+## Big Idea
+We can model seasonal signals and find trends in time series.  
+
+## Reading
+Read Chapter one from @Cowpertwait2009. It's OK to skim the readings in this book. It's not a great book for our purposes as many of you haven't taken linear algebra and the book occasionally goes that way. But it's useful to hum your way through the chapter nonetheless.
+
+## Packages
+You'll want `zoo` [@R-zoo], for the assignment and `tidyverse` [@R-tidyverse]. Note that I often use base R syntax rather than tidy with time series. This is mostly because the formats are most often used for time-series data (e.g., `zoo` and `ts`) don't work as naturally with tidy syntax. Not using `ggplot` is a special hell for me. So you'll see that I often break and go back to `ggplot` and use `tidyverse` syntax like `mutate` etc.
+
+```{r,message=FALSE}
+library(tidyverse)
+library(zoo)
+```
+
+```{r,echo=FALSE}
+op <- par(no.readonly = TRUE)
+```
+
+
+## Seasonality and decomposition
+### Breaking down a series the tedious way
+In my work I routinely use time series that have a seasonal component. E.g., monthly weather data. Environmental time series often have a periodic component that relates to geophysics or biology in some way. This is called "seasonal" whether it relates to actual seasons (e.g., summer) or not. Let's look at some data on atmospheric carbon dioxide (aka the Keeling curve) that have a long-term trend as well as a seasonal component and figure out a way to break it down. We already saw the onboard data set `co2` which only goes to 1998 (it's frozen in time for reproducibility). So let's get the most up-to-date data from NOAA.
+
+```{r}
+fname <- "https://www.esrl.noaa.gov/gmd/webdata/ccgg/trends/co2/co2_mm_mlo.txt"
+co2 <- read.table(fname)
+co2 <- co2[,4]
+co2 <- ts(co2,start=c(1959,3),frequency = 12)
+co2 <- window(co2,start=c(1960,1), end=c(2022,12))
+data(co2)
+tsp(co2) #compare to print(tsp(co2),8)
+plot(co2,ylab=expression(CO[2]~(ppm)))
+```
+
+We've seen these data before. Note that these data are in the `ts` class and are sampled monthly with `freq=12` in the properties. Plotting is the best way to explore a time series. But we can get a little more formal about these data. It's pretty clear that this time series has a trend and a seasonal component. There is some noise on top of that. We can write this out as an **additive** time series model: 
+  
+  $$y_t = m_t + s_t + z_t$$ 
+  
+where at time $t$, $y_t$ is the observed series, $m_t$ is the trend in the data, $s_t$ is the seasonal component, and $z_t$ is the residual noise or error. Definitely read the part in the chapter about multiplicative time series models -- we will see a few of those along the way. 
+
+There are a few different ways to approach decomposing these data. We could get the trend ($m$) by fitting a model as a function of time or we could calculate a moving average of some kind that would remove the seasonal component ($s$). Let's do the second approach as this will let us see the parts of the trend that aren't purely linear (like we would get from fitting a model like `lm(y~time(y))`).
+
+A centered moving average (aka a moving average with symmetric window) will let us estimate the trend.
+$$\hat m_t = \frac{\frac{1}{2}y_{t-6} + y_{t-5} + y_{t-4} + y_{t-3} + y_{t-2} + y_{t-1} + y_{t} + y_{t+1} + y_{t+2}+ y_{t+3}+ y_{t+4}+ y_{t+5}+ \frac{1}{2}y_{t+6}}{12}$$
+  
+  where $t = 7, 8,...., n-6$ where $n$ is the length of $y$. We can implement this using a loop where we start on the 7th observation of the `co2` data (to keep the indexing happy) and calculate each value of $\hat m$. We'll lose the fist six and last six observations.
+
+```{r}
+n <- length(co2) # length of the record
+m.hat <- rep(NA,n) # an empty vector to store results
+for(i in 7:(n-6)){
+m.hat[i] <- (0.5*co2[i-6] + co2[i-5] + co2[i-4] + co2[i-3] + co2[i-2] + 
+co2[i-1] + co2[i] + co2[i+1] + co2[i+2] + co2[i+3] + co2[i+4] + co2[i+5] + 
+0.5*co2[i+6])/12   
+}
+m.hat <- ts(m.hat) # make it a time series
+# give it the right start time and frequency by copying tsp() from co2
+tsp(m.hat) <- tsp(co2) 
+plot(m.hat,ylab=expression(CO[2]~(ppm))) # here is the trend.
+```
+
+The code above gave us an estimate of the trend (we put a hat on estimates by convention). But this is a bit ugly, right? Loops are often that way. But it's important to see what is happening. We are stepping through the data and applying the moving average looking back six time steps and forward six time steps. At each iteration we write the value of the moving average to the *i*th space in the empty vector `m.hat`. While it's good to know how this stuff works there are better ways of doing this and you've already probably thought of this: We don't have to this with a loop. Let's do this the easy way with the `filter` function. Note that if you have tidyverse located you might have a conflict between `dpylr::filter` from the `tidyverse` and `stats::filter` which is part of base R. We want `stats::filter` here. Watch and remember those messages when you load a package!
+
+```{r}
+f <- frequency(co2)
+filt <- c(0.5, rep(1, times=f-1), 0.5)/f
+m.hat <- stats::filter(x=co2, filter=filt) # note stats::filter
+```
+
+That's also $\hat m$ but done with quite a bit less pain. **But make sure you understand what the loop code did above.** 
+
+What about the seasonal component $s$? We can get an estimate ($\hat s$) by subtraction: $\hat s_t = y_t - \hat m_t$.
+```{r}
+s.hat <- co2 - m.hat
+par(mfcol=c(2,1))
+plot(s.hat,ylab=expression(CO[2]~(ppm)))
+boxplot(s.hat~cycle(s.hat),xlab="Month",ylab=expression(CO[2]~(ppm)))
+```
+
+So, via subtraction we got an estimate of the seasonal component and by making boxplots by month we see the draw down of CO$\mathrm{_2}$ during the North American summer and the rise in winter. Thus at the moment we have a nice model of the this time series: $y_t=m_t+s_t$ but we don't have any residual noise $z_t$. I'm going to show you how we can calculate the residual if we assume that the seasonal cycle is the same every year. I'll do that by calculating the mean of $\hat s$ for each month and treat deviations from the mean as the noise term $\hat z$. 
+
+```{r}
+s.hat <- aggregate(s.hat~cycle(s.hat),FUN=mean) # length of 12
+s.hat <- rep(s.hat$s.hat,length(co2)/12) # repeat this component for each year
+s.hat <- ts(s.hat) # make it a ts object
+tsp(s.hat) <- tsp(co2) 
+
+# thus noise is
+z.hat <- co2 - m.hat - s.hat
+plot(z.hat)
+```
+
+At some point when building a model you have to ask if it's "good" or at least "useful." We calculated the residuals (errors) on the decomposed time series as $\hat z$.
+
+Just like in a regression model or a machine learning model or any model really, we can examine the residuals for patterns, to see if they are normally distributed, and/or look at the mean squared error (MSE) or the root mean squared error (RMSE)
+
+```{r}
+# MSE
+mean(z.hat^2,na.rm = TRUE)
+# RMSE
+sqrt(mean(z.hat^2,na.rm = TRUE))
+```
+
+If we were comparing this decomposition to a different method we could compare the MSE or RMSE as a way of deciding which one was better.
+
+We can also combine these how we like and look at the CO$\mathrm{_2}$ trend and noise. This might be called the deseasonalized CO$\mathrm{_2}$.
+
+```{r}
+co2_deseas <- m.hat + z.hat
+plot(co2_deseas,ylab=expression(CO[2]~(ppm)),main="Deseasonalized Carbon Dioxide")
+```
+
+Let's look at the whole thing by combining each of these parts into a single `ts` object. Note the scale of the y-axis on each plot (the units are still ppm).
+
+```{r}
+co2.hat <- cbind(co2,m.hat,s.hat,z.hat)
+plot(co2.hat)
+```
+
+We just did some fancy model building and broke an additive time series into its constituent parts! Walk through each line of code above and make sure you understand what we did.
+
+### Breaking down a series the easy way
+Now, as much as I'm sure you enjoyed the journey above, you'll be pleased to know that `R` has  function for doing this much more quickly:
+  
+```{r}
+co2Decomp <- decompose(co2,type = "additive")
+plot(co2Decomp)
+```
+
+Pretty cool, huh? The plot shows the original data plus all the components and these can be combined just like we did above. Look at `str(co2Decomp)`.
+
+```{r}
+str(co2Decomp)
+```
+
+See that `co2Decomp` is a new class (`decomposed.ts`) and a `list` with six components. You can assess the components in the normal way (e.g., `co2Decomp$trend`). Also see that the function reminds us that this is an additive model. The `decompose` function also works with **multiplicative** time series:
+
+  $$y_t = m_t \times s_t \times z_t$$ 
+
+The book has good stuff on the multiplicative model but also has a typo in Eq 1.3. The equation above is correct.  See text for details and the help page for `decompose`. I don't want to spoil the fun.
+
+### How does `m` differ from the slope in a `lm`?
+Let's think for a minute about what a "trend" is. Note that we said above that $m_t$ is the trend in the data. We've also said that we can use the slope in a linear model to describe the trend. Like this:
+
+```{r}
+co2LinearModel <- lm(co2~time(co2))
+plot(co2,ylab=expression(CO[2]~(ppm)))
+abline(co2LinearModel,col="red")
+```
+
+We can look at those two together.
+
+```{r}
+plot(m.hat,ylab=expression(CO[2]~(ppm))) # trend from the decomposition.
+abline(co2LinearModel,col="red") # and the trend from a linear model
+```
+
+Take a minute to appreciate how and why these are both trends and how and why they differ.
+
+### Warning
+Computers just do what they are told. The `decompose` function will find a trend and seasonal component even in data that don't have one. I'm going to create a time series of "monthly" data that runs 10 years starting in the year 2010. Then I'll decompose it.
+
+```{r}
+y <- ts(rnorm(120),start=c(2010,1),frequency = 12)
+plot(decompose(y))
+```
+
+Note that there is NO trend in `y` -- it's just random numbers. And there is no seasonal structure in `y` -- it's just random numbers. But `decompose` was very content to pull out the trend and seasonal parts of the data. Note the magnitude of the y-axes and you can see that there isn't a lot of there there. But, if you didn't know better you might obsess over this plot and trick yourself into finding patterns where none exist.
+
+## Stationarity
+I linked to a nice video on stationarity in time series. It's worth a watch and clearer than the book. I'll spare you much more than that statement for now and not ask you to wade through any code. But be aware that data with a persistent trend are not stationary, nor are data with changing variance, nor data which have a seasonal component. E.g., look at the `AirPassengers` data below. It's a classic time series that have been used to teach generations of time-series students and is featured in the reading. It  fails on all three aspects of stationarity!
+
+```{r}
+data(AirPassengers)
+plot(AirPassengers)
+```
+
+We will talk more in the future about when you should test for stationarity -- maybe because a test you are using a model that assumes stationarity. And when you should just note it as a descriptive feature of a time series -- remember, your eye is a really good diagnostic tool.
+
+## Your Work
+
+### Air Passengers 
+First, look at the `AirPassengers` data above. Decompose it with an additive model and then a multiplicative model. Report on what you have found. Pay attention to the the units on the multiplicative model. Compare the two models using MSE (again, watch the units).
+
+### KBLI
+Second, revisit the climate data from the Bellingham airport from last week. Note the use of `ggplot` -- which I prefer for my own work.
+
+```{r}
+kbli <- readRDS("data/kbli.rds")
+kbli_tb <- broom::tidy(kbli)
+kbli_tb <- kbli_tb %>% 
+  mutate(series = recode(series, 
+                         PRCP = "Precipitation (mm)",
+                         TEMP = "Temperature (C)"))
+kbli_tb %>% 
+  ggplot(mapping = aes(x=index,y=value)) + 
+  geom_line() +
+  labs(x="Date",y=element_blank()) +
+  facet_wrap(~series,scales = "free",ncol=1) + 
+  theme_minimal()
+```
+
+
+Then (with good reporting, plotting, and other exploratory data analysis) try this:
+
+* Aggregate the variables (temperature and precipitation) to monthly resolution using  mean for temperature and sum for precipitation. You'll probably want to do this using `aggregate` with `as.yearmon` -- see the examples in `aggregate.zoo`. The `hydroTSM` package has some nice functions as well for this kind of thing (e.g., `daily2monthly`).
+
+* Decompose these monthly data. The function `decompose` works on class `ts` and not on class `zoo` though, so you'll have to change the class of the data. Report on what you find for the decomposition.
+
+* Finally, aggregate the variables (temperature and precipitation) to **annual** resolution for each season (winter, spring, summer, fall) using  mean for temperature and sum for precipitation. Use linear models and report any trends. E.g., are summer temperatures increasing? Meteorological seasons are groups of three months. I.e., winter is Dec, Jan, Feb; spring is Mar, Apr, May; summer is Jun, Jul, Aug, autumn is Sep, Oct, Nov. 
+
+As an example, here is a plot of summer temperatures.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+library(hydroTSM)
+tSummer <- hydroTSM::dm2seasonal(kbli$TEMP,season="JJA",FUN=mean)
+plot(tSummer,main="KBLI Summer Temp",xlab="Year",
+     ylab=expression(degree~C))
+abline(lm(tSummer~as.numeric(time(tSummer))),col="red")
+```
+
+You can report the slopes in a table if you like. Easier and clearer than plotting everything probably.
+
+### Write Up and Reflect
+Pass in a R Markdown doc with your analysis. Leave all code visible, although you may quiet messages and warnings if desired. Turn in your knitted html. The last section of your document should include a reflection where you explain how it all went. What triumphs did you have? What is still confusing? Are you clear on why $m_t$ from `decompose` is not the same as the coefficient from a linear model (`lm`)?
+
+```{r,eval=FALSE,echo=FALSE}
+
+data("AirPassengers")
+plot(AirPassengers)
+apD <- decompose(AirPassengers,type = "mult")
+plot(apD)
+
+
+# or by hand
+# Y[t] = T[t] * S[t] * e[t]
+f <- frequency(AirPassengers)
+filt <- c(0.5, rep(1, times=f-1), 0.5)/f
+m.hat <- filter(x=AirPassengers, filter=filt)
+s.hat <- AirPassengers / m.hat
+tsp(AirPassengers)
+tsp(m.hat)
+tsp(s.hat)
+par(mfcol=c(2,1))
+plot(s.hat)
+boxplot(s.hat~cycle(s.hat),xlab="Month")
+s.hat <- aggregate(s.hat~cycle(s.hat),FUN=mean) # length of 12
+s.hat <- rep(s.hat$s.hat,length(AirPassengers)/f) # repeat this component for each year
+s.hat <- ts(s.hat) # make it a ts object
+tsp(s.hat) <- tsp(AirPassengers)
+plot(s.hat)
+# thus noise is
+z.hat <- AirPassengers / (m.hat * s.hat)
+# let's combine these parts into a single ts object
+AirPassengers.hat <- cbind(AirPassengers,m.hat,s.hat,z.hat)
+plot(AirPassengers.hat) 
+
+
+
+# See walk through
+data("AirPassengers")
+plot(AirPassengers) # wow! clearly a multiplicative process
+airDecomp <- decompose(AirPassengers,type = "mult")
+plot(airDecomp) # looks cool. Note axes on the plot.
+                # The trend is in num of passengers while the seas
+                # component and residuals are scalars
+str(airDecomp)
+# note that ran * seas * trend == original data by definition
+# let's see how just the trend and seas look
+plot(AirPassengers)
+# the predicted values
+lines(airDecomp$seasonal* airDecomp$trend,col="red")
+# so what are the residuals?
+plot(airDecomp$random) # note the scale -- this is the scalar to multiply
+                       # by -- not num of passengers.
+# what are the residuals in actual numbers of passengers?
+resids <- AirPassengers - (airDecomp$seasonal * airDecomp$trend)
+plot(resids,ylab="n")
+# what is the MSE?
+mean(resids^2,na.rm=TRUE)
+
+# what if we had done an additive model instead?
+airDecompBad <- decompose(AirPassengers,type = "add")
+plot(airDecompBad)
+# let's see how the trend and seas look
+plot(AirPassengers)
+lines(airDecompBad$seasonal + airDecompBad$trend,col="red")
+# what are the residuals in actual numbers of passengers?
+plot(airDecompBad$seasonal + airDecompBad$trend)
+lines(AirPassengers,col="red")
+residsBad <- AirPassengers - (airDecompBad$seasonal + airDecompBad$trend)
+plot(residsBad)
+# what is the MSE?
+mean(residsBad^2,na.rm=TRUE)
+
+
+
+# Aggregate to monthly resolution using the mean for temperature and sum for precipitation. 
+library(tidyverse) # just can't take this base plotting anymore
+library(zoo)
+kbli <- readRDS("kbli.rds")
+kbli <- window(kbli,start = as.Date("1991-01-01"),end = as.Date("2020-12-31"))
+kbli_tb <- broom::tidy(kbli)
+kbli_tb <- kbli_tb %>% 
+  mutate(series = recode(series, 
+                         PRCP = "Precipitation (mm)",
+                         TEMP = "Temperature (C)"))
+kbli_tb %>% 
+  ggplot(mapping = aes(x=index,y=value)) + 
+  geom_line() +
+  labs(x="Date",y=element_blank()) +
+  facet_wrap(~series,scales = "free",ncol=1) + 
+  theme_minimal()
+
+tavg <- aggregate(kbli$TEMP,by=as.yearmon,FUN=mean)
+head(tavg)
+
+prcp <- aggregate(kbli$PRCP,by=as.yearmon,FUN=sum)
+# or...
+library(hydroTSM)
+tavg <- daily2monthly(kbli$TEMP, FUN=mean, na.rm=TRUE)
+head(tavg)
+
+tavgD <- decompose(ts(tavg,start = 1991, frequency = 12))
+plot(tavgD)
+
+# march jump is surprising!
+prcpD <- decompose(ts(prcp,start = 1991, frequency = 12))
+plot(prcpD)
+
+# get seasons
+tmp <- rollmean(x = tavg,k = 3,fill = NA)
+# first summer
+tmp[7]
+mean(tavg[c(6,7,8)])
+
+# winter tmax
+tAvgWinter <- tmp[seq(13,length(tmp),by=12)]
+plot(tAvgWinter,main="KBLI Winter Avg Temp")
+abline(lm(tAvgWinter~time(tAvgWinter)),col="red")
+
+# summer tmax
+tAvgSummer <- tmp[seq(7,length(tmp),by=12)]
+plot(tAvgSummer,main="KBLI Summer Avg Temp",
+     ylab=expression(degree~C),xlab="Year")
+abline(lm(tAvgSummer~time(tAvgSummer)),col="red")
+
+## or
+tAvgSummer <- dm2seasonal(kbli$TEMP,season="JJA",FUN=mean)
+plot(tAvgSummer)
+abline(lm(tAvgSummer~as.numeric(time(tAvgSummer))),col="red")
+```
