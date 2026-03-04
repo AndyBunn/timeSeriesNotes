@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>6 Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process | A collection of note for ESCI 504</title>
+  <title>6 Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process | A collection of notes for ESCI 504</title>
   <meta name="description" content="Helpful materials for ESCI 504" />
-  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="6 Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process | A collection of note for ESCI 504" />
+  <meta property="og:title" content="6 Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process | A collection of notes for ESCI 504" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Helpful materials for ESCI 504" />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="6 Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process | A collection of note for ESCI 504" />
+  <meta name="twitter:title" content="6 Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process | A collection of notes for ESCI 504" />
   
   <meta name="twitter:description" content="Helpful materials for ESCI 504" />
   
@@ -51,15 +51,15 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.33/datatables.js"></script>
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script>
 <link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
-<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
 
 <script>
 /* ========================================================================
@@ -812,8 +812,9 @@ $(document).ready(function () {
 
 
 <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -823,7 +824,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -1173,7 +1174,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A collection of note for ESCI 504</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A collection of notes for ESCI 504</a>
           </h1>
         </div>
 
@@ -1201,22 +1202,22 @@ y_t = \theta \epsilon_{t-1} + \epsilon_t
 <div id="acf-and-pacf-of-a-single-ma1-simulation" class="section level2 hasAnchor" number="6.2">
 <h2><span class="header-section-number">6.2</span> ACF and PACF of a Single MA(1) Simulation<a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#acf-and-pacf-of-a-single-ma1-simulation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Let’s start by making a MA(1) time series.</p>
-<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb147-2"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-2" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
-<span id="cb147-3"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-3" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
-<span id="cb147-4"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-4" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2346</span>)</span>
-<span id="cb147-5"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-5" tabindex="-1"></a></span>
-<span id="cb147-6"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-6" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span></span>
-<span id="cb147-7"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-7" tabindex="-1"></a>tm <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
-<span id="cb147-8"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-8" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="at">model =</span> <span class="fu">list</span>(<span class="at">ma =</span> <span class="fl">0.4</span>), <span class="at">n =</span> n)</span>
-<span id="cb147-9"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-9" tabindex="-1"></a></span>
-<span id="cb147-10"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-10" tabindex="-1"></a>simpleLayoutMatrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb147-11"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-11" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> tm, <span class="at">y =</span> y)) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Time&quot;</span>)</span>
-<span id="cb147-12"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-12" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggAcf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="cn">NULL</span>)</span>
-<span id="cb147-13"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-13" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggPacf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="cn">NULL</span>)</span>
-<span id="cb147-14"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-14" tabindex="-1"></a></span>
-<span id="cb147-15"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb147-15" tabindex="-1"></a><span class="fu">grid.arrange</span>(p1, p2, p3, <span class="at">layout_matrix =</span> simpleLayoutMatrix)</span></code></pre></div>
-<p><img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb150-2"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-2" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb150-3"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-3" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb150-4"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-4" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2346</span>)</span>
+<span id="cb150-5"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-5" tabindex="-1"></a></span>
+<span id="cb150-6"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-6" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb150-7"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-7" tabindex="-1"></a>tm <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb150-8"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-8" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="at">model =</span> <span class="fu">list</span>(<span class="at">ma =</span> <span class="fl">0.4</span>), <span class="at">n =</span> n)</span>
+<span id="cb150-9"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-9" tabindex="-1"></a></span>
+<span id="cb150-10"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-10" tabindex="-1"></a>simpleLayoutMatrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb150-11"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-11" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> tm, <span class="at">y =</span> y)) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Time&quot;</span>)</span>
+<span id="cb150-12"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-12" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggAcf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="cn">NULL</span>)</span>
+<span id="cb150-13"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-13" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggPacf</span>(y) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="cn">NULL</span>)</span>
+<span id="cb150-14"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-14" tabindex="-1"></a></span>
+<span id="cb150-15"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-15" tabindex="-1"></a><span class="fu">grid.arrange</span>(p1, p2, p3, <span class="at">layout_matrix =</span> simpleLayoutMatrix)</span></code></pre></div>
+<p><img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-1-1.png" alt="" width="672" /></p>
 <p>The time series plot shows typical short-term wiggliness — a feature of MA processes driven by shocks. The ACF shows a sharp drop-off after lag 1, which is the signature of an MA(1). The PACF, however, does something subtler: a bump at lag 1, and a surprising dip below zero at lag 2. That’s the focus of this document — understanding why this happens and what it tells us.</p>
 <p>This simulation shows a typical MA(1) pattern:</p>
 <ul>
@@ -1227,33 +1228,33 @@ y_t = \theta \epsilon_{t-1} + \epsilon_t
 <div id="simulation-study-across-many-ma1-coefficients" class="section level2 hasAnchor" number="6.3">
 <h2><span class="header-section-number">6.3</span> Simulation Study Across Many MA(1) Coefficients<a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#simulation-study-across-many-ma1-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The code below builds a large data frame of simulation results. For each randomly chosen MA(1) coefficient (theta), we simulate a time series, compute its PACF, and extract the values at lag 1 and lag 2. This lets us explore how the PACF behaves systematically as theta varies. We will simulate 1000 MA(1) series with <span class="math inline">\(\theta \in [0.2, 0.9]\)</span> to examine systematic behavior in the PACF.</p>
-<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb148-1" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">1000</span>                     <span class="co"># Number of simulations</span></span>
-<span id="cb148-2"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb148-2" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, m, <span class="dv">3</span>)       <span class="co"># Object to store theta, PACF lag 1, PACF lag 2</span></span>
-<span id="cb148-3"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb148-3" tabindex="-1"></a>thetas <span class="ot">&lt;-</span> <span class="fu">runif</span>(m, <span class="fl">0.2</span>, <span class="fl">0.9</span>)  <span class="co"># Randomly draw MA(1) coefficients for simulation</span></span>
-<span id="cb148-4"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb148-4" tabindex="-1"></a>res[,<span class="dv">1</span>] <span class="ot">&lt;-</span> thetas             <span class="co"># Store theta</span></span>
-<span id="cb148-5"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb148-5" tabindex="-1"></a></span>
-<span id="cb148-6"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb148-6" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
-<span id="cb148-7"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb148-7" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="at">model =</span> <span class="fu">list</span>(<span class="at">ma =</span> thetas[i]), <span class="at">n =</span> n)  <span class="co"># Simulate MA(1)</span></span>
-<span id="cb148-8"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb148-8" tabindex="-1"></a>  tmp <span class="ot">&lt;-</span> <span class="fu">Pacf</span>(y, <span class="at">plot =</span> <span class="cn">FALSE</span>)                         <span class="co"># Get PACF</span></span>
-<span id="cb148-9"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb148-9" tabindex="-1"></a>  res[i,<span class="dv">2</span>] <span class="ot">&lt;-</span> tmp<span class="sc">$</span>acf[<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>]                           <span class="co"># Store lag 1 PACF</span></span>
-<span id="cb148-10"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb148-10" tabindex="-1"></a>  res[i,<span class="dv">3</span>] <span class="ot">&lt;-</span> tmp<span class="sc">$</span>acf[<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>]                           <span class="co"># Store lag 2 PACF</span></span>
-<span id="cb148-11"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb148-11" tabindex="-1"></a>}</span>
-<span id="cb148-12"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb148-12" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(res)</span>
-<span id="cb148-13"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb148-13" tabindex="-1"></a><span class="fu">names</span>(res) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Simulated_theta&quot;</span>, <span class="st">&quot;PACF_lag1&quot;</span>, <span class="st">&quot;PACF_lag2&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-1" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">1000</span>                     <span class="co"># Number of simulations</span></span>
+<span id="cb151-2"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-2" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, m, <span class="dv">3</span>)       <span class="co"># Object to store theta, PACF lag 1, PACF lag 2</span></span>
+<span id="cb151-3"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-3" tabindex="-1"></a>thetas <span class="ot">&lt;-</span> <span class="fu">runif</span>(m, <span class="fl">0.2</span>, <span class="fl">0.9</span>)  <span class="co"># Randomly draw MA(1) coefficients for simulation</span></span>
+<span id="cb151-4"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-4" tabindex="-1"></a>res[,<span class="dv">1</span>] <span class="ot">&lt;-</span> thetas             <span class="co"># Store theta</span></span>
+<span id="cb151-5"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-5" tabindex="-1"></a></span>
+<span id="cb151-6"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-6" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
+<span id="cb151-7"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-7" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="at">model =</span> <span class="fu">list</span>(<span class="at">ma =</span> thetas[i]), <span class="at">n =</span> n)  <span class="co"># Simulate MA(1)</span></span>
+<span id="cb151-8"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-8" tabindex="-1"></a>  tmp <span class="ot">&lt;-</span> <span class="fu">Pacf</span>(y, <span class="at">plot =</span> <span class="cn">FALSE</span>)                         <span class="co"># Get PACF</span></span>
+<span id="cb151-9"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-9" tabindex="-1"></a>  res[i,<span class="dv">2</span>] <span class="ot">&lt;-</span> tmp<span class="sc">$</span>acf[<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>]                           <span class="co"># Store lag 1 PACF</span></span>
+<span id="cb151-10"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-10" tabindex="-1"></a>  res[i,<span class="dv">3</span>] <span class="ot">&lt;-</span> tmp<span class="sc">$</span>acf[<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>]                           <span class="co"># Store lag 2 PACF</span></span>
+<span id="cb151-11"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-11" tabindex="-1"></a>}</span>
+<span id="cb151-12"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-12" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(res)</span>
+<span id="cb151-13"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-13" tabindex="-1"></a><span class="fu">names</span>(res) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Simulated_theta&quot;</span>, <span class="st">&quot;PACF_lag1&quot;</span>, <span class="st">&quot;PACF_lag2&quot;</span>)</span></code></pre></div>
 </div>
 <div id="insight-1-pacf-lag-1-underestimates-theta" class="section level2 hasAnchor" number="6.4">
 <h2><span class="header-section-number">6.4</span> Insight 1: PACF Lag 1 Underestimates <span class="math inline">\(\theta\)</span><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-1-pacf-lag-1-underestimates-theta" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>This plot compares the true MA(1) coefficient used in each simulation (theta) to the estimated PACF value at lag 1. If the PACF exactly reflected the true coefficient, all points would fall along the dashed 1:1 line. Instead, we see a consistent pattern of underestimation — the PACF at lag 1 grows more slowly than theta, especially as theta increases. This visualizes how the PACF captures indirect correlation, not the actual model parameter.</p>
-<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb149-1" tabindex="-1"></a><span class="fu">ggplot</span>(res, <span class="fu">aes</span>(<span class="at">x =</span> Simulated_theta, <span class="at">y =</span> PACF_lag1)) <span class="sc">+</span></span>
-<span id="cb149-2"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb149-2" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
-<span id="cb149-3"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb149-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;gray&quot;</span>) <span class="sc">+</span></span>
-<span id="cb149-4"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb149-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(theta[<span class="dv">1</span>]),</span>
-<span id="cb149-5"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb149-5" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;PACF Lag 1&quot;</span>,</span>
-<span id="cb149-6"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb149-6" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;PACF Lag 1 Underestimates the True MA(1) Coefficient&quot;</span>,</span>
-<span id="cb149-7"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb149-7" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&quot;Dashed line shows the 1:1 reference line&quot;</span>) <span class="sc">+</span></span>
-<span id="cb149-8"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb149-8" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.15</span>, <span class="fl">0.9</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fl">0.15</span>, <span class="fl">0.9</span>)) <span class="sc">+</span></span>
-<span id="cb149-9"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb149-9" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
-<p><img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb152-1" tabindex="-1"></a><span class="fu">ggplot</span>(res, <span class="fu">aes</span>(<span class="at">x =</span> Simulated_theta, <span class="at">y =</span> PACF_lag1)) <span class="sc">+</span></span>
+<span id="cb152-2"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb152-2" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
+<span id="cb152-3"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb152-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;gray&quot;</span>) <span class="sc">+</span></span>
+<span id="cb152-4"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb152-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(theta[<span class="dv">1</span>]),</span>
+<span id="cb152-5"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb152-5" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;PACF Lag 1&quot;</span>,</span>
+<span id="cb152-6"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb152-6" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;PACF Lag 1 Underestimates the True MA(1) Coefficient&quot;</span>,</span>
+<span id="cb152-7"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb152-7" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&quot;Dashed line shows the 1:1 reference line&quot;</span>) <span class="sc">+</span></span>
+<span id="cb152-8"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb152-8" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.15</span>, <span class="fl">0.9</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fl">0.15</span>, <span class="fl">0.9</span>)) <span class="sc">+</span></span>
+<span id="cb152-9"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb152-9" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-3-1.png" alt="" width="672" /></p>
 <div id="why-this-happens" class="section level3 hasAnchor" number="6.4.1">
 <h3><span class="header-section-number">6.4.1</span> Why This Happens<a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The PACF at lag 1 is the coefficient from regressing <span class="math inline">\(y_t\)</span> on <span class="math inline">\(y_{t-1}\)</span>. In an MA(1) model, <span class="math inline">\(y_t\)</span> and <span class="math inline">\(y_{t-1}\)</span> both include <span class="math inline">\(\epsilon_{t-1}\)</span>, creating a correlation. But this correlation is weaker than the actual MA coefficient <span class="math inline">\(\theta\)</span>, because it is <strong>shared noise</strong>, not a structural dependency.</p>
@@ -1270,27 +1271,27 @@ y_t = \theta \epsilon_{t-1} + \epsilon_t
 <div id="insight-2-pacf-lag-2-is-consistently-negative" class="section level2 hasAnchor" number="6.5">
 <h2><span class="header-section-number">6.5</span> Insight 2: PACF Lag 2 is Consistently Negative<a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-2-pacf-lag-2-is-consistently-negative" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>This plot shows a strong inverse relationship between PACF lag 1 and lag 2. As PACF lag 1 increases (which happens as theta increases), PACF lag 2 becomes more negative. This pattern reflects how the model’s one-lag memory indirectly creates compensating effects at lag 2 once lag 1 has been accounted for.</p>
-<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-1" tabindex="-1"></a><span class="fu">ggplot</span>(res, <span class="fu">aes</span>(<span class="at">x =</span> PACF_lag1, <span class="at">y =</span> PACF_lag2)) <span class="sc">+</span></span>
-<span id="cb150-2"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>,<span class="at">color =</span> <span class="st">&quot;gray&quot;</span>) <span class="sc">+</span></span>
-<span id="cb150-3"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;PACF Lag 1&quot;</span>,</span>
-<span id="cb150-4"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-4" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;PACF Lag 2&quot;</span>,</span>
-<span id="cb150-5"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-5" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;PACF Lag 2 Is More Negative as Lag 1 Increases&quot;</span>,</span>
-<span id="cb150-6"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-6" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&quot;Each point is a simulated MA(1) process&quot;</span>) <span class="sc">+</span></span>
-<span id="cb150-7"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb150-7" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
-<p><img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb153-1" tabindex="-1"></a><span class="fu">ggplot</span>(res, <span class="fu">aes</span>(<span class="at">x =</span> PACF_lag1, <span class="at">y =</span> PACF_lag2)) <span class="sc">+</span></span>
+<span id="cb153-2"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb153-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>,<span class="at">color =</span> <span class="st">&quot;gray&quot;</span>) <span class="sc">+</span></span>
+<span id="cb153-3"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb153-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;PACF Lag 1&quot;</span>,</span>
+<span id="cb153-4"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb153-4" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;PACF Lag 2&quot;</span>,</span>
+<span id="cb153-5"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb153-5" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;PACF Lag 2 Is More Negative as Lag 1 Increases&quot;</span>,</span>
+<span id="cb153-6"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb153-6" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&quot;Each point is a simulated MA(1) process&quot;</span>) <span class="sc">+</span></span>
+<span id="cb153-7"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb153-7" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" /></p>
 <p>Here we plot PACF lag 2 against the true theta used in each simulation. The consistent downward slope illustrates that the more influence theta has at lag 1, the more negative the partial correlation becomes at lag 2 — an indirect, but systematic pattern that is unique to MA(1) models.</p>
-<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-1" tabindex="-1"></a><span class="co"># Also show vs theta</span></span>
-<span id="cb151-2"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-2" tabindex="-1"></a><span class="fu">ggplot</span>(res, <span class="fu">aes</span>(<span class="at">x =</span> Simulated_theta, <span class="at">y =</span> PACF_lag2)) <span class="sc">+</span></span>
-<span id="cb151-3"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-3" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
-<span id="cb151-4"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;gray&quot;</span>) <span class="sc">+</span></span>
-<span id="cb151-5"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-5" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span></span>
-<span id="cb151-6"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(True<span class="sc">~</span>theta[<span class="dv">1</span>]),</span>
-<span id="cb151-7"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-7" tabindex="-1"></a>       <span class="at">y =</span> <span class="fu">expression</span>(PACF<span class="sc">~</span>Lag<span class="sc">~</span><span class="dv">2</span><span class="sc">~</span>(<span class="fu">hat</span>(theta[<span class="dv">2</span>]))),</span>
-<span id="cb151-8"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-8" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;PACF Lag 2 Is Systematically Negative&quot;</span>,</span>
-<span id="cb151-9"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-9" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&quot;This behavior is a hallmark of MA(1) structure&quot;</span>) <span class="sc">+</span></span>
-<span id="cb151-10"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb151-10" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb154-1" tabindex="-1"></a><span class="co"># Also show vs theta</span></span>
+<span id="cb154-2"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb154-2" tabindex="-1"></a><span class="fu">ggplot</span>(res, <span class="fu">aes</span>(<span class="at">x =</span> Simulated_theta, <span class="at">y =</span> PACF_lag2)) <span class="sc">+</span></span>
+<span id="cb154-3"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb154-3" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
+<span id="cb154-4"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb154-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;gray&quot;</span>) <span class="sc">+</span></span>
+<span id="cb154-5"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb154-5" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span></span>
+<span id="cb154-6"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb154-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(True<span class="sc">~</span>theta[<span class="dv">1</span>]),</span>
+<span id="cb154-7"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb154-7" tabindex="-1"></a>       <span class="at">y =</span> <span class="fu">expression</span>(PACF<span class="sc">~</span>Lag<span class="sc">~</span><span class="dv">2</span><span class="sc">~</span>(<span class="fu">hat</span>(theta[<span class="dv">2</span>]))),</span>
+<span id="cb154-8"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb154-8" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;PACF Lag 2 Is Systematically Negative&quot;</span>,</span>
+<span id="cb154-9"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb154-9" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&quot;This behavior is a hallmark of MA(1) structure&quot;</span>) <span class="sc">+</span></span>
+<span id="cb154-10"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#cb154-10" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" /></p>
 <div id="why-this-happens-1" class="section level3 hasAnchor" number="6.5.1">
 <h3><span class="header-section-number">6.5.1</span> Why This Happens<a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The PACF at lag 2 is the partial correlation between <span class="math inline">\(y_t\)</span> and <span class="math inline">\(y_{t-2}\)</span>, holding <span class="math inline">\(y_{t-1}\)</span> constant. In an MA(1), there is no direct influence of <span class="math inline">\(y_{t-2}\)</span> on <span class="math inline">\(y_t\)</span>, but they do share overlapping shock terms: <span class="math inline">\(y_{t-2}\)</span> includes <span class="math inline">\(\epsilon_{t-2}\)</span>, which can influence <span class="math inline">\(y_{t-1}\)</span>, which in turn influences <span class="math inline">\(y_t\)</span> through <span class="math inline">\(\epsilon_{t-1}\)</span>.</p>

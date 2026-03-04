@@ -43,7 +43,7 @@ tsp(co2) #compare to print(tsp(co2),8)
 plot(co2,ylab=expression(CO[2]~(ppm)))
 ```
 
-<img src="02DecompTrends_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="02DecompTrends_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" />
 
 We've seen these data before. Note that these data are in the `ts` class and are sampled monthly with `freq=12` in the properties. Plotting is the best way to explore a time series. But we can get a little more formal about these data. It's pretty clear that this time series has a trend and a seasonal component. There is some noise on top of that. We can write this out as an **additive** time series model: 
   
@@ -73,7 +73,7 @@ tsp(m.hat) <- tsp(co2)
 plot(m.hat,ylab=expression(CO[2]~(ppm))) # here is the trend.
 ```
 
-<img src="02DecompTrends_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="02DecompTrends_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" />
 
 The code above gave us an estimate of the trend (we put a hat on estimates by convention). But this is a bit ugly, right? Loops are often that way. But it's important to see what is happening. We are stepping through the data and applying the moving average looking back six time steps and forward six time steps. At each iteration we write the value of the moving average to the *i*th space in the empty vector `m.hat`. While it's good to know how this stuff works there are better ways of doing this and you've already probably thought of this: We don't have to this with a loop. Let's do this the easy way with the `filter` function. Note that if you have tidyverse located you might have a conflict between `dpylr::filter` from the `tidyverse` and `stats::filter` which is part of base R. We want `stats::filter` here. Watch and remember those messages when you load a package!
 
@@ -95,7 +95,7 @@ plot(s.hat,ylab=expression(CO[2]~(ppm)))
 boxplot(s.hat~cycle(s.hat),xlab="Month",ylab=expression(CO[2]~(ppm)))
 ```
 
-<img src="02DecompTrends_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="02DecompTrends_files/figure-html/unnamed-chunk-7-1.png" alt="" width="672" />
 
 So, via subtraction we got an estimate of the seasonal component and by making boxplots by month we see the draw down of CO$\mathrm{_2}$ during the North American summer and the rise in winter. Thus at the moment we have a nice model of the this time series: $y_t=m_t+s_t$ but we don't have any residual noise $z_t$. I'm going to show you how we can calculate the residual if we assume that the seasonal cycle is the same every year. I'll do that by calculating the mean of $\hat s$ for each month and treat deviations from the mean as the noise term $\hat z$. 
 
@@ -111,7 +111,7 @@ z.hat <- co2 - m.hat - s.hat
 plot(z.hat)
 ```
 
-<img src="02DecompTrends_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="02DecompTrends_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" />
 
 At some point when building a model you have to ask if it's "good" or at least "useful." We calculated the residuals (errors) on the decomposed time series as $\hat z$.
 
@@ -146,7 +146,7 @@ co2_deseas <- m.hat + z.hat
 plot(co2_deseas,ylab=expression(CO[2]~(ppm)),main="Deseasonalized Carbon Dioxide")
 ```
 
-<img src="02DecompTrends_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="02DecompTrends_files/figure-html/unnamed-chunk-10-1.png" alt="" width="672" />
 
 Let's look at the whole thing by combining each of these parts into a single `ts` object. Note the scale of the y-axis on each plot (the units are still ppm).
 
@@ -156,7 +156,7 @@ co2.hat <- cbind(co2,m.hat,s.hat,z.hat)
 plot(co2.hat)
 ```
 
-<img src="02DecompTrends_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="02DecompTrends_files/figure-html/unnamed-chunk-11-1.png" alt="" width="672" />
 
 We just did some fancy model building and broke an additive time series into its constituent parts! Walk through each line of code above and make sure you understand what we did.
 
@@ -169,7 +169,7 @@ co2Decomp <- decompose(co2,type = "additive")
 plot(co2Decomp)
 ```
 
-<img src="02DecompTrends_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="02DecompTrends_files/figure-html/unnamed-chunk-12-1.png" alt="" width="672" />
 
 Pretty cool, huh? The plot shows the original data plus all the components and these can be combined just like we did above. Look at `str(co2Decomp)`.
 
@@ -205,7 +205,7 @@ plot(co2,ylab=expression(CO[2]~(ppm)))
 abline(co2LinearModel,col="red")
 ```
 
-<img src="02DecompTrends_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="02DecompTrends_files/figure-html/unnamed-chunk-14-1.png" alt="" width="672" />
 
 We can look at those two together.
 
@@ -215,7 +215,7 @@ plot(m.hat,ylab=expression(CO[2]~(ppm))) # trend from the decomposition.
 abline(co2LinearModel,col="red") # and the trend from a linear model
 ```
 
-<img src="02DecompTrends_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="02DecompTrends_files/figure-html/unnamed-chunk-15-1.png" alt="" width="672" />
 
 Take a minute to appreciate how and why these are both trends and how and why they differ.
 
@@ -228,7 +228,7 @@ y <- ts(rnorm(120),start=c(2010,1),frequency = 12)
 plot(decompose(y))
 ```
 
-<img src="02DecompTrends_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="02DecompTrends_files/figure-html/unnamed-chunk-16-1.png" alt="" width="672" />
 
 Note that there is NO trend in `y` -- it's just random numbers. And there is no seasonal structure in `y` -- it's just random numbers. But `decompose` was very content to pull out the trend and seasonal parts of the data. Note the magnitude of the y-axes and you can see that there isn't a lot of there there. But, if you didn't know better you might obsess over this plot and trick yourself into finding patterns where none exist.
 
@@ -241,7 +241,7 @@ data(AirPassengers)
 plot(AirPassengers)
 ```
 
-<img src="02DecompTrends_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="02DecompTrends_files/figure-html/unnamed-chunk-17-1.png" alt="" width="672" />
 
 We will talk more in the future about when you should test for stationarity -- maybe because a test you are using a model that assumes stationarity. And when you should just note it as a descriptive feature of a time series -- remember, your eye is a really good diagnostic tool.
 
@@ -269,7 +269,11 @@ kbli_tb %>%
   theme_minimal()
 ```
 
-<img src="02DecompTrends_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+```
+## Warning: `label` cannot be a <ggplot2::element_blank> object.
+```
+
+<img src="02DecompTrends_files/figure-html/unnamed-chunk-18-1.png" alt="" width="672" />
 
 
 Then (with good reporting, plotting, and other exploratory data analysis) try this:
@@ -282,7 +286,7 @@ Then (with good reporting, plotting, and other exploratory data analysis) try th
 
 As an example, here is a plot of summer temperatures.
 
-<img src="02DecompTrends_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="02DecompTrends_files/figure-html/unnamed-chunk-19-1.png" alt="" width="672" />
 
 You can report the slopes in a table if you like. Easier and clearer than plotting everything probably.
 

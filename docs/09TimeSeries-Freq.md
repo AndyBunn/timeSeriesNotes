@@ -34,7 +34,7 @@ As always, the goal is not just to describe patterns, but to get closer to mecha
 
 Look at these two plots. This is the same signal two ways: once in the time domain and once in the frequency domain.
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-3-1.png" alt="" width="672" />
 
 The two plots have **exactly** the same information -- just a different lens.^[In theory, the time and frequency domains are mathematically equivalent and you can reconstruct one from the other using a full Fourier transform. But in practice, smoothing, truncation, or sampling limitations can obscure some details in one domain or the other.] The time-domain plot shows the signal as it changes over time. The frequency-domain plot shows how much of the signal is happening at different frequencies. You can see strong peaks around 0.02 (i.e., a 50-unit cycle) and 0.005 (a 200-unit cycle). This is the power of spectral analysis: it reveals hidden periodicity even when the time series looks noisy or chaotic.
 
@@ -58,7 +58,7 @@ p1 + geom_line(data=dat,mapping = aes(x=tm,y=wav250),color=sfPal[1]) +
   labs(title = "Period 250, f=1/250=0.004", subtitle = "Amplitude = 0.3")
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" />
 
 Let's add to it with some more sine waves. Run this code one line at time to see each sine function.
 
@@ -72,7 +72,7 @@ p1 + geom_line(data=dat,mapping = aes(x=tm,y=wav50),color=sfPal[2]) +
   labs(title = "Period 50, f=1/50=0.02", subtitle = "Amplitude = 0.75")
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" />
 
 
 ``` r
@@ -80,7 +80,7 @@ p1 + geom_line(data=dat,mapping = aes(x=tm,y=wav10),color=sfPal[3]) +
   labs(title = "Period 10, f=1/10=0.1", subtitle = "Amplitude = 1")
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-6-1.png" alt="" width="672" />
 
 
 ``` r
@@ -88,7 +88,7 @@ p1 + geom_line(data=dat,mapping = aes(x=tm,y=wav5),color=sfPal[4]) +
   labs(title = "Period 5, f=1/5=0.2", subtitle = "Amplitude = 0.5")
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-7-1.png" alt="" width="672" />
 
 And sum them.
 
@@ -99,7 +99,7 @@ p1 + geom_line(data=dat,mapping = aes(x=tm,y=allWav),color=sfPal[5]) +
   labs(title = "Multiple frequencies combined")
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" />
 
 Zoom in a bit:
 
@@ -114,7 +114,7 @@ p1 + geom_line(data=dat,mapping = aes(x=tm,y=allWav),color=sfPal[5]) +
 ## (`geom_line()`).
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-9-1.png" alt="" width="672" />
 
 Now let's add a little noise and we have a series that looks a lot like something we might see in nature.
 
@@ -125,7 +125,7 @@ p1 + geom_line(data=dat,mapping = aes(x=tm,y=allWav),color=sfPal[5]) +
   labs(title = "Multiple frequencies combined")
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-10-1.png" alt="" width="672" />
 
 A little noise and an awful lot of repeating signals.
 
@@ -136,7 +136,7 @@ How can we analyze that series and find out what it is made of? We will calculat
 spectrum(dat$allWav,log="no")
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-11-1.png" alt="" width="672" />
 
 This is the raw periodogram. By default the plot puts the spectrum on a log axis. I've turned that off above but I suggest you run that again to see the log scales: `spectrum(dat$allWav)`. The spectrum is  scaled so that its area is one half the variance of the series. Again, the text discusses why, as well as discussing the bandwidth parameter (which relates to the smoothing). You can think of the y-axis as being the amplitude of the signal at a given frequency (or its power or even its information). Play with the smoothing argument, e.g., `spectrum(wav,span=5,log="no")`. 
 
@@ -152,7 +152,7 @@ data(sunspot.year)
 plot(sunspot.year)
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-12-1.png" alt="" width="672" />
 
 What periodicities / frequencies are embedded in these data?
 
@@ -163,7 +163,7 @@ plot(ss.spec,log="no", type="h", xlab="Frequency (cycles / yr)",
      ylab="Spectral density")
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-13-1.png" alt="" width="672" />
 
 Two things. First, note the spikes at the 0.09 range of frequencies. What is that period (years)? About eleven years because $~f=1/p$. There is also some amplitude/power/information at lower frequencies. What might that be? Can you see that in the time domain?
 
@@ -175,7 +175,7 @@ plot(ss.spec,log="no", type="h", xlab="Frequency (cycles / yr)",
      ylab="Spectral density", xlim=c(0,0.2))
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-14-1.png" alt="" width="672" />
 
 Here is an example where I'll make the plot with `ggplot`. Note the addition of the second x-axis showing period. Try as I might, I still think in periods and not frequencies.
 
@@ -197,7 +197,7 @@ ggplot(data = dat,mapping = aes(x=freqs,xend=freqs,y=0,yend=specs)) +
                                        name="Period (yr / cycle)"))
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-15-1.png" alt="" width="672" />
 
 Now, let's look at sunspots but using the monthly data.
 
@@ -207,7 +207,7 @@ data(sunspot.month)
 plot(sunspot.month)
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-16-1.png" alt="" width="672" />
 
 ``` r
 tsp(sunspot.month) # note freq = 12
@@ -238,7 +238,7 @@ ggplot(data = dat,mapping = aes(x=freqs,xend=freqs,y=0,yend=specs)) +
   scale_x_continuous(name = "Frequency (cycle / yr)")
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-17-1.png" alt="" width="672" />
 
 See if you can figure out why the x-axis has changed with the monthly sunspot data as compared to the annual data.
 
@@ -275,7 +275,7 @@ ggplot(data = jul65N, aes(x=kya,y=W.per.m2)) +
        title="July insolation at 65N")
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-18-1.png" alt="" width="672" />
 
 
 
@@ -313,7 +313,7 @@ data(co021)
 plot(co021, plot.type="spag")
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-20-1.png" alt="" width="672" />
 
 ``` r
 # detrend and average the individual series to make a chronology
@@ -323,7 +323,7 @@ co021.crn <- chron(co021.rwi)
 plot(co021.crn, add.spline=TRUE, nyrs=64)
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-20-2.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-20-2.png" alt="" width="672" />
 
 ``` r
 dat <- co021.crn[, 1]
@@ -335,7 +335,7 @@ out.wave <- morlet(y1 = dat, x1 = yrs, p2 = 8, dj = 0.1,
 wavelet.plot(out.wave, useRaster=NA, reverse.y = TRUE)
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-20-3.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-20-3.png" alt="" width="672" />
 
 ``` r
 # discrete wavelet transform
@@ -366,5 +366,5 @@ for(i in nPwrs2:1){
 box()
 ```
 
-<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-20-4.png" width="672" />
+<img src="09TimeSeries-Freq_files/figure-html/unnamed-chunk-20-4.png" alt="" width="672" />
 

@@ -38,7 +38,7 @@ p1 <- ggplot() +
 p1
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-3-1.png" alt="" width="672" />
 
 ### Moving (running) average
 
@@ -72,7 +72,7 @@ p1 + labs(subtitle = "Moving Average Filters") +
 ## (`geom_line()`).
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" />
 
 ### Hanning
 The Hanning filter is similar to the moving average in the sense that the curve emphasizes low frequency variability and loses the jaggedness over the moving average. It's also a  simple filter (look at the code by typing `hanning` at the `R` prompt) but it is a start into thinking in the frequency domain. It's part of a family of functions called window functions that are zero-valued outside of some interval chosen by the user. It's used quite a bit by time-series wonks and it is implemented in `dplR` with the function `hanning()`. I'll skip the theory here but it's a great precursor to the work we will do with spectral analysis next week.
@@ -104,7 +104,7 @@ p1 + labs(subtitle = "Hanning Filters") +
 ## (`geom_line()`).
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" />
 
 Like the moving average the smooth is shorter than the input data. It's too bad because its nice to preserve the ends of the data but there is much wringing of hands and gnashing of teeth about the "right" way of running a smoothing algorithm where the data are sparse. This so-called end-member problem is the subject of a lot of work in the time-series literature.
 
@@ -134,7 +134,7 @@ p1 + labs(subtitle = "Smoothing Spline Filters") +
   geom_line(data=dat, mapping = aes(x=yrs,y=ss0.6), color = sfPal[3],linewidth=1)
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-7-1.png" alt="" width="672" />
 
 ### Loess
 I've become increasingly fond of the loess smoother which uses a local, linear polynomial fit to smooth data. The parameter to adjust is the span `span`. Because `span` is the proportion of points used in the smoothing, the smaller the number the stiffer the curve will be. So a `span` of 0.05 would use 5% of the points. We can make the curves similar to the number of years in our moving average or hanning filters with some division.
@@ -152,7 +152,7 @@ p1 + labs(subtitle = "Loess Filters") +
   geom_line(data=dat, mapping = aes(x=yrs,y=f100.lo), color = sfPal[3],linewidth=1)
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" />
 
 Unlike the moving averages and hanning filters, the smooth is the same length as the input data. That's nice...but preserving the ends of the data means that there is less information at play on the ends than there is in the middle. There is no way to model the ends members to everybody's satisfaction. 
 
@@ -187,7 +187,7 @@ plot(window(tavgTS,start=2000, end = 2004),
      ylab=expression(degree*C))
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-10-1.png" alt="" width="672" />
 
 ``` r
 # get summer (JJA) temps three ways
@@ -231,7 +231,7 @@ plot(summerTavg_v2,ylab=expression(degree*C),xlab="Time")
 abline(lm(summerTavg_v2~time(summerTavg_v2)),col="red")
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-10-2.png" width="672" />
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-10-2.png" alt="" width="672" />
 
 Go through the code and make sure you follow what just happened at each step.
 
@@ -275,7 +275,7 @@ ggplot(data=core1) +
        subtitle = "Sample 641114 Schulman Old Tree No. 1, Mesa Verde")
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-11-1.png" alt="" width="672" />
 
 We will fit a loess model of ring wing width as a function of time. Note this is a first-order polynomial (`degree = 1`) while the default is to use a 2nd-order polynomial. The argument `span` gives the percentage of the points used. Since there are 694 this corresponds to  69 years being used at each fit. 
 
@@ -298,7 +298,7 @@ loessFit %>% ggplot() +
        subtitle = "Sample 641114 Schulman Old Tree No. 1, Mesa Verde")
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-13-1.png" alt="" width="672" />
 
 
 If instead of a proportion of the data, we can specify a number of points (years) to use like we did above. E.g., 100-year smooth. Is 100 years the right value? Nobody can really say. But this is one approach for filtering out this relatively low-frequency (100 period = 0.01 f).
@@ -314,7 +314,7 @@ loessFit %>% ggplot() +
        subtitle = "Sample 641114 Schulman Old Tree No. 1, Mesa Verde")
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-14-1.png" alt="" width="672" />
 
 We can make the RWI via:
 
@@ -329,7 +329,11 @@ core1 %>% pivot_longer(cols=-Year) %>%
   facet_grid(rows=vars(name),scales = "free")
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+```
+## Warning: `label` cannot be a <ggplot2::element_blank> object.
+```
+
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-15-1.png" alt="" width="672" />
 
 
 ## The Case of the Poorly-Launched Sensors
@@ -372,7 +376,7 @@ pRad <- ggplot(rad) +
 gridExtra::grid.arrange(pTmp,pRad)  
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-16-1.png" alt="" width="672" />
 
 Here is a better look at the times:
 
@@ -424,7 +428,7 @@ zooRad <- zoo(rad[,2],rad[,1])
 plot(zooRad[1:100],type="b",pch=20,ylab=expression(W~m^-2))
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-19-1.png" alt="" width="672" />
 
 The `zoo` package has several ways of filling `NA` values. Let's run a linear interpolation and a cubic smoothing spline. In this case, the results are very similar because the radiation data are quite well behaved (sun comes up and sun goes down).
 
@@ -437,7 +441,7 @@ lines(zooRad.spline[1:100],lwd=2,col="red",lty="dotted")
 lines(zooRad[1:100],col="grey",lwd=1)
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-20-1.png" alt="" width="672" />
 
 That was easy too. Note the different ways of filling in the missing data. Look at `na.locf` as well. They all use some kind of filtering to impute the missing data.
 
@@ -458,7 +462,7 @@ ggplot(data = dat,mapping = aes(x=x,y=y)) +
   geom_line()
 ```
 
-<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+<img src="08TimeSeries-Filters_files/figure-html/unnamed-chunk-21-1.png" alt="" width="672" />
 
 ### Revisit the case of the poorly launched sensors
 In the poorly launched sensors debacle there were a few problems. The radiation data was spotty but collecting every hour (2208 observations). The temp data was collecting every other hour (1104 observations) AND doing so at three minutes after the hour. We fixed the second part but not the first one. Your task is to align these data sets. They have to be hourly resolution for some reason you can invent. Figure out a way to take the `tmp` object above and change it to have hourly rather than two hourly resolution. I can think of several ways to do it but I'm going to leave you up to your own devices to figure out a way to do it. When you are done the radiation and temperature data should be aligned with 2208 observations each. 

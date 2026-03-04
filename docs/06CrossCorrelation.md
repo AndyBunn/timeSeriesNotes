@@ -166,7 +166,7 @@ cor(x[1:(n-1)], y[2:n]) # correlates great!
 Ccf(x, y) # the cross correlation plot
 ```
 
-<img src="06CrossCorrelation_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="06CrossCorrelation_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" />
 
 By hand, you can see that $\text{cor}(x_{t-1}, y_t) = 0.891$, whereas $\text{cor}(x_t, y_t) = 0.115$. We can view these correlations across multiple lags using the cross-correlation plot from `Ccf`. That function returns the correlation between $x_{t+k}$ and $y_t$ for various values of lag $k$.
 
@@ -188,7 +188,7 @@ plot(y, predict(lmY))
 abline(lmY, col = "blue")
 ```
 
-<img src="06CrossCorrelation_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="06CrossCorrelation_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" />
 
 Cross-correlation is commonly used to identify short-lag predictive relationships. This is common in economics (e.g., jobless claims leading GDP) and in environmental science — for instance, where river discharge might precede changes in turbidity, or phytoplankton peaks might precede zooplankton booms.
 
@@ -240,7 +240,7 @@ Let's compare that to what `ccf()` gives
 ccf_obj <- Ccf(x, y, lag.max = 10)
 ```
 
-<img src="06CrossCorrelation_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="06CrossCorrelation_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" />
 
 ``` r
 ccf_lag1 <- ccf_obj$acf[ccf_obj$lag == -1]
@@ -296,7 +296,7 @@ ggplot(pgLong,aes(x=day,y=value,color=name)) +
 ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 ```
 
-<img src="06CrossCorrelation_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="06CrossCorrelation_files/figure-html/unnamed-chunk-10-1.png" alt="" width="672" />
 
 It seems clear that there is an offset between the two series. Just eyeballing it, it looks like there is a four to six week lag between the grazers and producers. Use cross correlation and see if you can determine the lagged relationship more specifically. 
 

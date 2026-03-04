@@ -47,7 +47,7 @@ for(i in 2:n){
 ggplot() + geom_line(aes(x=x,y=y)) + theme_minimal()
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" />
 
 Take a look at how we did this. We initialized with a value of zero and then started building `y` on the second value. We couldn't start the loop at `i=1` because we needed the prior year for an AR(1) model. Keep this in mind when you get to the section for your work below. We could have started the time series with a random number instead of a zero if we were feeling adventurous. E.g., before the loop we could have set `y[1]=rnorm(1)`.
 
@@ -57,7 +57,7 @@ Run that loop above and make the plot a half dozen or so times. Get a feel for w
 ### The Very Fun Presentation
 Go read [Allison Horst's on autocorrelation](https://allisonhorst.com/time-series-acf) on the autocorrelation function (ACF). She is **amazing** and I read everything she does with awe. 
 
-<img src="assets/allison_horst/host_acf_images.gif" width="100%" />
+<img src="assets/allison_horst/host_acf_images.gif" alt="" width="100%" />
 
 
 ## The Boring Presentation
@@ -77,7 +77,7 @@ So how do you assess autocorrelation more generally? You calculate $\rho$ for su
 Acf(y)
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-6-1.png" alt="" width="672" />
 
 This produces a plot of the correlation ($r$) at lags ($k$). The autocorrelation value at the first lag ($k=1$) is $\phi=0.668$ which is very close to the value of $\phi$ we set above. But also note that there is autocorrelation at higher lags ($k=2, k=3$) that follows a decay of $\phi^k$ ($\phi_2=\phi^2$, $\phi_3=\phi^3$, etc.). 
 
@@ -138,7 +138,7 @@ Another benefit of using `Acf` over `acf` is that there is a pre-rolled `ggplot`
 ggAcf(y) + theme_minimal()
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-9-1.png" alt="" width="672" />
 
 ## Partial Autocorrelation Function
 ### PACF
@@ -153,7 +153,7 @@ Our expectation for `y` is that after taking the AR(1) model into account the co
 ggPacf(y) + theme_minimal()
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-10-1.png" alt="" width="672" />
 
 Interpreting ACF plots is pretty straightforward, but what does the PACF plot mean? Well, if you have an AR(1) process the remaining autocorrelation at higher lags will be near zero in your PACF plot. That is, if the true process is AR(1), all autocorrelation is removed from the model -- even the residual autocorrelation from the geometric decrease seen at higher lags in the ACF plot. Thus, if you have an AR(1) process, the ACF decays geometrically while the PACF falls to zero (zero'ish) abruptly after lag 1. If you still see a geometric progression decline in a PACF plot you might be looking at different process, like an MA(1) process. We will get there next week.
 
@@ -225,7 +225,7 @@ cis <- qnorm((1 + 0.95)/2)/sqrt(n)
 abline(h=c(-cis,cis),lty="dashed",col="blue")
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-13-1.png" alt="" width="672" />
 
 Now we can do the same for the partial coefficients which we get using a regression analysis through the origin.
 
@@ -295,7 +295,7 @@ cis <- qnorm((1 + 0.95)/2)/sqrt(n)
 abline(h=c(-cis,cis),lty="dashed",col="blue")
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-15-1.png" alt="" width="672" />
 
 Just in case anybody **really** wants the details, the function `pacf` does this with linear algebra by solving the Toeplitz matrix. The details of this are significantly past the level of detail we typically go into:
 
@@ -362,7 +362,7 @@ for(i in 2:n){
 ggplot() + geom_line(aes(x=x,y=y))
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-17-1.png" alt="" width="672" />
 
 And with drift:
 
@@ -375,7 +375,7 @@ for(i in 2:n){
 ggplot() + geom_line(aes(x=x,y=y))
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-18-1.png" alt="" width="672" />
 
 Oh, here is a question for you to answer -- you should be able to spit this answer out without having to calculate anything. What would the `Acf()` and `Pacf()` plots look like for these data? How would it change if you increase $n$?
 
@@ -400,7 +400,7 @@ broom::tidy(Nile) %>%
   theme_minimal()
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-19-1.png" alt="" width="672" />
 
 Is this river flow record autocorrelated?
 
@@ -408,7 +408,7 @@ Is this river flow record autocorrelated?
 ggAcf(Nile) + theme_minimal()
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-20-1.png" alt="" width="672" />
 
 And the PACF
 
@@ -416,7 +416,7 @@ And the PACF
 ggPacf(Nile) + theme_minimal()
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-21-1.png" alt="" width="672" />
 
 Looking at the plot of the original time series it does look like its possible that high flow years follow high flow years and low years follow low years (positive autocorrelation) but it's hard to say for sure. However the ACF and PACF plots show that there is an AR(1) model at play here. Like our simulated data above the PACF shows no significant autocorrelation at a lag of two years after accounting for the lag at one year. Thus, we can probably say that this  record  follows a process: $y_t = \phi_1 y_{t-1} + \epsilon_t$.  
 
@@ -433,7 +433,7 @@ broom::tidy(nhtemp) %>%
   theme_minimal()
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-22-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-22-1.png" alt="" width="672" />
 
 Is this temperature record autocorrelated?
 
@@ -441,7 +441,7 @@ Is this temperature record autocorrelated?
 ggAcf(nhtemp) + theme_minimal()
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-23-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-23-1.png" alt="" width="672" />
 
 And the PACF
 
@@ -449,7 +449,7 @@ And the PACF
 ggPacf(nhtemp) + theme_minimal()
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-24-1.png" alt="" width="672" />
 
 Unlike what we have above, the ACF and PACF plots show that there is likely an AR(2) model at play here. Note that the PACF shows significant autocorrelation at a lag of two years even after accounting for the lag at one year. Thus, we can probably say that this temperature record  follows a process: $y_t = \phi_1 y_{t-1} + \phi_2 y_{t-2} + \epsilon_t$. See below for how we might estimate those coefficients.
 
@@ -467,7 +467,7 @@ broom::tidy(sunspot.year) %>%
   theme_minimal()
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-25-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-25-1.png" alt="" width="672" />
 
 This is a whole different level of autocorrelation! Note how the series goes up and then down in a cycle. This means that there will be both positive and negative autocorrelation depending on the lag. 
 
@@ -476,7 +476,7 @@ This is a whole different level of autocorrelation! Note how the series goes up 
 ggAcf(sunspot.year)
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-26-1.png" width="672" />
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-26-1.png" alt="" width="672" />
 
 Take some time to wrap your head around this idea. The data are positively autocorrelated for a few years, then negatively autocorrelated, and so on. It should make sense once you realize that sunspots numbers go up and down on an approximately 11-year cycle due to internal hydromagnetic processes. Figuring out what the dominant periodicities are in a time series falls under the realm of studying time series in the frequency domain. We'll get to that later.
 
@@ -604,4 +604,9 @@ grid.arrange(p1,p2,p3,
              layout_matrix=simpleLayoutMatrix)
 ```
 
-<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-29-1.png" width="672" />
+```
+## Warning: `label` cannot be a <ggplot2::element_blank> object.
+## `label` cannot be a <ggplot2::element_blank> object.
+```
+
+<img src="03TimeSeries-Autocorrelation_files/figure-html/unnamed-chunk-29-1.png" alt="" width="672" />

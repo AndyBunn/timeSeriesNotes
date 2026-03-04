@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2 The Measure of Time | A collection of note for ESCI 504</title>
+  <title>2 The Measure of Time | A collection of notes for ESCI 504</title>
   <meta name="description" content="Helpful materials for ESCI 504" />
-  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2 The Measure of Time | A collection of note for ESCI 504" />
+  <meta property="og:title" content="2 The Measure of Time | A collection of notes for ESCI 504" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Helpful materials for ESCI 504" />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 The Measure of Time | A collection of note for ESCI 504" />
+  <meta name="twitter:title" content="2 The Measure of Time | A collection of notes for ESCI 504" />
   
   <meta name="twitter:description" content="Helpful materials for ESCI 504" />
   
@@ -51,15 +51,15 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.33/datatables.js"></script>
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script>
 <link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
-<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
 
 <script>
 /* ========================================================================
@@ -812,8 +812,9 @@ $(document).ready(function () {
 
 
 <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -823,7 +824,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -1173,7 +1174,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A collection of note for ESCI 504</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A collection of notes for ESCI 504</a>
           </h1>
         </div>
 
@@ -1195,7 +1196,7 @@ div.csl-indent {
 <h2><span class="header-section-number">2.3</span> Packages<a href="the-measure-of-time.html#packages" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="load" class="section level3 hasAnchor" number="2.3.1">
 <h3><span class="header-section-number">2.3.1</span> Load<a href="the-measure-of-time.html#load" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>We will use the <code>tidyverse</code> <span class="citation">(<a href="references-1.html#ref-R-tidyverse">Wickham 2023</a>)</span>, <code>zoo</code> <span class="citation">(<a href="references-1.html#ref-R-zoo">Zeileis, Grothendieck, and Ryan 2025</a>)</span>, and <code>broom</code> <span class="citation">(<a href="references-1.html#ref-R-broom">Robinson, Hayes, and Couch 2025</a>)</span>. Install them if you haven’t done so already (e.g.,: <code>install.packages(c("tidyverse", "zoo"))</code>).</p>
+<p>We will use the <code>tidyverse</code> <span class="citation">(<a href="references-1.html#ref-R-tidyverse">Wickham 2023</a>)</span>, <code>zoo</code> <span class="citation">(<a href="references-1.html#ref-R-zoo">Zeileis, Grothendieck, and Ryan 2025</a>)</span>, and <code>broom</code> <span class="citation">(<a href="references-1.html#ref-R-broom">Robinson et al. 2026</a>)</span>. Install them if you haven’t done so already (e.g.,: <code>install.packages(c("tidyverse", "zoo"))</code>).</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="the-measure-of-time.html#cb3-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb3-2"><a href="the-measure-of-time.html#cb3-2" tabindex="-1"></a><span class="fu">library</span>(zoo)</span></code></pre></div>
 </div>
@@ -1205,7 +1206,7 @@ div.csl-indent {
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="the-measure-of-time.html#cb4-1" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">&quot;tidyverse&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &#39;2.0.0&#39;</code></pre>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="the-measure-of-time.html#cb6-1" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">&quot;zoo&quot;</span>)</span></code></pre></div>
-<pre><code>## [1] &#39;1.8.14&#39;</code></pre>
+<pre><code>## [1] &#39;1.8.15&#39;</code></pre>
 <p>Get in the habit of updating packages regularly. A good way of doing that is via <code>update.packages()</code>. Because I’m usually content to let <code>R</code> update everything semi-automatically I usually run that as <code>update.packages(ask = FALSE, type = "binary")</code> from a <em>fresh <code>R</code> session</em>. Fresh here means that don’t have packages already loaded – e.g., go to Session | Restart R in Rstudio. Running that regularly (I do it every week, but I’m a pretty heavy user) is a very good idea. You can also click the little update button under the pacakges in RStudio if you prefer that kind of interaction.</p>
 </div>
 </div>
@@ -1223,7 +1224,7 @@ div.csl-indent {
 <p>As you know <code>R</code> has a lot of of onboard data sets. You can take a look at the data sets package to get an idea of what’s easy to grab. But you can also look at the time-series packages (like my package <code>dplR</code>) many of which have data available as well. We’ll also work with data we can read into <code>R</code> from an online source or via a text file of some sort. The options are, for almost any reasonable definition, infinite. Let’s start with two onboard data sets.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="the-measure-of-time.html#cb8-1" tabindex="-1"></a><span class="fu">data</span>(LakeHuron)</span>
 <span id="cb8-2"><a href="the-measure-of-time.html#cb8-2" tabindex="-1"></a><span class="fu">plot</span>(LakeHuron)</span></code></pre></div>
-<p><img src="01Intro_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" /></p>
 <p>OK, what’s going on here? We loaded a data set of the level of Lake Huron (in feet) from 1875 to 1972, made a plot, and looked at some summary statistics. You can look at the help page for the data via <code>?LakeHuron</code>.</p>
 <p><code>R</code> knows this is a time series – the class of the object <code>LakeHuron</code> is class <code>ts</code> which is one of the ways we will work with time-series data.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="the-measure-of-time.html#cb9-1" tabindex="-1"></a><span class="fu">class</span>(LakeHuron)</span></code></pre></div>
@@ -1237,7 +1238,7 @@ div.csl-indent {
 <span id="cb13-2"><a href="the-measure-of-time.html#cb13-2" tabindex="-1"></a><span class="fu">str</span>(co2)</span></code></pre></div>
 <pre><code>##  Time-Series [1:468] from 1959 to 1998: 315 316 316 318 318 ...</code></pre>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="the-measure-of-time.html#cb15-1" tabindex="-1"></a><span class="fu">plot</span>(co2)</span></code></pre></div>
-<p><img src="01Intro_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" /></p>
 <p>These data are monthly and run from 1959 to 1998. From a purely practical standpoint you should make sure that you and <code>R</code> agree on the time-series properties of a data set. For instance, you should know the start and end times and the frequency (the number of observations per unit of time). Before you go further, can you predict what the output will be when you run <code>tsp(co2)</code>?</p>
 <p>To look under the hood further and get an idea of how these objects exist in <code>R</code> run <code>attributes(co2)</code> and <code>class(co2)</code>.</p>
 </div>
@@ -1254,7 +1255,7 @@ div.csl-indent {
 <span id="cb16-7"><a href="the-measure-of-time.html#cb16-7" tabindex="-1"></a><span class="fu">lines</span>(xfit, yfit, <span class="at">col=</span><span class="st">&quot;darkblue&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
 <span id="cb16-8"><a href="the-measure-of-time.html#cb16-8" tabindex="-1"></a><span class="fu">boxplot</span>(LakeHuron, <span class="at">horizontal=</span><span class="cn">TRUE</span>,  <span class="at">outline=</span><span class="cn">TRUE</span>,  <span class="at">axes=</span><span class="cn">FALSE</span>,</span>
 <span id="cb16-9"><a href="the-measure-of-time.html#cb16-9" tabindex="-1"></a>        <span class="at">ylim=</span>my.xlim, <span class="at">col =</span> <span class="st">&quot;lightgreen&quot;</span>, <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">boxwex=</span><span class="dv">3</span>)</span></code></pre></div>
-<p><img src="01Intro_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-9-1.png" alt="" width="672" /></p>
 <p>Given a sample size of less than 100, these data don’t show much kurtosis or skew and in fact look pretty normal. That is, I wouldn’t say they were platykurtic or negatively skewed as compared to a random expectation. How could I test such a thing? Well, there are tests in the <code>moments</code> package (e.g., <code>agostino.test(LakeHuron)</code>, <code>anscombe.test(LakeHuron)</code>, <code>jarque.test(c(LakeHuron)</code>) or we could use some kind of resampling method (e.g., bootstrapping). But here is where we get to the single most important mantra I have when working with data: plot and explore it. <strong>Plot your data. Plot your data. Plot your data</strong>. Statistical significance is like pornography (to steal from United States Supreme Court Justice Potter Stewart), you know it when you see it.</p>
 <p>There are other plots I like to make when exploring data. I’m partial to plotting the cumulative distribution function (take a look at <code>ecdf</code>) and maybe a normal QQ plot (<code>qqnorm</code>) but we can leave it here for the time being. Just remember: <strong><em>Plot your data</em></strong>.</p>
 </div>
@@ -1307,7 +1308,7 @@ div.csl-indent {
 ##        625.5549          -0.0242</code></pre>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="the-measure-of-time.html#cb22-1" tabindex="-1"></a><span class="fu">plot</span>(LakeHuron)</span>
 <span id="cb22-2"><a href="the-measure-of-time.html#cb22-2" tabindex="-1"></a><span class="fu">abline</span>(LakeHuronLinearModel,<span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
-<p><img src="01Intro_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-12-1.png" alt="" width="672" /></p>
 <p>We can see that how lake levels are changing at a rate of -0.02 feet per year.</p>
 </div>
 <div id="the-zoo-class" class="section level2 hasAnchor" number="2.7">
@@ -1344,11 +1345,11 @@ div.csl-indent {
 ## 2000-01-06  3.7 1.110223e-15</code></pre>
 <p>OK. What have we learned? The object <code>kbli</code> is class <code>zoo</code> the time index is a <code>Date</code>, there are two columns of data (precipitation and temperature) and therefore we refer to this as a multivariate time series. Let’s do some plotting with the built in plot function for <code>zoo</code></p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="the-measure-of-time.html#cb31-1" tabindex="-1"></a><span class="fu">plot</span>(kbli)</span></code></pre></div>
-<p><img src="01Intro_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-16-1.png" alt="" width="672" /></p>
 <p>And look at some precip data with <code>window</code>. This is the 2024 water year.</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="the-measure-of-time.html#cb32-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">window</span>(kbli<span class="sc">$</span>PRCP, <span class="at">start =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2023-11-01&quot;</span>), </span>
 <span id="cb32-2"><a href="the-measure-of-time.html#cb32-2" tabindex="-1"></a>     <span class="at">end =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2024-10-31&quot;</span>)), <span class="at">ylab=</span><span class="st">&quot;Precip (mm)&quot;</span>)</span></code></pre></div>
-<p><img src="01Intro_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-17-1.png" alt="" width="672" /></p>
 <p>Reminder, this is a <code>zoo</code> object and so <code>R</code> uses <code>plot.zoo</code> to do the actual plotting even though you just type <code>plot</code>. Same goes for <code>window</code>.</p>
 <p>The important distinction here is that unlike class <code>ts</code>, the times are actual dates and not an arbitrary index like we had with the <code>LakeHuron</code> data. The times are stored as class <code>Date</code> which is a good class for dates without times. If we had more finely resolved data we might want a different class like <code>POSIXlt</code> or <code>POSIXct</code>. Peruse the help file for Date-Time Classes via <code>?DateTimeClasses</code>.</p>
 </div>
@@ -1365,7 +1366,7 @@ div.csl-indent {
 <span id="cb34-5"><a href="the-measure-of-time.html#cb34-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Date&quot;</span>,<span class="at">y=</span><span class="fu">expression</span>(degree<span class="sc">~</span>C),</span>
 <span id="cb34-6"><a href="the-measure-of-time.html#cb34-6" tabindex="-1"></a>       <span class="at">title=</span><span class="st">&quot;Average Daily Temperature, Bellingham WA&quot;</span>) <span class="sc">+</span></span>
 <span id="cb34-7"><a href="the-measure-of-time.html#cb34-7" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span></code></pre></div>
-<p><img src="01Intro_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-19-1.png" alt="" width="672" /></p>
 <p>Most often I use <code>lubridate</code> for making date and time objects from characters or decimal dates. E.g., <code>date_decimal(kbliDD)</code> would go back to a date from the numbers. Or if you had characters of dates like “2009-02-10” you could make that a date via <code>ymd("2009-02-10")</code>. You will encounter dates in an Excel spreadsheet at some point. And when that happens, even the most religious of people will declare that there is no god. Remember that <code>lubridate</code> can help.</p>
 </div>
 <div id="tidy-it-up" class="section level2 hasAnchor" number="2.9">
@@ -1389,14 +1390,15 @@ div.csl-indent {
 <span id="cb37-8"><a href="the-measure-of-time.html#cb37-8" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Date&quot;</span>,<span class="at">y=</span><span class="fu">element_blank</span>(),</span>
 <span id="cb37-9"><a href="the-measure-of-time.html#cb37-9" tabindex="-1"></a>       <span class="at">title=</span><span class="st">&quot;Average Temperature and Precipitation, Bellingham WA&quot;</span>) <span class="sc">+</span></span>
 <span id="cb37-10"><a href="the-measure-of-time.html#cb37-10" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span></code></pre></div>
-<p><img src="01Intro_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<pre><code>## Warning: `label` cannot be a &lt;ggplot2::element_blank&gt; object.</code></pre>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-21-1.png" alt="" width="672" /></p>
 <p>Also note that this works with <code>ts</code> objects as well.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="the-measure-of-time.html#cb38-1" tabindex="-1"></a>co2_tb <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(co2)</span>
-<span id="cb38-2"><a href="the-measure-of-time.html#cb38-2" tabindex="-1"></a>co2_tb <span class="sc">%&gt;%</span> </span>
-<span id="cb38-3"><a href="the-measure-of-time.html#cb38-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>index,<span class="at">y=</span>value)) <span class="sc">+</span> </span>
-<span id="cb38-4"><a href="the-measure-of-time.html#cb38-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb38-5"><a href="the-measure-of-time.html#cb38-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Date&quot;</span>,<span class="at">y=</span><span class="fu">expression</span>(CO[<span class="dv">2</span>]<span class="sc">~</span>(ppm)))</span></code></pre></div>
-<p><img src="01Intro_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="the-measure-of-time.html#cb39-1" tabindex="-1"></a>co2_tb <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(co2)</span>
+<span id="cb39-2"><a href="the-measure-of-time.html#cb39-2" tabindex="-1"></a>co2_tb <span class="sc">%&gt;%</span> </span>
+<span id="cb39-3"><a href="the-measure-of-time.html#cb39-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>index,<span class="at">y=</span>value)) <span class="sc">+</span> </span>
+<span id="cb39-4"><a href="the-measure-of-time.html#cb39-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb39-5"><a href="the-measure-of-time.html#cb39-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Date&quot;</span>,<span class="at">y=</span><span class="fu">expression</span>(CO[<span class="dv">2</span>]<span class="sc">~</span>(ppm)))</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-22-1.png" alt="" width="672" /></p>
 <p>I really hate use base plotting and will probably convert back and forth a good deal. You are welcome to use base plotting (e.g., <code>plot</code>) or <code>ggplot</code>.</p>
 </div>
 <div id="your-work" class="section level2 hasAnchor" number="2.10">
@@ -1410,9 +1412,9 @@ div.csl-indent {
 </blockquote>
 <p>The time index is monthly and starts in 1750. So the first observation is January 1, 1750.</p>
 <p>Let’s go get the data. Below, I’ll download it from the web, save it into a file (that file goes into whatever your working directory is), and then read it.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="the-measure-of-time.html#cb39-1" tabindex="-1"></a>fname <span class="ot">&lt;-</span> <span class="st">&quot;https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Complete_TAVG_complete.txt&quot;</span></span>
-<span id="cb39-2"><a href="the-measure-of-time.html#cb39-2" tabindex="-1"></a><span class="fu">download.file</span>(fname, <span class="st">&quot;data/Complete_TAVG_complete.txt&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="the-measure-of-time.html#cb40-1" tabindex="-1"></a>tAnoms <span class="ot">&lt;-</span> <span class="fu">read_table</span>(<span class="st">&quot;data/Complete_TAVG_complete.txt&quot;</span>, <span class="at">skip =</span> <span class="dv">35</span>,<span class="at">na =</span> <span class="st">&quot;NaN&quot;</span>,<span class="at">col_names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="the-measure-of-time.html#cb40-1" tabindex="-1"></a>fname <span class="ot">&lt;-</span> <span class="st">&quot;https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Complete_TAVG_complete.txt&quot;</span></span>
+<span id="cb40-2"><a href="the-measure-of-time.html#cb40-2" tabindex="-1"></a><span class="fu">download.file</span>(fname, <span class="st">&quot;data/Complete_TAVG_complete.txt&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="the-measure-of-time.html#cb41-1" tabindex="-1"></a>tAnoms <span class="ot">&lt;-</span> <span class="fu">read_table</span>(<span class="st">&quot;data/Complete_TAVG_complete.txt&quot;</span>, <span class="at">skip =</span> <span class="dv">35</span>,<span class="at">na =</span> <span class="st">&quot;NaN&quot;</span>,<span class="at">col_names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
@@ -1430,57 +1432,57 @@ div.csl-indent {
 ##   X12 = col_double()
 ## )</code></pre>
 <p>We will just keep the first three columns of the data which are the year, month, and temperature anomaly.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="the-measure-of-time.html#cb42-1" tabindex="-1"></a>tAnoms <span class="ot">&lt;-</span> tAnoms[,<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="sc">%&gt;%</span></span>
-<span id="cb42-2"><a href="the-measure-of-time.html#cb42-2" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Year =</span> X1, <span class="at">Month =</span> X2, <span class="at">degC =</span> X3)</span>
-<span id="cb42-3"><a href="the-measure-of-time.html#cb42-3" tabindex="-1"></a><span class="fu">glimpse</span>(tAnoms)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="the-measure-of-time.html#cb43-1" tabindex="-1"></a>tAnoms <span class="ot">&lt;-</span> tAnoms[,<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="the-measure-of-time.html#cb43-2" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Year =</span> X1, <span class="at">Month =</span> X2, <span class="at">degC =</span> X3)</span>
+<span id="cb43-3"><a href="the-measure-of-time.html#cb43-3" tabindex="-1"></a><span class="fu">glimpse</span>(tAnoms)</span></code></pre></div>
 <pre><code>## Rows: 3,300
 ## Columns: 3
 ## $ Year  &lt;dbl&gt; 1750, 1750, 1750, 1750, 1750, 1750, 1750, 1750, 1750, 1750, 1750…
 ## $ Month &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9…
 ## $ degC  &lt;dbl&gt; -0.252, -1.261, 0.225, 0.288, -0.970, -0.573, 0.390, 0.947, -0.4…</code></pre>
 <p>I’ll toss out the data prior to 1851 as well. The uncertainty is pretty large before that time because there weren’t a ton of thermometers contributing to this global record prior to the mid-19th century.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="the-measure-of-time.html#cb44-1" tabindex="-1"></a>tAnoms <span class="ot">&lt;-</span> tAnoms <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Year <span class="sc">&gt;</span> <span class="dv">1850</span>)</span>
-<span id="cb44-2"><a href="the-measure-of-time.html#cb44-2" tabindex="-1"></a><span class="fu">glimpse</span>(tAnoms)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="the-measure-of-time.html#cb45-1" tabindex="-1"></a>tAnoms <span class="ot">&lt;-</span> tAnoms <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Year <span class="sc">&gt;</span> <span class="dv">1850</span>)</span>
+<span id="cb45-2"><a href="the-measure-of-time.html#cb45-2" tabindex="-1"></a><span class="fu">glimpse</span>(tAnoms)</span></code></pre></div>
 <pre><code>## Rows: 2,088
 ## Columns: 3
 ## $ Year  &lt;dbl&gt; 1851, 1851, 1851, 1851, 1851, 1851, 1851, 1851, 1851, 1851, 1851…
 ## $ Month &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9…
 ## $ degC  &lt;dbl&gt; -0.012, -0.618, -1.146, -1.051, -0.299, -0.238, 0.058, -0.277, -…</code></pre>
 <p>Ok. We have <code>tAnoms</code> which is a standard <code>tibble</code>. This will suit many of our needs but we will need the <code>ts</code> and <code>zoo</code> classes from time to time. So, let’s make <code>ts</code> and <code>zoo</code> objects from the data.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="the-measure-of-time.html#cb46-1" tabindex="-1"></a>tAnoms_ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(tAnoms<span class="sc">$</span>degC,<span class="at">start=</span><span class="fu">c</span>(<span class="dv">1851</span>,<span class="dv">1</span>),<span class="at">frequency =</span> <span class="dv">12</span>)</span>
-<span id="cb46-2"><a href="the-measure-of-time.html#cb46-2" tabindex="-1"></a>tAnoms_zoo <span class="ot">&lt;-</span> <span class="fu">zoo</span>(tAnoms<span class="sc">$</span>degC,</span>
-<span id="cb46-3"><a href="the-measure-of-time.html#cb46-3" tabindex="-1"></a>                  <span class="at">order.by =</span> <span class="fu">as.Date</span>(<span class="fu">paste</span>(tAnoms<span class="sc">$</span>Year,<span class="st">&quot;-&quot;</span>,tAnoms<span class="sc">$</span>Month,<span class="st">&quot;-&quot;</span>,<span class="st">&quot;1&quot;</span>,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="the-measure-of-time.html#cb47-1" tabindex="-1"></a>tAnoms_ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(tAnoms<span class="sc">$</span>degC,<span class="at">start=</span><span class="fu">c</span>(<span class="dv">1851</span>,<span class="dv">1</span>),<span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb47-2"><a href="the-measure-of-time.html#cb47-2" tabindex="-1"></a>tAnoms_zoo <span class="ot">&lt;-</span> <span class="fu">zoo</span>(tAnoms<span class="sc">$</span>degC,</span>
+<span id="cb47-3"><a href="the-measure-of-time.html#cb47-3" tabindex="-1"></a>                  <span class="at">order.by =</span> <span class="fu">as.Date</span>(<span class="fu">paste</span>(tAnoms<span class="sc">$</span>Year,<span class="st">&quot;-&quot;</span>,tAnoms<span class="sc">$</span>Month,<span class="st">&quot;-&quot;</span>,<span class="st">&quot;1&quot;</span>,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)))</span></code></pre></div>
 <p>Now we have three different objects all containing the same data. We have objects that are class <code>tibble</code>, <code>ts</code>, and <code>zoo</code>. Ideally you will be comfortable working with all three of these objects. E.g., figure out how to plot, summarize the all the objects.</p>
 <p>For instance, here is a plot of just August temperatures using each data set. Note how I used <code>month</code> from <code>lubridate</code> in one instance and <code>cycle</code> in another just to show you that there are many different ways of doing things.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="the-measure-of-time.html#cb47-1" tabindex="-1"></a>tAnoms <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Month <span class="sc">==</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb47-2"><a href="the-measure-of-time.html#cb47-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>Year,<span class="at">y=</span>degC)) <span class="sc">+</span></span>
-<span id="cb47-3"><a href="the-measure-of-time.html#cb47-3" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb47-4"><a href="the-measure-of-time.html#cb47-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="fu">expression</span>(Anomaly<span class="sc">~</span>degree<span class="sc">*</span>C), </span>
-<span id="cb47-5"><a href="the-measure-of-time.html#cb47-5" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;August Temperatures&quot;</span>, </span>
-<span id="cb47-6"><a href="the-measure-of-time.html#cb47-6" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&quot;Anomalies relative to the Jan 1951-Dec 1980  average&quot;</span>) <span class="sc">+</span></span>
-<span id="cb47-7"><a href="the-measure-of-time.html#cb47-7" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
-<p><img src="01Intro_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="the-measure-of-time.html#cb48-1" tabindex="-1"></a><span class="fu">plot</span>(tAnoms_zoo[<span class="fu">month</span>(tAnoms_zoo)<span class="sc">==</span><span class="dv">8</span>], <span class="at">xlab=</span><span class="st">&quot;Year&quot;</span>,<span class="at">ylab=</span><span class="fu">expression</span>(Anomaly<span class="sc">~</span>degree<span class="sc">*</span>C), </span>
-<span id="cb48-2"><a href="the-measure-of-time.html#cb48-2" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;August Temperatures&quot;</span>,</span>
-<span id="cb48-3"><a href="the-measure-of-time.html#cb48-3" tabindex="-1"></a>     <span class="at">sub =</span> <span class="st">&quot;Anomalies relative to the Jan 1951-Dec 1980  average&quot;</span>)</span></code></pre></div>
-<p><img src="01Intro_files/figure-html/unnamed-chunk-28-2.png" width="672" /></p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="the-measure-of-time.html#cb49-1" tabindex="-1"></a>augtAnoms_ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(tAnoms_ts[<span class="fu">cycle</span>(tAnoms_ts)<span class="sc">==</span><span class="dv">8</span>],<span class="at">start=</span><span class="dv">1851</span>)</span>
-<span id="cb49-2"><a href="the-measure-of-time.html#cb49-2" tabindex="-1"></a><span class="fu">plot</span>(augtAnoms_ts, </span>
-<span id="cb49-3"><a href="the-measure-of-time.html#cb49-3" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Year&quot;</span>,<span class="at">ylab=</span><span class="fu">expression</span>(Anomaly<span class="sc">~</span>degree<span class="sc">*</span>C), </span>
-<span id="cb49-4"><a href="the-measure-of-time.html#cb49-4" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;August Temperatures&quot;</span>,</span>
-<span id="cb49-5"><a href="the-measure-of-time.html#cb49-5" tabindex="-1"></a>     <span class="at">sub =</span> <span class="st">&quot;Anomalies relative to the Jan 1951-Dec 1980  average&quot;</span>)</span></code></pre></div>
-<p><img src="01Intro_files/figure-html/unnamed-chunk-28-3.png" width="672" /></p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="the-measure-of-time.html#cb48-1" tabindex="-1"></a>tAnoms <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Month <span class="sc">==</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb48-2"><a href="the-measure-of-time.html#cb48-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>Year,<span class="at">y=</span>degC)) <span class="sc">+</span></span>
+<span id="cb48-3"><a href="the-measure-of-time.html#cb48-3" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb48-4"><a href="the-measure-of-time.html#cb48-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="fu">expression</span>(Anomaly<span class="sc">~</span>degree<span class="sc">*</span>C), </span>
+<span id="cb48-5"><a href="the-measure-of-time.html#cb48-5" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;August Temperatures&quot;</span>, </span>
+<span id="cb48-6"><a href="the-measure-of-time.html#cb48-6" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&quot;Anomalies relative to the Jan 1951-Dec 1980  average&quot;</span>) <span class="sc">+</span></span>
+<span id="cb48-7"><a href="the-measure-of-time.html#cb48-7" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-28-1.png" alt="" width="672" /></p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="the-measure-of-time.html#cb49-1" tabindex="-1"></a><span class="fu">plot</span>(tAnoms_zoo[<span class="fu">month</span>(tAnoms_zoo)<span class="sc">==</span><span class="dv">8</span>], <span class="at">xlab=</span><span class="st">&quot;Year&quot;</span>,<span class="at">ylab=</span><span class="fu">expression</span>(Anomaly<span class="sc">~</span>degree<span class="sc">*</span>C), </span>
+<span id="cb49-2"><a href="the-measure-of-time.html#cb49-2" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;August Temperatures&quot;</span>,</span>
+<span id="cb49-3"><a href="the-measure-of-time.html#cb49-3" tabindex="-1"></a>     <span class="at">sub =</span> <span class="st">&quot;Anomalies relative to the Jan 1951-Dec 1980  average&quot;</span>)</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-28-2.png" alt="" width="672" /></p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="the-measure-of-time.html#cb50-1" tabindex="-1"></a>augtAnoms_ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(tAnoms_ts[<span class="fu">cycle</span>(tAnoms_ts)<span class="sc">==</span><span class="dv">8</span>],<span class="at">start=</span><span class="dv">1851</span>)</span>
+<span id="cb50-2"><a href="the-measure-of-time.html#cb50-2" tabindex="-1"></a><span class="fu">plot</span>(augtAnoms_ts, </span>
+<span id="cb50-3"><a href="the-measure-of-time.html#cb50-3" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Year&quot;</span>,<span class="at">ylab=</span><span class="fu">expression</span>(Anomaly<span class="sc">~</span>degree<span class="sc">*</span>C), </span>
+<span id="cb50-4"><a href="the-measure-of-time.html#cb50-4" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;August Temperatures&quot;</span>,</span>
+<span id="cb50-5"><a href="the-measure-of-time.html#cb50-5" tabindex="-1"></a>     <span class="at">sub =</span> <span class="st">&quot;Anomalies relative to the Jan 1951-Dec 1980  average&quot;</span>)</span></code></pre></div>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-28-3.png" alt="" width="672" /></p>
 </div>
 <div id="your-turn" class="section level3 hasAnchor" number="2.10.2">
 <h3><span class="header-section-number">2.10.2</span> Your Turn<a href="the-measure-of-time.html#your-turn" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Get somewhat comfy with basic data manipulation. Try to get a feel for how the times are stored in each class. When you are ready, do two things with each class (<code>tibble</code>, <code>ts</code>, and <code>zoo</code>). First, create and plot an annual mean temperature anomaly from the monthly data (e.g., 1851 will have one value that is the average of 12 temperatures from January to December). Second, report the trend in the data using the slope coefficient from a linear model. And if you are feeling spunky, try an optional third step: add a five-year centered moving average to each plot. I want you to do these with each class (<code>tibble</code>, <code>ts</code>, and <code>zoo</code>) because we will encounter all them as we move forward. Your plots, slopes, etc. should look the same for each class.</p>
 <p>I’ll start you off by showing one way to take these monthly data and make them annual.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="the-measure-of-time.html#cb50-1" tabindex="-1"></a>tAnomsAnn <span class="ot">&lt;-</span> tAnoms <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">degC =</span> <span class="fu">mean</span>(degC))</span>
-<span id="cb50-2"><a href="the-measure-of-time.html#cb50-2" tabindex="-1"></a>tAnomsAnn_ts <span class="ot">&lt;-</span> <span class="fu">aggregate.ts</span>(tAnoms_ts, <span class="at">nfrequency =</span> <span class="dv">1</span>, <span class="at">FUN =</span> mean)</span>
-<span id="cb50-3"><a href="the-measure-of-time.html#cb50-3" tabindex="-1"></a>tAnomsAnn_zoo <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(tAnoms_zoo, <span class="at">by =</span> year,<span class="at">FUN =</span> mean)</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="the-measure-of-time.html#cb51-1" tabindex="-1"></a>tAnomsAnn <span class="ot">&lt;-</span> tAnoms <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">degC =</span> <span class="fu">mean</span>(degC))</span>
+<span id="cb51-2"><a href="the-measure-of-time.html#cb51-2" tabindex="-1"></a>tAnomsAnn_ts <span class="ot">&lt;-</span> <span class="fu">aggregate.ts</span>(tAnoms_ts, <span class="at">nfrequency =</span> <span class="dv">1</span>, <span class="at">FUN =</span> mean)</span>
+<span id="cb51-3"><a href="the-measure-of-time.html#cb51-3" tabindex="-1"></a>tAnomsAnn_zoo <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(tAnoms_zoo, <span class="at">by =</span> year,<span class="at">FUN =</span> mean)</span></code></pre></div>
 <p>When I fit a linear model I find that the annual trend is 0.01 degrees C per year. That’s a degree per century. Yikes.</p>
 <p>I’ve hidden my code, but here is what I came up with in terms of plots.</p>
-<p><img src="01Intro_files/figure-html/unnamed-chunk-31-1.png" width="672" /><img src="01Intro_files/figure-html/unnamed-chunk-31-2.png" width="672" /><img src="01Intro_files/figure-html/unnamed-chunk-31-3.png" width="672" /></p>
+<p><img src="01Intro_files/figure-html/unnamed-chunk-31-1.png" alt="" width="672" /><img src="01Intro_files/figure-html/unnamed-chunk-31-2.png" alt="" width="672" /><img src="01Intro_files/figure-html/unnamed-chunk-31-3.png" alt="" width="672" /></p>
 </div>
 <div id="write-up-and-reflect" class="section level3 hasAnchor" number="2.10.3">
 <h3><span class="header-section-number">2.10.3</span> Write Up and Reflect<a href="the-measure-of-time.html#write-up-and-reflect" class="anchor-section" aria-label="Anchor link to header"></a></h3>

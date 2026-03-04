@@ -40,7 +40,7 @@ packageVersion("zoo")
 ```
 
 ```
-## [1] '1.8.14'
+## [1] '1.8.15'
 ```
 
 Get in the habit of updating packages regularly. A good way of doing that is via `update.packages()`. Because I'm usually content to let `R` update everything semi-automatically I usually run that as `update.packages(ask = FALSE, type = "binary")` from a *fresh `R` session*. Fresh here means that don't have packages already loaded -- e.g., go to Session | Restart R in Rstudio. Running that regularly (I do it every week, but I'm a pretty heavy user) is a very good idea. You can also click the little update button under the pacakges in RStudio if you prefer that kind of interaction.
@@ -64,7 +64,7 @@ data(LakeHuron)
 plot(LakeHuron)
 ```
 
-<img src="01Intro_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="01Intro_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" />
 
 OK, what's going on here? We loaded a data set of the level of Lake Huron (in feet) from 1875 to 1972, made a plot, and looked at some summary statistics. You can look at the help page for the data via `?LakeHuron`. 
 
@@ -107,7 +107,7 @@ str(co2)
 plot(co2)
 ```
 
-<img src="01Intro_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="01Intro_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" />
 
 These data are monthly and run from 1959 to 1998. From a purely practical standpoint you should make sure that you and `R` agree on the time-series properties of a data set. For instance, you should know the start and end times and the frequency (the number of observations per unit of time). Before you go further, can you predict what the output will be when you run `tsp(co2)`?
 
@@ -132,7 +132,7 @@ boxplot(LakeHuron, horizontal=TRUE,  outline=TRUE,  axes=FALSE,
         ylim=my.xlim, col = "lightgreen", add = TRUE, boxwex=3)
 ```
 
-<img src="01Intro_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="01Intro_files/figure-html/unnamed-chunk-9-1.png" alt="" width="672" />
 
 Given a sample size of less than 100, these data don't show much kurtosis or skew and in fact look pretty normal. That is, I wouldn't say they were platykurtic or negatively skewed as compared to a random expectation. How could I test such a thing? Well, there are tests in the `moments` package (e.g., `agostino.test(LakeHuron)`, `anscombe.test(LakeHuron)`, `jarque.test(c(LakeHuron)`) or we could use some kind of resampling method (e.g., bootstrapping). But here is where we get to the single most important mantra I have when working with data: plot and explore it.  **Plot your data. Plot your data. Plot your data**. Statistical significance is like pornography (to steal from United States Supreme Court Justice Potter Stewart), you know it when you see it.
 
@@ -208,7 +208,7 @@ plot(LakeHuron)
 abline(LakeHuronLinearModel,col="red")
 ```
 
-<img src="01Intro_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="01Intro_files/figure-html/unnamed-chunk-12-1.png" alt="" width="672" />
 
 We can see that how lake levels are changing at a rate of -0.02 feet per year.
 
@@ -282,7 +282,7 @@ OK. What have we learned? The object `kbli` is class `zoo` the time index is a `
 plot(kbli)
 ```
 
-<img src="01Intro_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="01Intro_files/figure-html/unnamed-chunk-16-1.png" alt="" width="672" />
 
 And look at some precip data with `window`. This is the 2024 water year.
 
@@ -291,7 +291,7 @@ plot(window(kbli$PRCP, start = as.Date("2023-11-01"),
      end = as.Date("2024-10-31")), ylab="Precip (mm)")
 ```
 
-<img src="01Intro_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="01Intro_files/figure-html/unnamed-chunk-17-1.png" alt="" width="672" />
 
 Reminder, this is a `zoo` object and so `R` uses `plot.zoo` to do the actual plotting even though you just type `plot`. Same goes for `window`.
 
@@ -320,7 +320,7 @@ temp_tb %>% ggplot(mapping = aes(x=decimalDate,y=TEMP)) +
     theme_minimal()
 ```
 
-<img src="01Intro_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="01Intro_files/figure-html/unnamed-chunk-19-1.png" alt="" width="672" />
 
 Most often I use `lubridate` for making date and time objects from characters or decimal dates. E.g., `date_decimal(kbliDD)` would go back to a date from the numbers. Or if you had characters of dates like "2009-02-10" you could make that a date via `ymd("2009-02-10")`. You will encounter dates in an Excel spreadsheet at some point. And when that happens, even the most religious of people will declare that there is no god. Remember that `lubridate` can help.
 
@@ -357,7 +357,11 @@ kbli_tb %>%
     theme_minimal()
 ```
 
-<img src="01Intro_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+```
+## Warning: `label` cannot be a <ggplot2::element_blank> object.
+```
+
+<img src="01Intro_files/figure-html/unnamed-chunk-21-1.png" alt="" width="672" />
 
 
 Also note that this works with `ts` objects as well.
@@ -371,7 +375,7 @@ co2_tb %>%
   labs(x="Date",y=expression(CO[2]~(ppm)))
 ```
 
-<img src="01Intro_files/figure-html/unnamed-chunk-22-1.png" width="672" />
+<img src="01Intro_files/figure-html/unnamed-chunk-22-1.png" alt="" width="672" />
 
 I really hate use base plotting and will probably convert back and forth a good deal. You are welcome to use base plotting (e.g., `plot`) or `ggplot`.
 
@@ -475,7 +479,7 @@ tAnoms %>% filter(Month == 8) %>%
   theme_minimal()
 ```
 
-<img src="01Intro_files/figure-html/unnamed-chunk-28-1.png" width="672" />
+<img src="01Intro_files/figure-html/unnamed-chunk-28-1.png" alt="" width="672" />
 
 ``` r
 plot(tAnoms_zoo[month(tAnoms_zoo)==8], xlab="Year",ylab=expression(Anomaly~degree*C), 
@@ -483,7 +487,7 @@ plot(tAnoms_zoo[month(tAnoms_zoo)==8], xlab="Year",ylab=expression(Anomaly~degre
      sub = "Anomalies relative to the Jan 1951-Dec 1980  average")
 ```
 
-<img src="01Intro_files/figure-html/unnamed-chunk-28-2.png" width="672" />
+<img src="01Intro_files/figure-html/unnamed-chunk-28-2.png" alt="" width="672" />
 
 ``` r
 augtAnoms_ts <- ts(tAnoms_ts[cycle(tAnoms_ts)==8],start=1851)
@@ -493,7 +497,7 @@ plot(augtAnoms_ts,
      sub = "Anomalies relative to the Jan 1951-Dec 1980  average")
 ```
 
-<img src="01Intro_files/figure-html/unnamed-chunk-28-3.png" width="672" />
+<img src="01Intro_files/figure-html/unnamed-chunk-28-3.png" alt="" width="672" />
 
 
 ### Your Turn
@@ -514,7 +518,7 @@ When I fit a linear model I find that the annual trend is 0.01 degrees C per yea
 
 I've hidden my code, but here is what I came up with in terms of plots.
 
-<img src="01Intro_files/figure-html/unnamed-chunk-31-1.png" width="672" /><img src="01Intro_files/figure-html/unnamed-chunk-31-2.png" width="672" /><img src="01Intro_files/figure-html/unnamed-chunk-31-3.png" width="672" />
+<img src="01Intro_files/figure-html/unnamed-chunk-31-1.png" alt="" width="672" /><img src="01Intro_files/figure-html/unnamed-chunk-31-2.png" alt="" width="672" /><img src="01Intro_files/figure-html/unnamed-chunk-31-3.png" alt="" width="672" />
 
 ### Write Up and Reflect
 Pass in a R Markdown doc with those plots. Leave all code visible, although you may quiet messages and warnings if desired. Turn in your knitted html. The last section of your document should include a reflection where you explain how it all went. What triumphs did you have? What is still confusing?

@@ -160,7 +160,7 @@ se_2 <- sqrt(phi^2 + 1)
 se_3 <- sqrt(phi^4 + phi^2 + 1)
 ```
 
-<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" />
 
 ## Using ARMA coefficients to forecast
 Now that we get the idea, let's work on a more sophisticated example using the fitted coefficients from an AR model. That is, we will build on our experience and use just the internal autocorrelation of a time series to forecast a few steps forward. Doing so is more interesting given stronger and longer memory processes. Thus, we will take the data of annual sunspot counts which you'll recall vary over about a decade and forecast the time series.
@@ -173,7 +173,7 @@ autoplot(sunspot.year) +
   theme_minimal()
 ```
 
-<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" />
 
 Until now we have been fitting AR and ARMA "by hand." We've been thinking about the models and deciding on the order based on ACF, PACF, AIC, etc. That is the smart way of doing things. It makes you think about the models, the processes, and so on. But some of you have already discovered the the `ar` and `auto.arima` functions which simplify this process (dangerously so^[Please use these automatic functions with care. They are blind algorithms that just operate until their stopping criteria are met. With great power comes great responsibility. They optimize based on information criteria, not predictive power. E.g.,`auto.arima` uses AICc, AIC, or BIC to pick models. These penalize complexity, but not harshly enough when sample sizes are large or when noise structures are complex. A model can "look" optimal by those criteria yet still generalize poorly. By default, `auto.arima` will consider fairly large values for AR and MA terms (max.p = 5, max.q = 5), which can fit noise patterns. In short samples, this is especially risky. In time series, near-identical scores can come from very different models. Without domain insight, functions like `auto.arima` might favor a more complex model that explains idiosyncrasies and not the "truth."]). The later is in the `forecast` library. Here we will use `ar` to fit an AR($p$) model and $p$ will be selected for us magically (actually by AIC). 
 
@@ -207,7 +207,7 @@ plot(sunspot.year,xlim=c(1700, 1998),col="grey",lwd=1.5,
 lines(sunspot.forecast$pred,col="darkgreen",lwd=1.5)
 ```
 
-<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-7-1.png" alt="" width="672" />
 
 This is pretty cool. The sunspot data fit an AR(9) process and the `predict` function (look at `?predict.ar`) captures the cyclic nature of the sunspot data. Let's make a better plot by zooming in a little and adding the standard error of the forecast to the plot. I'll go `ggplot` for this one.
 
@@ -237,7 +237,7 @@ ggplot() +
 ## (`geom_line()`).
 ```
 
-<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" />
 
 But what would happen if we extended this forward? Where will the predictions go? What about the errors?
 
@@ -260,7 +260,7 @@ p1 <- ggplot(mapping = aes(x=x,y=y)) +
 p1
 ```
 
-<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-9-1.png" alt="" width="672" />
 
 If I want to estimate $\hat y_8$ we could start with a simple average. The idea is that if $y$ is a random variable it will have a central tenancy so forecasting it to the mean is kind of reasonable, right?  So we will assume that $\hat y_8 = \bar y$ and add it to the plot. 
 
@@ -278,7 +278,7 @@ yhat1
 p1 + geom_point(mapping = aes(x=8,y=yhat1),color="blue",size=3)
 ```
 
-<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-10-1.png" alt="" width="672" />
 
 We can also use moving averages to get just a tiny bit more sophisticated. You used these some when we were reading and plotting data. Recall the `filter` and `rollmean` functions? Let's roll our own but in this case we won't roll the function along the length of $y$ but just select how many points back in time to use to estimate $\hat y_8$ :
 
@@ -300,7 +300,7 @@ yhat2
 p1 + geom_point(mapping = aes(x=8,y=yhat2),color="blue",size=3)
 ```
 
-<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-11-1.png" alt="" width="672" />
 
 I know some of you are already programming quite a bit and have asked questions about how to write functions. Feel free to ignore if this doesn't interest you. I'll slip a little code snippet in here here so that if we set `n` to `NULL` we will just get the average.
 
@@ -380,7 +380,7 @@ yhat3
 p1 + geom_point(mapping = aes(x=8,y=yhat3),color="blue",size=3)
 ```
 
-<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-15-1.png" alt="" width="672" />
 
 So above we are estimating the 8th value of $y$ using the four prior values where each is value is weighted:
 
@@ -433,7 +433,7 @@ p1 + geom_point(preds,mapping = aes(x=x,y=yhat),
             position = position_nudge(y = -0.25),color="blue",size=3)
 ```
 
-<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-18-1.png" alt="" width="672" />
 
 These are all reasonable predictions but not especially interesting. But let's think about the weighted moving average differently. Imagine the weighted average where we consider the entire series and assign exponentially smaller weights as we go back in time. For example if we started with a smoothing coefficient of $\alpha = 0.9$, our weights going back in time from 7 would be:
 
@@ -452,7 +452,7 @@ ggplot() + geom_point(aes(x=x,y=y)) +
        x="Number of backwards time steps")
 ```
 
-<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-19-1.png" alt="" width="672" />
 
 You've probably spotted a problem. We can't use these weights like we did the moving average because the that the series sums to more than one. That screws up the weighted moving average concept. What Holt (or maybe all the way back to Poisson -- I'm not up on the history of math) did was solve this elegantly as:
 $$ \hat y_t  = \alpha \times y_t + (1 - \alpha) \times \hat y_{t-1}$$
@@ -503,7 +503,7 @@ ggplot(mapping = aes(x=x,y=y)) +
             position = position_nudge(y = -0.25),color="blue",size=3)
 ```
 
-<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-21-1.png" alt="" width="672" />
 
 This is the base concept underneath Holt-Winters smoothing. The book walks you through how to go from $\hat y_t  = \alpha \times y_t + (1 - \alpha) \times \hat y_{t-1}$ (eq. 3.15) to the entire Holt-Winters method (eq. 3.21) which is composed of combining the simple smoothing as shown above ($\alpha$) with the trend ($\beta$) and seasonality ($\gamma$) to to do the forecasting. The trick is figuring out what the parameters ($\alpha$, $\beta$, $\gamma$) are. The `HoltWinters` function does this with numeric optimization -- in the default case minimizing the sum of the squared errors for all three parameters. 
 
@@ -526,26 +526,26 @@ hw
 ## HoltWinters(x = co2)
 ## 
 ## Smoothing parameters:
-##  alpha: 0.5306546
-##  beta : 0.01455503
-##  gamma: 0.3019897
+##  alpha: 0.5314171
+##  beta : 0.01428484
+##  gamma: 0.3037014
 ## 
 ## Coefficients:
 ##            [,1]
-## a   427.2432590
-## b     0.2152986
-## s1   -1.7319226
-## s2   -3.1603238
-## s3   -3.1203881
-## s4   -1.7525459
-## s5   -0.4967728
-## s6    0.4805736
-## s7    1.1996301
-## s8    1.6694987
-## s9    2.9822135
-## s10   3.4534960
-## s11   2.7131830
-## s12   0.6168803
+## a   428.2477315
+## b     0.2109565
+## s1    1.2044837
+## s2    1.6740867
+## s3    2.9867467
+## s4    3.4581457
+## s5    2.7184633
+## s6    0.6218410
+## s7   -1.7636416
+## s8   -3.1574661
+## s9   -3.0816552
+## s10  -1.7310139
+## s11  -0.5470361
+## s12   0.4506814
 ```
 
 ``` r
@@ -554,7 +554,7 @@ plot(co2,xlim=c(1980,2040),ylim=c(340,460),
 lines(predict(hw,n.ahead = 120),col="blue")
 ```
 
-<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-22-1.png" width="672" />
+<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-22-1.png" alt="" width="672" />
 
 
 
@@ -574,7 +574,7 @@ ggplot(ch4,mapping = aes(x=DecimalDate,y=ppb)) +
        title="Global Monthly Mean Methane Concentration")
 ```
 
-<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-23-1.png" width="672" />
+<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-23-1.png" alt="" width="672" />
 
 ``` r
 # make a ts object
@@ -603,7 +603,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+<img src="05TimeSeries-Forecast_files/figure-html/unnamed-chunk-24-1.png" alt="" width="672" />
 
 #### AR($p$) Forecast
 And fit an AR($p$) model via:
@@ -620,9 +620,9 @@ ch4.ar
 ## 
 ## Coefficients:
 ##       1        2        3        4  
-##  1.0802  -0.1542  -0.0289   0.0891  
+##  1.0790  -0.1532  -0.0283   0.0887  
 ## 
-## Order selected 4  sigma^2 estimated as  71.72
+## Order selected 4  sigma^2 estimated as  71.87
 ```
 
 Forecast the training data over the period of the testing data. Overlay the testing data on your plot. How do they compare visually? Now compare the predicted data to the withheld (test) data statistically (e.g., correlation and RMSE). Is this a "good" model? Can you explain what is going on with these predictions?
@@ -635,14 +635,6 @@ And make a Holt-winters model too.
 
 ``` r
 ch4.hw <- HoltWinters(ch4.train)
-```
-
-```
-## Warning in HoltWinters(ch4.train): optimization difficulties: ERROR:
-## ABNORMAL_TERMINATION_IN_LNSRCH
-```
-
-``` r
 ch4.hw
 ```
 
@@ -653,26 +645,26 @@ ch4.hw
 ## HoltWinters(x = ch4.train)
 ## 
 ## Smoothing parameters:
-##  alpha: 0.8729582
-##  beta : 0.01981042
+##  alpha: 0.872475
+##  beta : 0.01994403
 ##  gamma: 1
 ## 
 ## Coefficients:
 ##             [,1]
-## a   1839.8827680
-## b      0.5998914
-## s1     1.8281395
-## s2     1.3145093
-## s3     0.5110901
-## s4    -1.9972249
-## s5    -7.0008862
-## s6    -9.9788581
-## s7    -6.6378429
-## s8    -0.2315650
-## s9     4.5676653
-## s10    6.2974446
-## s11    4.8814883
-## s12    2.5872320
+## a   1839.9285798
+## b      0.6024801
+## s1     1.8076307
+## s2     1.3062933
+## s3     0.4966191
+## s4    -2.0179314
+## s5    -6.9834049
+## s6    -9.9796454
+## s7    -6.6316441
+## s8    -0.1604993
+## s9     4.5841619
+## s10    6.2374132
+## s11    4.8811614
+## s12    2.6214202
 ```
 
 Forecast the training data over the period of the testing data. Overlay the testing data on your plot. How do they compare visually? Now compare the predicted data to the withheld (test) data statistically  (e.g., correlation and RMSE). Is this a "good" model? Can you explain what is going on with these predictions?

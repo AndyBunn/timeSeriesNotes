@@ -57,13 +57,13 @@ ols1 <- lm(y~x)
 Acf(residuals(ols1)) # problem with independence
 ```
 
-<img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-3-1.png" alt="" width="672" />
 
 ``` r
 Pacf(residuals(ols1)) # looks like an AR1
 ```
 
-<img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-3-2.png" width="672" />
+<img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-3-2.png" alt="" width="672" />
 
 ``` r
 # step 3 - get a good model
@@ -108,7 +108,7 @@ ols2 <- lm(y2~x2)
 Acf(residuals(ols2)) # clean
 ```
 
-<img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-3-3.png" width="672" />
+<img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-3-3.png" alt="" width="672" />
 
 ### GLS
 We have all been taught OLS. OLS is a **method** for estimating the unknown parameters in a linear regression model -- e.g., estimating the intercept ($\beta_0$) and slope ($\beta_1$) of a line in the formula $y=\beta_0 + \beta_1x$. OLS works by choosing the parameters of a linear function by minimizing the sum of the squares of the differences between the observed dependent variable ($y$) in the given data set and those predicted by the linear function (e.g., $y=\beta_0 + \beta_1x$ in the example above, but note that you can have more than one independent variable in a multiple regression). If conditions like homoscedasticity, independence, and normality are met, the OLS estimators are optimal (often called BLUE -- Best Linear Unbiased Estimators). In other words, when the assumptions are met, OLS works. OLS has a nice property that teaching it is relatively simple and can be done without a bunch of matrix algebra. You can calculate the sum of squares by hand and in intro stats courses we relate OLS to simpler concepts like correlation.
@@ -161,13 +161,13 @@ summary(gls1)
 Acf(residuals(gls1)) # problem with independence
 ```
 
-<img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" />
 
 ``` r
 Pacf(residuals(gls1)) # looks like an AR1
 ```
 
-<img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-4-2.png" width="672" />
+<img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-4-2.png" alt="" width="672" />
 
 The residuals of this model are autocorrelated as an AR(1) process from looking at the plots. Thus, we have violated the assumption of independent residuals. But do not despair. We will use a GLS model that allows us to specify an AR(1) correlation structure for the residuals and perform hypothesis testing in the presence of this temporal structure. Doing so, will give us new and improved estimates of the parameters. We will thus sleep well knowing in our hearts that we have done good.
 
@@ -217,7 +217,7 @@ summary(gls2)
 Acf(residuals(gls2,type="normalized")) # clean!
 ```
 
-<img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" />
 
 We ask for the "normalized" residuals above because they are the transformed residuals that account for the error correlation and heteroscedasticity structure we specified. They’re essentially standardized residuals that assume your model’s covariance matrix is correct.
 
@@ -273,11 +273,16 @@ ggplot(data=dat, aes(x=Year)) +
 ```
 
 ```
+## Ignoring unknown labels:
+## • sub : "Total Flow for Water Year"
+```
+
+```
 ## Warning: Removed 4 rows containing missing values or values outside the scale range
 ## (`geom_line()`).
 ```
 
-<img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" />
 
 The main gist of the paper is that precipitation explains most of the variability in the river's flow but that temperature is important under certain conditions. E.g., "Different combinations of temperature, precipitation, and soil moisture can result in flow deficits of similar magnitude, but recent droughts have been amplified by warmer temperatures that exacerbate the effects of relatively modest precipitation deficits." This is cool: Transpiration and evaporation are greater when it's warmer, right? The cool thing that Woodhouse et al. have done is tease out the relationship between precipitation and temperature in a new way.
 

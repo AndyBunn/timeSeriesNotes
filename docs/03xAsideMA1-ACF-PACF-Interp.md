@@ -42,7 +42,7 @@ p3 <- ggPacf(y) + labs(title = NULL)
 grid.arrange(p1, p2, p3, layout_matrix = simpleLayoutMatrix)
 ```
 
-<img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-1-1.png" width="672" />
+<img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-1-1.png" alt="" width="672" />
 
 The time series plot shows typical short-term wiggliness — a feature of MA processes driven by shocks. The ACF shows a sharp drop-off after lag 1, which is the signature of an MA(1). The PACF, however, does something subtler: a bump at lag 1, and a surprising dip below zero at lag 2. That’s the focus of this document — understanding why this happens and what it tells us.
 
@@ -89,7 +89,7 @@ ggplot(res, aes(x = Simulated_theta, y = PACF_lag1)) +
   theme_minimal()
 ```
 
-<img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-3-1.png" alt="" width="672" />
 
 ### Why This Happens
 
@@ -124,7 +124,7 @@ ggplot(res, aes(x = PACF_lag1, y = PACF_lag2)) +
   theme_minimal()
 ```
 
-<img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" />
 
 Here we plot PACF lag 2 against the true theta used in each simulation. The consistent downward slope illustrates that the more influence theta has at lag 1, the more negative the partial correlation becomes at lag 2 — an indirect, but systematic pattern that is unique to MA(1) models.
 
@@ -146,7 +146,7 @@ ggplot(res, aes(x = Simulated_theta, y = PACF_lag2)) +
 ## `geom_smooth()` using formula = 'y ~ x'
 ```
 
-<img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="03xAsideMA1-ACF-PACF-Interp_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" />
 
 ### Why This Happens
 

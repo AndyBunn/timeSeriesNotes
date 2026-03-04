@@ -50,7 +50,12 @@ gridExtra::grid.arrange(p1,p2,p3,
                         layout_matrix=simpleLayoutMatrix)
 ```
 
-<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+```
+## Warning: `label` cannot be a <ggplot2::element_blank> object.
+## `label` cannot be a <ggplot2::element_blank> object.
+```
+
+<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-3-1.png" alt="" width="672" />
 
 This is an interesting pattern and characteristic of a MA(1) model. Note the strong first order autocorrelation. It doesn't have the decay that you have in an AR(1) model. That is characteristic of the MA processes. The PACF shows a strong negative correlation at lag 2 and then oscillates. This is characteristic behavior of the MA process as well but the reasons take a little work to wrap your head around. [This](https://stats.stackexchange.com/questions/281666/how-does-acf-pacf-identify-the-order-of-ma-and-ar-terms) is the best explanation I've seen for why this occurs that doesn't invovle a bunch of linear algebra. 
 
@@ -87,7 +92,12 @@ p3 <- ggPacf(y) + labs(title=element_blank())
 gridExtra::grid.arrange(p1,p2,p3,layout_matrix=simpleLayoutMatrix)
 ```
 
-<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+```
+## Warning: `label` cannot be a <ggplot2::element_blank> object.
+## `label` cannot be a <ggplot2::element_blank> object.
+```
+
+<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" />
 
 
 Now, in general we like to use models like this so that we can better understand the system by revealing something about the mechanisms that create the persistence in the data. In the case of the ARMA(1,1) model you can imagine a situation where $y_t$ has an *internal* dynamic that creates an AR(1) process and something *external* that creates the MA(1) process. For instance, let's imagine that we are measuring the growth of a perennial plant that requires a long growing season in $t-1$ to condition growth the following year ($t$). Perhaps it requires a lot of growing degree days in the current year $t$, and its internal biological needs rely on last year's stored energy $t-1$ for kicking off growth at the beginning of the year $t$. If growing degrees themselves are autocorrelated, perhaps because of atmospheric dynamics, you'd have internal autocorrelation and external autocorrelation. This might well create an ARMA(1,1) process in growth.
@@ -168,7 +178,7 @@ ggplot() + geom_line(aes(x=x,y=y)) +
   labs(x="time", title = "Simulated Non-Stationary ARMA(1,1) with Drift")
 ```
 
-<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-6-1.png" alt="" width="672" />
 
 You’ll see the series drifts upward over time—it’s not stationary.
 
@@ -181,7 +191,7 @@ ggplot() + geom_line(aes(x=x[-1],y=y_diff)) +
   labs(x="time", title = "Differenced Series (Looks Stationary)")
 ```
 
-<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-7-1.png" alt="" width="672" />
 
 The differenced version appears stationary. At this point, we could try fitting an ARMA model to it.
 
@@ -210,7 +220,12 @@ p3 <- ggPacf(y) + labs(title=element_blank())
 gridExtra::grid.arrange(p1,p2,p3,layout_matrix=simpleLayoutMatrix)
 ```
 
-<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+```
+## Warning: `label` cannot be a <ggplot2::element_blank> object.
+## `label` cannot be a <ggplot2::element_blank> object.
+```
+
+<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-9-1.png" alt="" width="672" />
 
 Now let's do some modeling of that series with several different formulations of the ARMA process. Here we are going to fit parameters (e.g., $\phi$ and $\theta$) to a time series ($y$) for a specified model (e.g., an ARMA(1,1) model). The parameters are fit by maximum likelihood (typically) and just like with most models we can assess the goodness of fit. Here we will use the `Arima` function in `forecast` (which is just a slightly fancier version of the `arima` function in the `stats` package).
 
@@ -262,7 +277,7 @@ dat %>% pivot_longer(cols=2:3) %>%
   labs(x="Time")
 ```
 
-<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-12-1.png" alt="" width="672" />
 
 Wow! Pretty impressive. The R$^2$ on that model is excellent at 0.73^[We haven't subjected that to any kind of training/testing scheme so we shouldn't get too excited].
 
@@ -320,7 +335,12 @@ p3 <- ggPacf(y) + labs(title=element_blank())
 gridExtra::grid.arrange(p1,p2,p3,layout_matrix=simpleLayoutMatrix)
 ```
 
-<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+```
+## Warning: `label` cannot be a <ggplot2::element_blank> object.
+## `label` cannot be a <ggplot2::element_blank> object.
+```
+
+<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-15-1.png" alt="" width="672" />
 
 Those look lovely. And we can use the `tsdiag` function. That gives the same info as the residual plots above but also plots the p-values from the Ljung–Box test. Larger values of `p` suggest independence at that lag. It's an ugly plot but a useful one:
 
@@ -329,7 +349,7 @@ Those look lovely. And we can use the `tsdiag` function. That gives the same inf
 tsdiag(arma11)
 ```
 
-<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-16-1.png" alt="" width="672" />
 
 Let's see how the ARMA(1,1) fits these data visually.
 
@@ -342,7 +362,7 @@ dat %>% pivot_longer(cols=2:3) %>%
   labs(x="Time")
 ```
 
-<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-17-1.png" alt="" width="672" />
 
 Wow! Pretty impressive. The R$^2$ on that model is excellent at 0.79^[Again, we haven't subjected that to any kind of training/testing scheme. We will talk about the challenges of training and testing data for time series models later in the course.]
 
@@ -365,7 +385,12 @@ p3 <- ggPacf(sst) + labs(title=element_blank())
 gridExtra::grid.arrange(p1,p2,p3,layout_matrix=simpleLayoutMatrix)
 ```
 
-<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+```
+## Warning: `label` cannot be a <ggplot2::element_blank> object.
+## `label` cannot be a <ggplot2::element_blank> object.
+```
+
+<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-18-1.png" alt="" width="672" />
 
 That is a complicated picture we have from the ACF and PACF plots. It certainly looks like there is a trend in the data so let's difference it first and then fit some ARMA models. 
 
@@ -381,7 +406,12 @@ p3 <- ggPacf(sst_diff) + labs(title=element_blank())
 gridExtra::grid.arrange(p1,p2,p3,layout_matrix=simpleLayoutMatrix)
 ```
 
-<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+```
+## Warning: `label` cannot be a <ggplot2::element_blank> object.
+## `label` cannot be a <ggplot2::element_blank> object.
+```
+
+<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-19-1.png" alt="" width="672" />
 
 Still a complicated picture we have from the ACF and PACF plots with the differencing. Now for some ARMA models. 
 
@@ -457,7 +487,12 @@ p3 <- ggPacf(y) + labs(title=element_blank())
 gridExtra::grid.arrange(p1,p2,p3,layout_matrix=simpleLayoutMatrix)
 ```
 
-<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-23-1.png" width="672" />
+```
+## Warning: `label` cannot be a <ggplot2::element_blank> object.
+## `label` cannot be a <ggplot2::element_blank> object.
+```
+
+<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-23-1.png" alt="" width="672" />
 
 Those are clean.
 
@@ -516,7 +551,7 @@ str(LynxHare)
 plot(LynxHare,main="Annual numbers of pelts in tousands")
 ```
 
-<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-25-1.png" width="672" />
+<img src="04TimeSeries-ARMA_files/figure-html/unnamed-chunk-25-1.png" alt="" width="672" />
 
 The adorable Snowshoe Hare is the primary food of the Canada Lynx and the these two species are closely linked by their population biology. Take a moment and write down how you can think about their population cycles in terms of their time-series properties. Can we try to understand how those populations might vary in terms of AR and MA processes? Do some wild and irresponsible speculation.
 

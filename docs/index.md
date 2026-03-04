@@ -1,7 +1,7 @@
 --- 
-title: "A collection of note for ESCI 504"
+title: "A collection of notes for ESCI 504"
 author: "Andy Bunn"
-date: "08-August-2025"
+date: "04-March-2026"
 description: "Helpful materials for ESCI 504"
 #github-repo: make one OpenDendro/dplR-workshop
 documentclass: book
@@ -39,7 +39,7 @@ This isn’t a comprehensive or final text. It’s a live document, shaped by yo
 
 ## Technical Setup
 
-This document was written in Markdown using the **bookdown** package and built with **R version 4.5.0`**. You should be up to date — or at least close — on your versions of R, RStudio, and relevant packages. You can keep your packages updated by running:
+This document was written in Markdown using the **bookdown** package and built with **R version 4.5.2`**. You should be up to date — or at least close — on your versions of R, RStudio, and relevant packages. You can keep your packages updated by running:
 
 ```r
 update.packages()
