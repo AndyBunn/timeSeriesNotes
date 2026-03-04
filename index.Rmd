@@ -1,5 +1,5 @@
 --- 
-title: "A collection of note for ESCI 504"
+title: "A collection of notes for ESCI 504"
 author: "Andy Bunn"
 date: "`r format(Sys.time(), '%d-%B-%Y')`"
 description: "Helpful materials for ESCI 504"
