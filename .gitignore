@@ -21,7 +21,6 @@ _cache/
 
 # misc
 todo.txt
-*.rds
 .DS_Store
 # docs is kept for GitHub Pages
 # build via bookdown::render_book("index.Rmd", "bookdown::gitbook")
