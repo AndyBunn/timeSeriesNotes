@@ -4,20 +4,20 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>A collection of notes for ESCI 504</title>
-  <meta name="description" content="Helpful materials for ESCI 504" />
+  <title>Time Series Analysis for Environmental Scientists: Notes for ESCI 504</title>
+  <meta name="description" content="Time series analysis notes and exercises for ESCI 504" />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="A collection of notes for ESCI 504" />
+  <meta property="og:title" content="Time Series Analysis for Environmental Scientists: Notes for ESCI 504" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:description" content="Helpful materials for ESCI 504" />
+  <meta property="og:description" content="Time series analysis notes and exercises for ESCI 504" />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="A collection of notes for ESCI 504" />
+  <meta name="twitter:title" content="Time Series Analysis for Environmental Scientists: Notes for ESCI 504" />
   
-  <meta name="twitter:description" content="Helpful materials for ESCI 504" />
+  <meta name="twitter:description" content="Time series analysis notes and exercises for ESCI 504" />
   
 
 <meta name="author" content="Andy Bunn" />
@@ -917,13 +917,13 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preamble</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#technical-setup"><i class="fa fa-check"></i><b>1.1</b> Technical Setup</a>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#whats-in-these-notes"><i class="fa fa-check"></i><b>1.1</b> What’s in These Notes</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#technical-setup"><i class="fa fa-check"></i><b>1.2</b> Technical Setup</a>
 <ul>
-<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#project-structure"><i class="fa fa-check"></i><b>1.1.1</b> Project Structure</a></li>
-<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#why-use-projects-in-r"><i class="fa fa-check"></i><b>1.1.2</b> Why Use Projects in R?</a></li>
-<li class="chapter" data-level="1.1.3" data-path="index.html"><a href="index.html#why-reproducibility-matters"><i class="fa fa-check"></i><b>1.1.3</b> Why Reproducibility Matters</a></li>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#project-structure"><i class="fa fa-check"></i><b>1.2.1</b> Project Structure</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#working-reproducibly-in-r"><i class="fa fa-check"></i><b>1.2.2</b> Working Reproducibly in R</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html"><i class="fa fa-check"></i><b>2</b> The Measure of Time</a>
@@ -1174,7 +1174,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A collection of notes for ESCI 504</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Time Series Analysis for Environmental Scientists: Notes for ESCI 504</a>
           </h1>
         </div>
 
@@ -1183,30 +1183,46 @@ div.csl-indent {
 
             <section class="normal" id="section-">
 <div id="header">
-<h1 class="title">A collection of notes for ESCI 504</h1>
+<h1 class="title">Time Series Analysis for Environmental Scientists: Notes for ESCI 504</h1>
 <p class="author"><em>Andy Bunn</em></p>
 <p class="date"><em>04-March-2026</em></p>
 </div>
-<div id="preamble" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">1</span> Preamble<a href="index.html#preamble" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="welcome" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">1</span> Welcome<a href="index.html#welcome" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>This document is a compilation of notes, examples, and exercises developed for our course on time series analysis, with a particular focus on environmental applications. Rather than follow a traditional textbook, we’ve taken a modular, hands-on approach. Each section builds on what came before, emphasizing interpretation, practical tools, and critical thinking about how time series models apply to real-world environmental questions.</p>
 <p>You’ll find annotated code, worked examples, and commentary throughout — some informal, some technical — all aimed at helping you <em>do</em> time series work, not just read about it. The examples often draw from environmental data: climate records, ecological time series, and other systems that change over time and space. But the core ideas and tools are broadly applicable.</p>
 <p>From time to time, I’ll refer you to more formal textbooks or peer-reviewed articles to go deeper into theory, context, or application. These serve as complements, not replacements, for what we’re doing here.</p>
 <p>The tone of these notes is meant to be accessible, pragmatic, and occasionally opinionated. You’ll see suggestions, cautions, and nudges — all based on what I’ve found helpful (and confusing) when learning and teaching these methods.</p>
 <p>This isn’t a comprehensive or final text. It’s a live document, shaped by your questions, feedback, and curiosity. Think of it as a field guide: not everything you’ll ever need, but hopefully exactly what you need to get your bearings, spot the patterns, and know what to do next.</p>
-<p><strong>Please note! This is a very drafty document and there are typos and all kinds of silliness in it.</strong></p>
-<div id="technical-setup" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Technical Setup<a href="index.html#technical-setup" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This document was written in Markdown using the <strong>bookdown</strong> package and built with <strong>R version 4.5.2`</strong>. You should be up to date — or at least close — on your versions of R, RStudio, and relevant packages. You can keep your packages updated by running:</p>
+<p><em>This is a living document — feedback and corrections are always welcome.</em></p>
+<div id="whats-in-these-notes" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> What’s in These Notes<a href="index.html#whats-in-these-notes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The notes move through the core ideas of time series analysis in roughly this order:</p>
+<ul>
+<li><strong>Introduction</strong> — what time series data are and how R represents them (the <code>ts</code> and <code>zoo</code> classes)</li>
+<li><strong>Decomposition and trends</strong> — separating a series into trend, seasonal, and irregular components</li>
+<li><strong>Autocorrelation</strong> — measuring and interpreting temporal dependence (ACF and PACF)</li>
+<li><strong>ARMA models</strong> — autoregressive and moving average models for stationary series</li>
+<li><strong>Forecasting</strong> — using a model’s correlation structure to predict future values</li>
+<li><strong>Cross-correlation</strong> — relationships between two time series</li>
+<li><strong>Time series regression</strong> — regression when your residuals aren’t independent</li>
+<li><strong>Filters</strong> — smoothing and extracting signals from noisy data</li>
+<li><strong>Frequency domain analysis</strong> — spectral methods for identifying periodic signals</li>
+</ul>
+<p>Each chapter builds on the last, so working through them in order is recommended — though the asides can be read independently.</p>
+</div>
+<div id="technical-setup" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Technical Setup<a href="index.html#technical-setup" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This document was written in Markdown using the <strong>bookdown</strong> package and built with <strong>R version 4.5.2</strong>. You should be up to date — or at least close — on your versions of R, RStudio, and relevant packages. You can keep your packages updated by running:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" tabindex="-1"></a><span class="fu">update.packages</span>()</span></code></pre></div>
-<div id="project-structure" class="section level3 hasAnchor" number="1.1.1">
-<h3><span class="header-section-number">1.1.1</span> Project Structure<a href="index.html#project-structure" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="project-structure" class="section level3 hasAnchor" number="1.2.1">
+<h3><span class="header-section-number">1.2.1</span> Project Structure<a href="index.html#project-structure" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>To follow along with the examples, you’ll need a working RStudio project. Here’s what to do:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>Create a new RStudio project</strong><br />
 Go to <strong>File → New Project → New Directory → New Project</strong>. Give it a name (e.g., <code>timeseries-notes</code>) and choose where to save it.</p></li>
 <li><p><strong>Download the <code>data/</code> folder</strong><br />
-You’ll find a folder named <code>data</code> that contains most of the datasets we’ll use (anything we don’t download directly in the code). Save this folder inside your project directory.</p>
+You’ll find the datasets we use in the <a href="https://github.com/AndyBunn/timeSeriesNotes/tree/main/data"><code>data/</code> folder on GitHub</a>. Download that folder and save it inside your project directory. (Anything we don’t load from the web directly will be read from here.)</p>
 <p>Your folder structure should look like this:</p>
 <pre><code>timeseries-course/
 ├── data/
@@ -1221,8 +1237,8 @@ In your code, use paths like <code>"data/jul65N.rds"</code> rather than full fil
 <p>Any code you write for homework, labs, or your own exploration should be saved in the main project folder (alongside the .Rproj file). This keeps your work organized and ensures it runs smoothly within the project environment.</p>
 <p>If you’re new to R projects, the key idea is this: treat your project folder as your workspace. All code, data, and outputs should live inside it. It makes everything cleaner and reproducible.</p>
 </div>
-<div id="why-use-projects-in-r" class="section level3 hasAnchor" number="1.1.2">
-<h3><span class="header-section-number">1.1.2</span> Why Use Projects in R?<a href="index.html#why-use-projects-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="working-reproducibly-in-r" class="section level3 hasAnchor" number="1.2.2">
+<h3><span class="header-section-number">1.2.2</span> Working Reproducibly in R<a href="index.html#working-reproducibly-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Think of an RStudio project like a <strong>toolbox</strong> or <strong>field kit</strong>. Everything you need for an analysis — your scripts, data, figures, notes — lives in one container. When you open the project, RStudio knows: <em>this is your workspace</em>. You don’t have to tell it where to find files or worry about breaking things if you move the folder.</p>
 <p>Projects help you:</p>
 <ul>
@@ -1236,22 +1252,9 @@ In your code, use paths like <code>"data/jul65N.rds"</code> rather than full fil
 </li>
 <li>Work seamlessly with Git and other tools for version control</li>
 </ul>
-<p>In short, RStudio projects make your work more organized, more robust, and easier to share.</p>
-</div>
-<div id="why-reproducibility-matters" class="section level3 hasAnchor" number="1.1.3">
-<h3><span class="header-section-number">1.1.3</span> Why Reproducibility Matters<a href="index.html#why-reproducibility-matters" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Science is only as strong as its ability to be checked, tested, and built upon. Reproducibility means that <strong>someone else — or your future self — can rerun your analysis and get the same results</strong>.</p>
-<p>In the world of data analysis, that means:</p>
-<ul>
-<li>Your code runs start to finish without manual tweaking<br />
-</li>
-<li>Your data is accessible, documented, and versioned<br />
-</li>
-<li>Your results (figures, summaries, statistics) are generated from your code, not copy-pasted<br />
-</li>
-<li>You (and others) can trace how a result came to be — and rerun it with new data if needed</li>
-</ul>
-<p>Working reproducibly isn’t just good practice — it’s essential for credible, transparent science. RStudio projects, scripted workflows, and literate programming tools like R Markdown and Bookdown are all part of that ecosystem. This course will help you build those habits as you learn the methods.</p>
+<p>Science is only as strong as its ability to be checked, tested, and built upon. Reproducibility means that <strong>someone else — or your future self — can rerun your analysis and get the same results</strong>. In practice, that means your code runs start to finish without manual tweaking, your data is accessible and versioned, and your results are generated from your code rather than copy-pasted. You (and others) can trace how any result came to be — and rerun it with new data if needed.</p>
+<p>Working reproducibly isn’t just good practice — it’s essential for credible, transparent science. RStudio projects, scripted workflows, and literate programming tools like R Markdown and Bookdown are all part of that ecosystem. This course will help you build those habits as you learn the methods.
+Working reproducibly isn’t just good practice — it’s essential for credible, transparent science. RStudio projects, scripted workflows, and literate programming tools like R Markdown and Bookdown are all part of that ecosystem. This course will help you build those habits as you learn the methods.</p>
 
 </div>
 </div>

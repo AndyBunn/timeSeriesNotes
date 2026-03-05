@@ -1,8 +1,8 @@
 --- 
-title: "A collection of notes for ESCI 504"
+title: "Time Series Analysis for Environmental Scientists: Notes for ESCI 504"
 author: "Andy Bunn"
 date: "`r format(Sys.time(), '%d-%B-%Y')`"
-description: "Helpful materials for ESCI 504"
+description: "Time series analysis notes and exercises for ESCI 504"
 #github-repo: make one OpenDendro/dplR-workshop
 documentclass: book
 bibliography: [packages.bib,otherRefs.bib]
@@ -23,7 +23,7 @@ output:
     split_bib: no
 ---
 
-# Preamble
+# Welcome
 
 This document is a compilation of notes, examples, and exercises developed for our course on time series analysis, with a particular focus on environmental applications. Rather than follow a traditional textbook, we’ve taken a modular, hands-on approach. Each section builds on what came before, emphasizing interpretation, practical tools, and critical thinking about how time series models apply to real-world environmental questions.
 
@@ -35,11 +35,27 @@ The tone of these notes is meant to be accessible, pragmatic, and occasionally o
 
 This isn’t a comprehensive or final text. It’s a live document, shaped by your questions, feedback, and curiosity. Think of it as a field guide: not everything you’ll ever need, but hopefully exactly what you need to get your bearings, spot the patterns, and know what to do next.
 
-**Please note! This is a very drafty document and there are typos and all kinds of silliness in it.**
+*This is a living document — feedback and corrections are always welcome.*
+
+## What’s in These Notes
+
+The notes move through the core ideas of time series analysis in roughly this order:
+
+- **Introduction** — what time series data are and how R represents them (the `ts` and `zoo` classes)
+- **Decomposition and trends** — separating a series into trend, seasonal, and irregular components
+- **Autocorrelation** — measuring and interpreting temporal dependence (ACF and PACF)
+- **ARMA models** — autoregressive and moving average models for stationary series
+- **Forecasting** — using a model’s correlation structure to predict future values
+- **Cross-correlation** — relationships between two time series
+- **Time series regression** — regression when your residuals aren’t independent
+- **Filters** — smoothing and extracting signals from noisy data
+- **Frequency domain analysis** — spectral methods for identifying periodic signals
+
+Each chapter builds on the last, so working through them in order is recommended — though the asides can be read independently.
 
 ## Technical Setup
 
-This document was written in Markdown using the **bookdown** package and built with **R version `r getRversion()``**. You should be up to date — or at least close — on your versions of R, RStudio, and relevant packages. You can keep your packages updated by running:
+This document was written in Markdown using the **bookdown** package and built with **R version `r getRversion()`**. You should be up to date — or at least close — on your versions of R, RStudio, and relevant packages. You can keep your packages updated by running:
 
 ```r
 update.packages()
@@ -53,7 +69,7 @@ To follow along with the examples, you’ll need a working RStudio project. Here
    Go to **File → New Project → New Directory → New Project**. Give it a name (e.g., `timeseries-notes`) and choose where to save it.
 
 2. **Download the `data/` folder**  
-   You’ll find a folder named `data` that contains most of the datasets we’ll use (anything we don’t download directly in the code). Save this folder inside your project directory.
+   You’ll find the datasets we use in the [`data/` folder on GitHub](https://github.com/AndyBunn/timeSeriesNotes/tree/main/data). Download that folder and save it inside your project directory. (Anything we don’t load from the web directly will be read from here.)
 
    Your folder structure should look like this:
    ```
@@ -76,7 +92,7 @@ Any code you write for homework, labs, or your own exploration should be saved i
 If you’re new to R projects, the key idea is this: treat your project folder as your workspace. All code, data, and outputs should live inside it. It makes everything cleaner and reproducible.
 
 
-### Why Use Projects in R?
+### Working Reproducibly in R
 
 Think of an RStudio project like a **toolbox** or **field kit**. Everything you need for an analysis — your scripts, data, figures, notes — lives in one container. When you open the project, RStudio knows: *this is your workspace*. You don’t have to tell it where to find files or worry about breaking things if you move the folder.
 
@@ -88,19 +104,9 @@ Projects help you:
 - Switch between different projects without mixing things up  
 - Work seamlessly with Git and other tools for version control  
 
-In short, RStudio projects make your work more organized, more robust, and easier to share.
+Science is only as strong as its ability to be checked, tested, and built upon. Reproducibility means that **someone else — or your future self — can rerun your analysis and get the same results**. In practice, that means your code runs start to finish without manual tweaking, your data is accessible and versioned, and your results are generated from your code rather than copy-pasted. You (and others) can trace how any result came to be — and rerun it with new data if needed.
 
-### Why Reproducibility Matters
-
-Science is only as strong as its ability to be checked, tested, and built upon. Reproducibility means that **someone else — or your future self — can rerun your analysis and get the same results**.
-
-In the world of data analysis, that means:
-
-- Your code runs start to finish without manual tweaking  
-- Your data is accessible, documented, and versioned  
-- Your results (figures, summaries, statistics) are generated from your code, not copy-pasted  
-- You (and others) can trace how a result came to be — and rerun it with new data if needed
-
+Working reproducibly isn’t just good practice — it’s essential for credible, transparent science. RStudio projects, scripted workflows, and literate programming tools like R Markdown and Bookdown are all part of that ecosystem. This course will help you build those habits as you learn the methods.
 Working reproducibly isn't just good practice — it’s essential for credible, transparent science. RStudio projects, scripted workflows, and literate programming tools like R Markdown and Bookdown are all part of that ecosystem. This course will help you build those habits as you learn the methods.
 
 

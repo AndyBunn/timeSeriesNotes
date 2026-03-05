@@ -1,8 +1,8 @@
-preamble
+welcome
+whats-in-these-notes
 technical-setup
 project-structure
-why-use-projects-in-r
-why-reproducibility-matters
+working-reproducibly-in-r
 the-measure-of-time
 big-idea
 reading
