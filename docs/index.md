@@ -1,7 +1,8 @@
 --- 
-title: "Time Series Analysis for Environmental Scientists: Notes for ESCI 504"
+title: "Time Series Analysis for Environmental Scientists"
+subtitle: "Notes for ESCI 504"
 author: "Andy Bunn"
-date: "04-March-2026"
+date: "06-March-2026"
 description: "Time series analysis notes and exercises for ESCI 504"
 #github-repo: make one OpenDendro/dplR-workshop
 documentclass: book
@@ -55,59 +56,36 @@ Each chapter builds on the last, so working through them in order is recommended
 
 ## Technical Setup
 
-This document was written in Markdown using the **bookdown** package and built with **R version 4.5.2**. You should be up to date — or at least close — on your versions of R, RStudio, and relevant packages. You can keep your packages updated by running:
+This document was written in Markdown using the **bookdown** package and built with **R version 4.5.2**. You should be reasonably up to date on your versions of R, RStudio, and relevant packages. You can update your packages by running:
 
-```r
+``` r
 update.packages()
 ```
 
 ### Project Structure
 
-To follow along with the examples, you’ll need a working RStudio project. Here’s what to do:
+To follow along with the examples, you'll want a working RStudio project.
 
-1. **Create a new RStudio project**  
-   Go to **File → New Project → New Directory → New Project**. Give it a name (e.g., `timeseries-notes`) and choose where to save it.
+1.  **Create a new RStudio project**\
+Go to **File → New Project → New Directory → New Project**. Give it a name (for example `timeseries-course`) and choose where to save it.
 
-2. **Download the `data/` folder**  
-   You’ll find the datasets we use in the [`data/` folder on GitHub](https://github.com/AndyBunn/timeSeriesNotes/tree/main/data). Download that folder and save it inside your project directory. (Anything we don’t load from the web directly will be read from here.)
+2.  **Download the `data/` folder**\
+The datasets used in the examples are available in the `data/` folder of the course repository. Download that folder and place it inside your project directory.
 
-   Your folder structure should look like this:
+You can download the data directly from the GitHub [repo](https://github.com/AndyBunn/timeseriesNotes). The hard link to it is:
+https://github.com/AndyBunn/timeseriesNotes/blob/main/data.zip 
+
+Once it's unzipped your folder structure should look something like this:
+
    ```
    timeseries-course/
    ├── data/
    │   ├── HansenSockeye.rds
    │   ├── jul65N.rds
    │   └── ...
-   └── timeseries-notes.Rproj
+   └── timeseries-course.Rproj
    ```
 
-3. **Refer to data files using relative paths**  
-   In your code, use paths like `"data/jul65N.rds"` rather than full file paths. This makes your work portable and easier to share or rerun later.
+3.  **Refer to data files using relative paths**
 
-4. **Store your own scripts in the root directory**
-
-Any code you write for homework, labs, or your own exploration should be saved in the main project folder (alongside the .Rproj file). This keeps your work organized and ensures it runs smoothly within the project environment.
-
-
-If you’re new to R projects, the key idea is this: treat your project folder as your workspace. All code, data, and outputs should live inside it. It makes everything cleaner and reproducible.
-
-
-### Working Reproducibly in R
-
-Think of an RStudio project like a **toolbox** or **field kit**. Everything you need for an analysis — your scripts, data, figures, notes — lives in one container. When you open the project, RStudio knows: *this is your workspace*. You don’t have to tell it where to find files or worry about breaking things if you move the folder.
-
-Projects help you:
-
-- Keep everything for a project in one place  
-- Use **relative paths** (like `"data/file.csv"`) that work on any computer  
-- Avoid hard-coded `setwd()` calls that break when folders change  
-- Switch between different projects without mixing things up  
-- Work seamlessly with Git and other tools for version control  
-
-Science is only as strong as its ability to be checked, tested, and built upon. Reproducibility means that **someone else — or your future self — can rerun your analysis and get the same results**. In practice, that means your code runs start to finish without manual tweaking, your data is accessible and versioned, and your results are generated from your code rather than copy-pasted. You (and others) can trace how any result came to be — and rerun it with new data if needed.
-
-Working reproducibly isn’t just good practice — it’s essential for credible, transparent science. RStudio projects, scripted workflows, and literate programming tools like R Markdown and Bookdown are all part of that ecosystem. This course will help you build those habits as you learn the methods.
-Working reproducibly isn't just good practice — it’s essential for credible, transparent science. RStudio projects, scripted workflows, and literate programming tools like R Markdown and Bookdown are all part of that ecosystem. This course will help you build those habits as you learn the methods.
-
-
-
+In your code, use paths like `"data/fishcatch.csv"` rather than full file paths. This keeps the code portable and ensures it will run on different machines without modification. E.g., `fishcatch <- read.csv("data/fishcatch.csv")`.

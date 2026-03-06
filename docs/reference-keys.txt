@@ -2,7 +2,6 @@ welcome
 whats-in-these-notes
 technical-setup
 project-structure
-working-reproducibly-in-r
 the-measure-of-time
 big-idea
 reading

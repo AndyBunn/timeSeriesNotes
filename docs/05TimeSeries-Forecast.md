@@ -526,26 +526,26 @@ hw
 ## HoltWinters(x = co2)
 ## 
 ## Smoothing parameters:
-##  alpha: 0.5314171
-##  beta : 0.01428484
-##  gamma: 0.3037014
+##  alpha: 0.5330001
+##  beta : 0.01411676
+##  gamma: 0.3031509
 ## 
 ## Coefficients:
 ##            [,1]
-## a   428.2477315
-## b     0.2109565
-## s1    1.2044837
-## s2    1.6740867
-## s3    2.9867467
-## s4    3.4581457
-## s5    2.7184633
-## s6    0.6218410
-## s7   -1.7636416
-## s8   -3.1574661
-## s9   -3.0816552
-## s10  -1.7310139
-## s11  -0.5470361
-## s12   0.4506814
+## a   428.2905291
+## b     0.2084006
+## s1    1.6745600
+## s2    2.9872259
+## s3    3.4584399
+## s4    2.7178241
+## s5    0.6210682
+## s6   -1.7630667
+## s7   -3.1567345
+## s8   -3.0807246
+## s9   -1.7299138
+## s10  -0.5457172
+## s11   0.4521307
+## s12   1.1608521
 ```
 
 ``` r
@@ -620,9 +620,9 @@ ch4.ar
 ## 
 ## Coefficients:
 ##       1        2        3        4  
-##  1.0790  -0.1532  -0.0283   0.0887  
+##  1.0788  -0.1526  -0.0287   0.0887  
 ## 
-## Order selected 4  sigma^2 estimated as  71.87
+## Order selected 4  sigma^2 estimated as  71.85
 ```
 
 Forecast the training data over the period of the testing data. Overlay the testing data on your plot. How do they compare visually? Now compare the predicted data to the withheld (test) data statistically (e.g., correlation and RMSE). Is this a "good" model? Can you explain what is going on with these predictions?
@@ -645,26 +645,26 @@ ch4.hw
 ## HoltWinters(x = ch4.train)
 ## 
 ## Smoothing parameters:
-##  alpha: 0.872475
-##  beta : 0.01994403
+##  alpha: 0.8723965
+##  beta : 0.01994267
 ##  gamma: 1
 ## 
 ## Coefficients:
 ##             [,1]
-## a   1839.9285798
-## b      0.6024801
-## s1     1.8076307
-## s2     1.3062933
-## s3     0.4966191
-## s4    -2.0179314
-## s5    -6.9834049
-## s6    -9.9796454
-## s7    -6.6316441
-## s8    -0.1604993
-## s9     4.5841619
-## s10    6.2374132
-## s11    4.8811614
-## s12    2.6214202
+## a   1839.9343262
+## b      0.6023756
+## s1     1.8530640
+## s2     1.3246237
+## s3     0.4930565
+## s4    -1.9923018
+## s5    -6.9914809
+## s6    -9.9997419
+## s7    -6.6153455
+## s8    -0.1684562
+## s9     4.5739170
+## s10    6.2523584
+## s11    4.8413518
+## s12    2.5956738
 ```
 
 Forecast the training data over the period of the testing data. Overlay the testing data on your plot. How do they compare visually? Now compare the predicted data to the withheld (test) data statistically  (e.g., correlation and RMSE). Is this a "good" model? Can you explain what is going on with these predictions?
