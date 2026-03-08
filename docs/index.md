@@ -2,7 +2,7 @@
 title: "Time Series Analysis for Environmental Scientists"
 subtitle: "Notes for ESCI 504"
 author: "Andy Bunn"
-date: "06-March-2026"
+date: "08-March-2026"
 description: "Time series analysis notes and exercises for ESCI 504"
 #github-repo: make one OpenDendro/dplR-workshop
 documentclass: book
@@ -88,4 +88,7 @@ Once it's unzipped your folder structure should look something like this:
 
 3.  **Refer to data files using relative paths**
 
-In your code, use paths like `"data/fishcatch.csv"` rather than full file paths. This keeps the code portable and ensures it will run on different machines without modification. E.g., `fishcatch <- read.csv("data/fishcatch.csv")`.
+In your code, use paths like `"data/HansenSockeye.rds"` rather than full file paths. This keeps the code portable and ensures it will run on different machines without modification. E.g., `fishcatch <- readRDS("data/HansenSockeye.rds")`.
+
+
+
