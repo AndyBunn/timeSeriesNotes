@@ -1267,13 +1267,13 @@ div.csl-indent {
 <div id="step-1-prepare-the-data" class="section level3 hasAnchor" number="8.9.1">
 <h3><span class="header-section-number">8.9.1</span> Step 1: Prepare the Data<a href="aside-ols-via-algebra-and-matrices.html#step-1-prepare-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We’ll use a small dataset with one predictor (X) and one response variable (y).</p>
-<div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb293-1"><a href="aside-ols-via-algebra-and-matrices.html#cb293-1" tabindex="-1"></a><span class="co"># Create a simple dataset</span></span>
-<span id="cb293-2"><a href="aside-ols-via-algebra-and-matrices.html#cb293-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  <span class="co"># For reproducibility</span></span>
-<span id="cb293-3"><a href="aside-ols-via-algebra-and-matrices.html#cb293-3" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>), <span class="at">ncol=</span><span class="dv">1</span>)  <span class="co"># 10 random predictors</span></span>
-<span id="cb293-4"><a href="aside-ols-via-algebra-and-matrices.html#cb293-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> X <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)  <span class="co"># Response variable with some noise</span></span>
-<span id="cb293-5"><a href="aside-ols-via-algebra-and-matrices.html#cb293-5" tabindex="-1"></a></span>
-<span id="cb293-6"><a href="aside-ols-via-algebra-and-matrices.html#cb293-6" tabindex="-1"></a><span class="co"># Display the data</span></span>
-<span id="cb293-7"><a href="aside-ols-via-algebra-and-matrices.html#cb293-7" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">X =</span> X, <span class="at">y =</span> y)</span></code></pre></div>
+<div class="sourceCode" id="cb294"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb294-1"><a href="aside-ols-via-algebra-and-matrices.html#cb294-1" tabindex="-1"></a><span class="co"># Create a simple dataset</span></span>
+<span id="cb294-2"><a href="aside-ols-via-algebra-and-matrices.html#cb294-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  <span class="co"># For reproducibility</span></span>
+<span id="cb294-3"><a href="aside-ols-via-algebra-and-matrices.html#cb294-3" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>), <span class="at">ncol=</span><span class="dv">1</span>)  <span class="co"># 10 random predictors</span></span>
+<span id="cb294-4"><a href="aside-ols-via-algebra-and-matrices.html#cb294-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> X <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)  <span class="co"># Response variable with some noise</span></span>
+<span id="cb294-5"><a href="aside-ols-via-algebra-and-matrices.html#cb294-5" tabindex="-1"></a></span>
+<span id="cb294-6"><a href="aside-ols-via-algebra-and-matrices.html#cb294-6" tabindex="-1"></a><span class="co"># Display the data</span></span>
+<span id="cb294-7"><a href="aside-ols-via-algebra-and-matrices.html#cb294-7" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">X =</span> X, <span class="at">y =</span> y)</span></code></pre></div>
 <pre><code>##              X         y
 ## 1  -0.56047565  3.103131
 ## 2  -0.23017749  2.899459
@@ -1289,10 +1289,10 @@ div.csl-indent {
 <div id="step-2-add-an-intercept-column-to-the-predictor-matrix" class="section level3 hasAnchor" number="8.9.2">
 <h3><span class="header-section-number">8.9.2</span> Step 2: Add an Intercept Column to the Predictor Matrix<a href="aside-ols-via-algebra-and-matrices.html#step-2-add-an-intercept-column-to-the-predictor-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We need to add a column of ones to the predictor matrix to account for the intercept term in the regression model.</p>
-<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="aside-ols-via-algebra-and-matrices.html#cb295-1" tabindex="-1"></a><span class="co"># Add intercept column to the predictor matrix</span></span>
-<span id="cb295-2"><a href="aside-ols-via-algebra-and-matrices.html#cb295-2" tabindex="-1"></a>X_with_intercept <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, X)</span>
-<span id="cb295-3"><a href="aside-ols-via-algebra-and-matrices.html#cb295-3" tabindex="-1"></a><span class="co"># Display the new predictor matrix</span></span>
-<span id="cb295-4"><a href="aside-ols-via-algebra-and-matrices.html#cb295-4" tabindex="-1"></a>X_with_intercept</span></code></pre></div>
+<div class="sourceCode" id="cb296"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb296-1"><a href="aside-ols-via-algebra-and-matrices.html#cb296-1" tabindex="-1"></a><span class="co"># Add intercept column to the predictor matrix</span></span>
+<span id="cb296-2"><a href="aside-ols-via-algebra-and-matrices.html#cb296-2" tabindex="-1"></a>X_with_intercept <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, X)</span>
+<span id="cb296-3"><a href="aside-ols-via-algebra-and-matrices.html#cb296-3" tabindex="-1"></a><span class="co"># Display the new predictor matrix</span></span>
+<span id="cb296-4"><a href="aside-ols-via-algebra-and-matrices.html#cb296-4" tabindex="-1"></a>X_with_intercept</span></code></pre></div>
 <pre><code>##       [,1]        [,2]
 ##  [1,]    1 -0.56047565
 ##  [2,]    1 -0.23017749
@@ -1308,11 +1308,11 @@ div.csl-indent {
 <div id="step-3-compute-the-ols-coefficients" class="section level3 hasAnchor" number="8.9.3">
 <h3><span class="header-section-number">8.9.3</span> Step 3: Compute the OLS Coefficients<a href="aside-ols-via-algebra-and-matrices.html#step-3-compute-the-ols-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The OLS coefficients can be computed using the formula <span class="math inline">\(\hat{\boldsymbol{\beta}} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}\)</span>.</p>
-<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="aside-ols-via-algebra-and-matrices.html#cb297-1" tabindex="-1"></a><span class="co"># Compute OLS coefficients</span></span>
-<span id="cb297-2"><a href="aside-ols-via-algebra-and-matrices.html#cb297-2" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_with_intercept) <span class="sc">%*%</span> X_with_intercept) <span class="sc">%*%</span> <span class="fu">t</span>(X_with_intercept) <span class="sc">%*%</span> y</span>
-<span id="cb297-3"><a href="aside-ols-via-algebra-and-matrices.html#cb297-3" tabindex="-1"></a></span>
-<span id="cb297-4"><a href="aside-ols-via-algebra-and-matrices.html#cb297-4" tabindex="-1"></a><span class="co"># Print the coefficients</span></span>
-<span id="cb297-5"><a href="aside-ols-via-algebra-and-matrices.html#cb297-5" tabindex="-1"></a>beta</span></code></pre></div>
+<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb298-1"><a href="aside-ols-via-algebra-and-matrices.html#cb298-1" tabindex="-1"></a><span class="co"># Compute OLS coefficients</span></span>
+<span id="cb298-2"><a href="aside-ols-via-algebra-and-matrices.html#cb298-2" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_with_intercept) <span class="sc">%*%</span> X_with_intercept) <span class="sc">%*%</span> <span class="fu">t</span>(X_with_intercept) <span class="sc">%*%</span> y</span>
+<span id="cb298-3"><a href="aside-ols-via-algebra-and-matrices.html#cb298-3" tabindex="-1"></a></span>
+<span id="cb298-4"><a href="aside-ols-via-algebra-and-matrices.html#cb298-4" tabindex="-1"></a><span class="co"># Print the coefficients</span></span>
+<span id="cb298-5"><a href="aside-ols-via-algebra-and-matrices.html#cb298-5" tabindex="-1"></a>beta</span></code></pre></div>
 <pre><code>##          [,1]
 ## [1,] 3.161708
 ## [2,] 2.628661</code></pre>
@@ -1320,11 +1320,11 @@ div.csl-indent {
 <div id="step-4-make-predictions" class="section level3 hasAnchor" number="8.9.4">
 <h3><span class="header-section-number">8.9.4</span> Step 4: Make Predictions<a href="aside-ols-via-algebra-and-matrices.html#step-4-make-predictions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We can use the computed coefficients to make predictions for the response variable.</p>
-<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="aside-ols-via-algebra-and-matrices.html#cb299-1" tabindex="-1"></a><span class="co"># Make predictions</span></span>
-<span id="cb299-2"><a href="aside-ols-via-algebra-and-matrices.html#cb299-2" tabindex="-1"></a>y_pred <span class="ot">&lt;-</span> X_with_intercept <span class="sc">%*%</span> beta</span>
-<span id="cb299-3"><a href="aside-ols-via-algebra-and-matrices.html#cb299-3" tabindex="-1"></a></span>
-<span id="cb299-4"><a href="aside-ols-via-algebra-and-matrices.html#cb299-4" tabindex="-1"></a><span class="co"># Print predictions</span></span>
-<span id="cb299-5"><a href="aside-ols-via-algebra-and-matrices.html#cb299-5" tabindex="-1"></a>y_pred</span></code></pre></div>
+<div class="sourceCode" id="cb300"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb300-1"><a href="aside-ols-via-algebra-and-matrices.html#cb300-1" tabindex="-1"></a><span class="co"># Make predictions</span></span>
+<span id="cb300-2"><a href="aside-ols-via-algebra-and-matrices.html#cb300-2" tabindex="-1"></a>y_pred <span class="ot">&lt;-</span> X_with_intercept <span class="sc">%*%</span> beta</span>
+<span id="cb300-3"><a href="aside-ols-via-algebra-and-matrices.html#cb300-3" tabindex="-1"></a></span>
+<span id="cb300-4"><a href="aside-ols-via-algebra-and-matrices.html#cb300-4" tabindex="-1"></a><span class="co"># Print predictions</span></span>
+<span id="cb300-5"><a href="aside-ols-via-algebra-and-matrices.html#cb300-5" tabindex="-1"></a>y_pred</span></code></pre></div>
 <pre><code>##             [,1]
 ##  [1,]  1.6884072
 ##  [2,]  2.5566491
@@ -1340,9 +1340,9 @@ div.csl-indent {
 <div id="step-5-verify-with-lm-function-optional" class="section level3 hasAnchor" number="8.9.5">
 <h3><span class="header-section-number">8.9.5</span> Step 5: Verify with <code>lm</code> Function (Optional)<a href="aside-ols-via-algebra-and-matrices.html#step-5-verify-with-lm-function-optional" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>To verify our matrix-based implementation, we can compare the results with the <code>lm</code> function in R.</p>
-<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="aside-ols-via-algebra-and-matrices.html#cb301-1" tabindex="-1"></a><span class="co"># Verify with lm function</span></span>
-<span id="cb301-2"><a href="aside-ols-via-algebra-and-matrices.html#cb301-2" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X)</span>
-<span id="cb301-3"><a href="aside-ols-via-algebra-and-matrices.html#cb301-3" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="aside-ols-via-algebra-and-matrices.html#cb302-1" tabindex="-1"></a><span class="co"># Verify with lm function</span></span>
+<span id="cb302-2"><a href="aside-ols-via-algebra-and-matrices.html#cb302-2" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X)</span>
+<span id="cb302-3"><a href="aside-ols-via-algebra-and-matrices.html#cb302-3" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y ~ X)

@@ -1218,59 +1218,59 @@ div.csl-indent {
 <div id="packages-5" class="section level2 hasAnchor" number="7.3">
 <h2><span class="header-section-number">7.3</span> Packages<a href="cross-correlation.html#packages-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>I’ll use <code>forecast</code> <span class="citation">(<a href="references-1.html#ref-R-forecast">Hyndman et al. 2026</a>)</span> as well as tidyverse <span class="citation">(<a href="references-1.html#ref-R-tidyverse">Wickham 2023</a>)</span> syntax.</p>
-<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="cross-correlation.html#cb240-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb240-2"><a href="cross-correlation.html#cb240-2" tabindex="-1"></a><span class="fu">library</span>(forecast)</span></code></pre></div>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="cross-correlation.html#cb241-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb241-2"><a href="cross-correlation.html#cb241-2" tabindex="-1"></a><span class="fu">library</span>(forecast)</span></code></pre></div>
 </div>
 <div id="lags" class="section level2 hasAnchor" number="7.4">
 <h2><span class="header-section-number">7.4</span> Lags<a href="cross-correlation.html#lags" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Here is a quick primer on different ways of lagging data.</p>
-<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="cross-correlation.html#cb241-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb241-2"><a href="cross-correlation.html#cb241-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(n))</span>
-<span id="cb241-3"><a href="cross-correlation.html#cb241-3" tabindex="-1"></a>x</span></code></pre></div>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="cross-correlation.html#cb242-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb242-2"><a href="cross-correlation.html#cb242-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(n))</span>
+<span id="cb242-3"><a href="cross-correlation.html#cb242-3" tabindex="-1"></a>x</span></code></pre></div>
 <pre><code>## Time Series:
 ## Start = 1 
 ## End = 10 
 ## Frequency = 1 
 ##  [1]  0.079854780  0.233410688  0.107206736  1.150652223  0.903326353
 ##  [6] -0.965635624 -0.146067990 -0.559301795 -0.214952105  0.001970085</code></pre>
-<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="cross-correlation.html#cb243-1" tabindex="-1"></a><span class="co"># v1: Lag by hand</span></span>
-<span id="cb243-2"><a href="cross-correlation.html#cb243-2" tabindex="-1"></a>xLag_v1 <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">c</span>(<span class="cn">NA</span>,x[<span class="sc">-</span>n]))</span>
-<span id="cb243-3"><a href="cross-correlation.html#cb243-3" tabindex="-1"></a><span class="co"># v2: use stats::lag (&quot;little el lag&quot;)</span></span>
-<span id="cb243-4"><a href="cross-correlation.html#cb243-4" tabindex="-1"></a><span class="co"># Note the sign of k: negative k starts later.</span></span>
-<span id="cb243-5"><a href="cross-correlation.html#cb243-5" tabindex="-1"></a>xLag_v2 <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">lag</span>(x, <span class="at">k =</span> <span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb243-6"><a href="cross-correlation.html#cb243-6" tabindex="-1"></a>xLag_v2</span></code></pre></div>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="cross-correlation.html#cb244-1" tabindex="-1"></a><span class="co"># v1: Lag by hand</span></span>
+<span id="cb244-2"><a href="cross-correlation.html#cb244-2" tabindex="-1"></a>xLag_v1 <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">c</span>(<span class="cn">NA</span>,x[<span class="sc">-</span>n]))</span>
+<span id="cb244-3"><a href="cross-correlation.html#cb244-3" tabindex="-1"></a><span class="co"># v2: use stats::lag (&quot;little el lag&quot;)</span></span>
+<span id="cb244-4"><a href="cross-correlation.html#cb244-4" tabindex="-1"></a><span class="co"># Note the sign of k: negative k starts later.</span></span>
+<span id="cb244-5"><a href="cross-correlation.html#cb244-5" tabindex="-1"></a>xLag_v2 <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">lag</span>(x, <span class="at">k =</span> <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb244-6"><a href="cross-correlation.html#cb244-6" tabindex="-1"></a>xLag_v2</span></code></pre></div>
 <pre><code>## Time Series:
 ## Start = 2 
 ## End = 11 
 ## Frequency = 1 
 ##  [1]  0.079854780  0.233410688  0.107206736  1.150652223  0.903326353
 ##  [6] -0.965635624 -0.146067990 -0.559301795 -0.214952105  0.001970085</code></pre>
-<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="cross-correlation.html#cb245-1" tabindex="-1"></a><span class="co"># v3: use Hmisc::Lag  (&quot;big el lag&quot;)</span></span>
-<span id="cb245-2"><a href="cross-correlation.html#cb245-2" tabindex="-1"></a><span class="co"># Note that shift is specifies the number of observations </span></span>
-<span id="cb245-3"><a href="cross-correlation.html#cb245-3" tabindex="-1"></a><span class="co"># to be shifted to the right -- positive shift starts later.</span></span>
-<span id="cb245-4"><a href="cross-correlation.html#cb245-4" tabindex="-1"></a>xLag_v3 <span class="ot">&lt;-</span> Hmisc<span class="sc">::</span><span class="fu">Lag</span>(x, <span class="at">shift =</span> <span class="dv">1</span>)</span>
-<span id="cb245-5"><a href="cross-correlation.html#cb245-5" tabindex="-1"></a>xLag_v3</span></code></pre></div>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="cross-correlation.html#cb246-1" tabindex="-1"></a><span class="co"># v3: use Hmisc::Lag  (&quot;big el lag&quot;)</span></span>
+<span id="cb246-2"><a href="cross-correlation.html#cb246-2" tabindex="-1"></a><span class="co"># Note that shift is specifies the number of observations </span></span>
+<span id="cb246-3"><a href="cross-correlation.html#cb246-3" tabindex="-1"></a><span class="co"># to be shifted to the right -- positive shift starts later.</span></span>
+<span id="cb246-4"><a href="cross-correlation.html#cb246-4" tabindex="-1"></a>xLag_v3 <span class="ot">&lt;-</span> Hmisc<span class="sc">::</span><span class="fu">Lag</span>(x, <span class="at">shift =</span> <span class="dv">1</span>)</span>
+<span id="cb246-5"><a href="cross-correlation.html#cb246-5" tabindex="-1"></a>xLag_v3</span></code></pre></div>
 <pre><code>## Time Series:
 ## Start = 1 
 ## End = 10 
 ## Frequency = 1 
 ##  [1]          NA  0.07985478  0.23341069  0.10720674  1.15065222  0.90332635
 ##  [7] -0.96563562 -0.14606799 -0.55930180 -0.21495211</code></pre>
-<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="cross-correlation.html#cb247-1" tabindex="-1"></a><span class="co"># ^^ This is the same behavior that dplyr::lag has. E.g.,</span></span>
-<span id="cb247-2"><a href="cross-correlation.html#cb247-2" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">lag</span>(<span class="fu">c</span>(x),<span class="at">n=</span><span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="cross-correlation.html#cb248-1" tabindex="-1"></a><span class="co"># ^^ This is the same behavior that dplyr::lag has. E.g.,</span></span>
+<span id="cb248-2"><a href="cross-correlation.html#cb248-2" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">lag</span>(<span class="fu">c</span>(x),<span class="at">n=</span><span class="dv">1</span>)</span></code></pre></div>
 <pre><code>##  [1]          NA  0.07985478  0.23341069  0.10720674  1.15065222  0.90332635
 ##  [7] -0.96563562 -0.14606799 -0.55930180 -0.21495211</code></pre>
-<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="cross-correlation.html#cb249-1" tabindex="-1"></a><span class="co"># But dplyr::lag doesn&#39;t like ts objects, hence the c(x). </span></span>
-<span id="cb249-2"><a href="cross-correlation.html#cb249-2" tabindex="-1"></a><span class="co"># It&#39;s all gross to parse out, I know.</span></span>
-<span id="cb249-3"><a href="cross-correlation.html#cb249-3" tabindex="-1"></a></span>
-<span id="cb249-4"><a href="cross-correlation.html#cb249-4" tabindex="-1"></a><span class="fu">tsp</span>(xLag_v1)</span></code></pre></div>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="cross-correlation.html#cb250-1" tabindex="-1"></a><span class="co"># But dplyr::lag doesn&#39;t like ts objects, hence the c(x). </span></span>
+<span id="cb250-2"><a href="cross-correlation.html#cb250-2" tabindex="-1"></a><span class="co"># It&#39;s all gross to parse out, I know.</span></span>
+<span id="cb250-3"><a href="cross-correlation.html#cb250-3" tabindex="-1"></a></span>
+<span id="cb250-4"><a href="cross-correlation.html#cb250-4" tabindex="-1"></a><span class="fu">tsp</span>(xLag_v1)</span></code></pre></div>
 <pre><code>## [1]  1 10  1</code></pre>
-<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="cross-correlation.html#cb251-1" tabindex="-1"></a><span class="fu">tsp</span>(xLag_v2)</span></code></pre></div>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="cross-correlation.html#cb252-1" tabindex="-1"></a><span class="fu">tsp</span>(xLag_v2)</span></code></pre></div>
 <pre><code>## [1]  2 11  1</code></pre>
-<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="cross-correlation.html#cb253-1" tabindex="-1"></a><span class="fu">tsp</span>(xLag_v3)</span></code></pre></div>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="cross-correlation.html#cb254-1" tabindex="-1"></a><span class="fu">tsp</span>(xLag_v3)</span></code></pre></div>
 <pre><code>## [1]  1 10  1</code></pre>
-<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="cross-correlation.html#cb255-1" tabindex="-1"></a><span class="co"># ts.union helps you see what&#39;s going on</span></span>
-<span id="cb255-2"><a href="cross-correlation.html#cb255-2" tabindex="-1"></a><span class="fu">ts.union</span>(x,xLag_v1,xLag_v2,xLag_v3)</span></code></pre></div>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="cross-correlation.html#cb256-1" tabindex="-1"></a><span class="co"># ts.union helps you see what&#39;s going on</span></span>
+<span id="cb256-2"><a href="cross-correlation.html#cb256-2" tabindex="-1"></a><span class="fu">ts.union</span>(x,xLag_v1,xLag_v2,xLag_v3)</span></code></pre></div>
 <pre><code>## Time Series:
 ## Start = 1 
 ## End = 11 
@@ -1294,27 +1294,27 @@ div.csl-indent {
 <p>Autocorrelation is the correlation of a variable with its own past values (e.g., <span class="math inline">\(y_t\)</span> with <span class="math inline">\(y_{t-1}\)</span>). Cross-correlation extends this idea to two different time series, asking: how does <span class="math inline">\(x_{t-k}\)</span> relate to <span class="math inline">\(y_t\)</span>?</p>
 <p>You’re already used to the idea that you can correlate two variables <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, but you can also lag <span class="math inline">\(x\)</span> like we did for autocorrelation. For example, <span class="math inline">\(y_t\)</span> can be correlated to <span class="math inline">\(x_{t-1}\)</span>, which we can implement like this: <code>cor(y[2:n], x[1:(n-1)])</code>.</p>
 <p>Here’s a toy example:</p>
-<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="cross-correlation.html#cb257-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb257-2"><a href="cross-correlation.html#cb257-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb257-3"><a href="cross-correlation.html#cb257-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, x[<span class="sc">-</span>n]) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.5</span>)</span>
-<span id="cb257-4"><a href="cross-correlation.html#cb257-4" tabindex="-1"></a><span class="fu">cor</span>(x, y) <span class="co"># doesn&#39;t correlate</span></span></code></pre></div>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="cross-correlation.html#cb258-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb258-2"><a href="cross-correlation.html#cb258-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb258-3"><a href="cross-correlation.html#cb258-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, x[<span class="sc">-</span>n]) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.5</span>)</span>
+<span id="cb258-4"><a href="cross-correlation.html#cb258-4" tabindex="-1"></a><span class="fu">cor</span>(x, y) <span class="co"># doesn&#39;t correlate</span></span></code></pre></div>
 <pre><code>## [1] 0.1149159</code></pre>
-<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="cross-correlation.html#cb259-1" tabindex="-1"></a><span class="fu">cor</span>(x[<span class="dv">1</span><span class="sc">:</span>(n<span class="dv">-1</span>)], y[<span class="dv">2</span><span class="sc">:</span>n]) <span class="co"># correlates great!</span></span></code></pre></div>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="cross-correlation.html#cb260-1" tabindex="-1"></a><span class="fu">cor</span>(x[<span class="dv">1</span><span class="sc">:</span>(n<span class="dv">-1</span>)], y[<span class="dv">2</span><span class="sc">:</span>n]) <span class="co"># correlates great!</span></span></code></pre></div>
 <pre><code>## [1] 0.8908105</code></pre>
-<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="cross-correlation.html#cb261-1" tabindex="-1"></a><span class="fu">Ccf</span>(x, y) <span class="co"># the cross correlation plot</span></span></code></pre></div>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="cross-correlation.html#cb262-1" tabindex="-1"></a><span class="fu">Ccf</span>(x, y) <span class="co"># the cross correlation plot</span></span></code></pre></div>
 <p><img src="06CrossCorrelation_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" /></p>
 <p>By hand, you can see that <span class="math inline">\(\text{cor}(x_{t-1}, y_t) = 0.891\)</span>, whereas <span class="math inline">\(\text{cor}(x_t, y_t) = 0.115\)</span>. We can view these correlations across multiple lags using the cross-correlation plot from <code>Ccf</code>. That function returns the correlation between <span class="math inline">\(x_{t+k}\)</span> and <span class="math inline">\(y_t\)</span> for various values of lag <span class="math inline">\(k\)</span>.</p>
 <p>A positive lag on the plot means that <strong>x is lagged behind y</strong> (i.e., you’re correlating earlier y-values with later x-values), while a negative lag means <strong>x leads y</strong> — and might be useful for forecasting.</p>
 <p>This kind of lagged relationship is useful for <strong>predictive modeling</strong>, where we use past values of one variable to forecast the present (or future) values of another.</p>
 <p>Thus, given a time series like <span class="math inline">\(x_t\)</span>, we could forecast <span class="math inline">\(y_t\)</span> based on <span class="math inline">\(x_{t-1}\)</span>:</p>
-<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="cross-correlation.html#cb262-1" tabindex="-1"></a><span class="co"># lag x</span></span>
-<span id="cb262-2"><a href="cross-correlation.html#cb262-2" tabindex="-1"></a>xLag <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, x[<span class="sc">-</span>n])</span>
-<span id="cb262-3"><a href="cross-correlation.html#cb262-3" tabindex="-1"></a><span class="co"># note this does the same lag operation</span></span>
-<span id="cb262-4"><a href="cross-correlation.html#cb262-4" tabindex="-1"></a>xLag <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">lag</span>(x, <span class="at">n =</span> <span class="dv">1</span>, <span class="at">default =</span> <span class="dv">0</span>)</span>
-<span id="cb262-5"><a href="cross-correlation.html#cb262-5" tabindex="-1"></a></span>
-<span id="cb262-6"><a href="cross-correlation.html#cb262-6" tabindex="-1"></a>lmY <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> xLag)</span>
-<span id="cb262-7"><a href="cross-correlation.html#cb262-7" tabindex="-1"></a><span class="fu">plot</span>(y, <span class="fu">predict</span>(lmY))</span>
-<span id="cb262-8"><a href="cross-correlation.html#cb262-8" tabindex="-1"></a><span class="fu">abline</span>(lmY, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="cross-correlation.html#cb263-1" tabindex="-1"></a><span class="co"># lag x</span></span>
+<span id="cb263-2"><a href="cross-correlation.html#cb263-2" tabindex="-1"></a>xLag <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, x[<span class="sc">-</span>n])</span>
+<span id="cb263-3"><a href="cross-correlation.html#cb263-3" tabindex="-1"></a><span class="co"># note this does the same lag operation</span></span>
+<span id="cb263-4"><a href="cross-correlation.html#cb263-4" tabindex="-1"></a>xLag <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">lag</span>(x, <span class="at">n =</span> <span class="dv">1</span>, <span class="at">default =</span> <span class="dv">0</span>)</span>
+<span id="cb263-5"><a href="cross-correlation.html#cb263-5" tabindex="-1"></a></span>
+<span id="cb263-6"><a href="cross-correlation.html#cb263-6" tabindex="-1"></a>lmY <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> xLag)</span>
+<span id="cb263-7"><a href="cross-correlation.html#cb263-7" tabindex="-1"></a><span class="fu">plot</span>(y, <span class="fu">predict</span>(lmY))</span>
+<span id="cb263-8"><a href="cross-correlation.html#cb263-8" tabindex="-1"></a><span class="fu">abline</span>(lmY, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
 <p><img src="06CrossCorrelation_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" /></p>
 <p>Cross-correlation is commonly used to identify short-lag predictive relationships. This is common in economics (e.g., jobless claims leading GDP) and in environmental science — for instance, where river discharge might precede changes in turbidity, or phytoplankton peaks might precede zooplankton booms.</p>
 <p>As with all time series correlations, beware of spurious relationships — especially when both series share strong seasonal or trend components.</p>
@@ -1324,36 +1324,36 @@ div.csl-indent {
 <p>The eagle-eyed among you will notice that the values from <code>Ccf</code> don’t align exactly with what <code>cor</code> produces. For the detail oriented, here is the scoop.</p>
 <p>The <code>ccf()</code> function in R computes cross-correlations that are normalized in a specific way. It uses the full-series mean and standard deviation for both variables, even when the number of overlapping points decreases at higher lags. This section shows what that means in practice and how to manually reproduce the <code>ccf()</code> result at lag 1.</p>
 <p>Let’s create some data.</p>
-<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="cross-correlation.html#cb263-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb263-2"><a href="cross-correlation.html#cb263-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb263-3"><a href="cross-correlation.html#cb263-3" tabindex="-1"></a></span>
-<span id="cb263-4"><a href="cross-correlation.html#cb263-4" tabindex="-1"></a><span class="co"># make y depend on lagged x (lag = 1)</span></span>
-<span id="cb263-5"><a href="cross-correlation.html#cb263-5" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fl">0.8</span> <span class="sc">*</span> <span class="fu">c</span>(<span class="dv">0</span>, x[<span class="dv">1</span><span class="sc">:</span>(n<span class="dv">-1</span>)]) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.5</span>)</span>
-<span id="cb263-6"><a href="cross-correlation.html#cb263-6" tabindex="-1"></a></span>
-<span id="cb263-7"><a href="cross-correlation.html#cb263-7" tabindex="-1"></a><span class="co"># Lagged vectors aligned for lag 1</span></span>
-<span id="cb263-8"><a href="cross-correlation.html#cb263-8" tabindex="-1"></a>x_lag <span class="ot">&lt;-</span> x[<span class="dv">1</span><span class="sc">:</span>(n <span class="sc">-</span> <span class="dv">1</span>)]</span>
-<span id="cb263-9"><a href="cross-correlation.html#cb263-9" tabindex="-1"></a>y_trunc <span class="ot">&lt;-</span> y[<span class="dv">2</span><span class="sc">:</span>n]</span></code></pre></div>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="cross-correlation.html#cb264-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb264-2"><a href="cross-correlation.html#cb264-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb264-3"><a href="cross-correlation.html#cb264-3" tabindex="-1"></a></span>
+<span id="cb264-4"><a href="cross-correlation.html#cb264-4" tabindex="-1"></a><span class="co"># make y depend on lagged x (lag = 1)</span></span>
+<span id="cb264-5"><a href="cross-correlation.html#cb264-5" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fl">0.8</span> <span class="sc">*</span> <span class="fu">c</span>(<span class="dv">0</span>, x[<span class="dv">1</span><span class="sc">:</span>(n<span class="dv">-1</span>)]) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.5</span>)</span>
+<span id="cb264-6"><a href="cross-correlation.html#cb264-6" tabindex="-1"></a></span>
+<span id="cb264-7"><a href="cross-correlation.html#cb264-7" tabindex="-1"></a><span class="co"># Lagged vectors aligned for lag 1</span></span>
+<span id="cb264-8"><a href="cross-correlation.html#cb264-8" tabindex="-1"></a>x_lag <span class="ot">&lt;-</span> x[<span class="dv">1</span><span class="sc">:</span>(n <span class="sc">-</span> <span class="dv">1</span>)]</span>
+<span id="cb264-9"><a href="cross-correlation.html#cb264-9" tabindex="-1"></a>y_trunc <span class="ot">&lt;-</span> y[<span class="dv">2</span><span class="sc">:</span>n]</span></code></pre></div>
 <p>We construct <code>y</code> to depend on a lagged version of <code>x</code>, and use <code>0</code> as the first value to avoid introducing an <code>NA</code>.</p>
 <p>Let’s get the correlation at lag one using <code>cor()</code></p>
-<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="cross-correlation.html#cb264-1" tabindex="-1"></a><span class="fu">cor</span>(x_lag, y_trunc)</span></code></pre></div>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="cross-correlation.html#cb265-1" tabindex="-1"></a><span class="fu">cor</span>(x_lag, y_trunc)</span></code></pre></div>
 <pre><code>## [1] 0.8302037</code></pre>
 <p>This computes a standard Pearson correlation using only the overlapping values. It uses <code>n - 1</code> observations and calculates means and standard deviations from that subset.</p>
 <p>Let’s compare that to what <code>ccf()</code> gives</p>
-<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="cross-correlation.html#cb266-1" tabindex="-1"></a>ccf_obj <span class="ot">&lt;-</span> <span class="fu">Ccf</span>(x, y, <span class="at">lag.max =</span> <span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="cross-correlation.html#cb267-1" tabindex="-1"></a>ccf_obj <span class="ot">&lt;-</span> <span class="fu">Ccf</span>(x, y, <span class="at">lag.max =</span> <span class="dv">10</span>)</span></code></pre></div>
 <p><img src="06CrossCorrelation_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" /></p>
-<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="cross-correlation.html#cb267-1" tabindex="-1"></a>ccf_lag1 <span class="ot">&lt;-</span> ccf_obj<span class="sc">$</span>acf[ccf_obj<span class="sc">$</span>lag <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb267-2"><a href="cross-correlation.html#cb267-2" tabindex="-1"></a>ccf_lag1</span></code></pre></div>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb268-1"><a href="cross-correlation.html#cb268-1" tabindex="-1"></a>ccf_lag1 <span class="ot">&lt;-</span> ccf_obj<span class="sc">$</span>acf[ccf_obj<span class="sc">$</span>lag <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb268-2"><a href="cross-correlation.html#cb268-2" tabindex="-1"></a>ccf_lag1</span></code></pre></div>
 <pre><code>## [1] 0.8253849</code></pre>
 <p>That correlation at lag 1 from <code>ccf_lag1</code> is <strong>slightly different</strong> from the result of <code>cor(x_lag, y_trunc)</code> (0.8302037). Why? Because <code>ccf()</code>:
 - Uses only <code>n - 1</code> data pairs at lag 1
 - But computes the mean and standard deviation using all <code>n</code> values from the full series of <code>x</code> and <code>y</code></p>
 <p>This ensures that correlation values at all lags are on the same scale.</p>
 <p>We can manually reproduce what <code>ccf()</code> does</p>
-<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="cross-correlation.html#cb269-1" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">1</span>  <span class="co"># lag</span></span>
-<span id="cb269-2"><a href="cross-correlation.html#cb269-2" tabindex="-1"></a>num <span class="ot">&lt;-</span> <span class="fu">sum</span>((x_lag <span class="sc">-</span> <span class="fu">mean</span>(x)) <span class="sc">*</span> (y_trunc <span class="sc">-</span> <span class="fu">mean</span>(y)))        <span class="co"># numerator</span></span>
-<span id="cb269-3"><a href="cross-correlation.html#cb269-3" tabindex="-1"></a>denom <span class="ot">&lt;-</span> (n <span class="sc">-</span> k) <span class="sc">*</span> <span class="fu">sd</span>(x) <span class="sc">*</span> <span class="fu">sd</span>(y)                           <span class="co"># denominator uses full-series SDs</span></span>
-<span id="cb269-4"><a href="cross-correlation.html#cb269-4" tabindex="-1"></a>manual_ccf <span class="ot">&lt;-</span> num <span class="sc">/</span> denom</span>
-<span id="cb269-5"><a href="cross-correlation.html#cb269-5" tabindex="-1"></a>manual_ccf</span></code></pre></div>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="cross-correlation.html#cb270-1" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">1</span>  <span class="co"># lag</span></span>
+<span id="cb270-2"><a href="cross-correlation.html#cb270-2" tabindex="-1"></a>num <span class="ot">&lt;-</span> <span class="fu">sum</span>((x_lag <span class="sc">-</span> <span class="fu">mean</span>(x)) <span class="sc">*</span> (y_trunc <span class="sc">-</span> <span class="fu">mean</span>(y)))        <span class="co"># numerator</span></span>
+<span id="cb270-3"><a href="cross-correlation.html#cb270-3" tabindex="-1"></a>denom <span class="ot">&lt;-</span> (n <span class="sc">-</span> k) <span class="sc">*</span> <span class="fu">sd</span>(x) <span class="sc">*</span> <span class="fu">sd</span>(y)                           <span class="co"># denominator uses full-series SDs</span></span>
+<span id="cb270-4"><a href="cross-correlation.html#cb270-4" tabindex="-1"></a>manual_ccf <span class="ot">&lt;-</span> num <span class="sc">/</span> denom</span>
+<span id="cb270-5"><a href="cross-correlation.html#cb270-5" tabindex="-1"></a>manual_ccf</span></code></pre></div>
 <pre><code>## [1] 0.8253849</code></pre>
 <p>This manual calculation matches the value from <code>ccf()</code> exactly.</p>
 <p>You might ask yourself: why does this matter? Well, this normalization approach allows <code>ccf()</code> (and <code>acf()</code>) to produce values that are comparable across different lags, even as the number of overlapping pairs shrinks. It’s a subtle point, but crucial for accurate interpretation of time series correlations. And when lags get really large like in the autotrophs and heterotrophs example, it’s worth understanding what happens under the hood.</p>
@@ -1361,15 +1361,15 @@ div.csl-indent {
 <div id="your-work-5" class="section level2 hasAnchor" number="7.7">
 <h2><span class="header-section-number">7.7</span> Your work<a href="cross-correlation.html#your-work-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Look at the file <code>PhytoGrazersExp1.rds</code>. It contains data used in a mesocosm simulation. The <code>producers</code> time series shows relative biomass of phytoplankton while the <code>grazers</code> time series shows the zooplankton biomass. The times are indexed by <code>day</code>.</p>
-<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="cross-correlation.html#cb271-1" tabindex="-1"></a>pg <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/PhytoGrazersExp1.rds&quot;</span>)</span>
-<span id="cb271-2"><a href="cross-correlation.html#cb271-2" tabindex="-1"></a><span class="co"># make these wide data long</span></span>
-<span id="cb271-3"><a href="cross-correlation.html#cb271-3" tabindex="-1"></a>pgLong <span class="ot">&lt;-</span> pg <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb271-4"><a href="cross-correlation.html#cb271-4" tabindex="-1"></a><span class="co"># and make a nice ggplot</span></span>
-<span id="cb271-5"><a href="cross-correlation.html#cb271-5" tabindex="-1"></a><span class="fu">ggplot</span>(pgLong,<span class="fu">aes</span>(<span class="at">x=</span>day,<span class="at">y=</span>value,<span class="at">color=</span>name)) <span class="sc">+</span></span>
-<span id="cb271-6"><a href="cross-correlation.html#cb271-6" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb271-7"><a href="cross-correlation.html#cb271-7" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb271-8"><a href="cross-correlation.html#cb271-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">&quot;Relative biomass&quot;</span>,</span>
-<span id="cb271-9"><a href="cross-correlation.html#cb271-9" tabindex="-1"></a>       <span class="at">x=</span><span class="st">&quot;Number of days from start of experiment&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="cross-correlation.html#cb272-1" tabindex="-1"></a>pg <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/PhytoGrazersExp1.rds&quot;</span>)</span>
+<span id="cb272-2"><a href="cross-correlation.html#cb272-2" tabindex="-1"></a><span class="co"># make these wide data long</span></span>
+<span id="cb272-3"><a href="cross-correlation.html#cb272-3" tabindex="-1"></a>pgLong <span class="ot">&lt;-</span> pg <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb272-4"><a href="cross-correlation.html#cb272-4" tabindex="-1"></a><span class="co"># and make a nice ggplot</span></span>
+<span id="cb272-5"><a href="cross-correlation.html#cb272-5" tabindex="-1"></a><span class="fu">ggplot</span>(pgLong,<span class="fu">aes</span>(<span class="at">x=</span>day,<span class="at">y=</span>value,<span class="at">color=</span>name)) <span class="sc">+</span></span>
+<span id="cb272-6"><a href="cross-correlation.html#cb272-6" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb272-7"><a href="cross-correlation.html#cb272-7" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb272-8"><a href="cross-correlation.html#cb272-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">&quot;Relative biomass&quot;</span>,</span>
+<span id="cb272-9"><a href="cross-correlation.html#cb272-9" tabindex="-1"></a>       <span class="at">x=</span><span class="st">&quot;Number of days from start of experiment&quot;</span>)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="06CrossCorrelation_files/figure-html/unnamed-chunk-10-1.png" alt="" width="672" /></p>
 <p>It seems clear that there is an offset between the two series. Just eyeballing it, it looks like there is a four to six week lag between the grazers and producers. Use cross correlation and see if you can determine the lagged relationship more specifically.</p>
