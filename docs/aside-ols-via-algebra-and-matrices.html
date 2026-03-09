@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>8 Regression | Time Series Analysis for Environmental Scientists</title>
+  <title>Aside: OLS via Algebra and Matrices | Time Series Analysis for Environmental Scientists</title>
   <meta name="description" content="Time series analysis notes and exercises for ESCI 504" />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="8 Regression | Time Series Analysis for Environmental Scientists" />
+  <meta property="og:title" content="Aside: OLS via Algebra and Matrices | Time Series Analysis for Environmental Scientists" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Time series analysis notes and exercises for ESCI 504" />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="8 Regression | Time Series Analysis for Environmental Scientists" />
+  <meta name="twitter:title" content="Aside: OLS via Algebra and Matrices | Time Series Analysis for Environmental Scientists" />
   
   <meta name="twitter:description" content="Time series analysis notes and exercises for ESCI 504" />
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="cross-correlation.html"/>
-<link rel="next" href="aside-ols-via-algebra-and-matrices.html"/>
+<link rel="prev" href="regression.html"/>
+<link rel="next" href="filtering-smoothing.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -1205,214 +1205,168 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="regression" class="section level1 hasAnchor" number="8">
-<h1><span class="header-section-number">8</span> Regression<a href="regression.html#regression" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="big-idea-6" class="section level2 hasAnchor" number="8.1">
-<h2><span class="header-section-number">8.1</span> Big Idea<a href="regression.html#big-idea-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>OLS regression can be problematic with time series because the assumption of independence gets violated pretty easily. But, there are other approaches that are useful.</p>
+<div id="aside-ols-via-algebra-and-matrices" class="section level1 unnumbered aside-chapter hasAnchor">
+<h1>Aside: OLS via Algebra and Matrices<a href="aside-ols-via-algebra-and-matrices.html#aside-ols-via-algebra-and-matrices" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-2" class="section level2 hasAnchor" number="8.6">
+<h2><span class="header-section-number">8.6</span> Introduction<a href="aside-ols-via-algebra-and-matrices.html#introduction-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Ordinary Least Squares (OLS) regression is a method for estimating the parameters in a linear regression model. This document explains OLS regression first using algebra and then using matrix notation, with a practical implementation in R.</p>
 </div>
-<div id="reading-6" class="section level2 hasAnchor" number="8.2">
-<h2><span class="header-section-number">8.2</span> Reading<a href="regression.html#reading-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Have a look at Chapter five (through section 5.3) from <span class="citation">Cowpertwait and Metcalfe (<a href="references-1.html#ref-Cowpertwait2009">2009</a>)</span>. It’s OK to skim the readings in this book. It’s not a great book for our purposes as many of you haven’t taken linear algebra and the book occasionally goes that way. But it’s useful to hum your way through the chapter nonetheless.</p>
+<div id="algebraic-approach-to-ols" class="section level2 hasAnchor" number="8.7">
+<h2><span class="header-section-number">8.7</span> Algebraic Approach to OLS<a href="aside-ols-via-algebra-and-matrices.html#algebraic-approach-to-ols" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In simple linear regression, we model the relationship between a predictor variable <span class="math inline">\(X\)</span> and a response variable <span class="math inline">\(y\)</span> using the equation:</p>
+<p><span class="math display">\[ y_i = \beta_0 + \beta_1 X_i + \epsilon_i \]</span></p>
+<p>where:
+- <span class="math inline">\(y_i\)</span> is the response variable for observation <span class="math inline">\(i\)</span>,
+- <span class="math inline">\(X_i\)</span> is the predictor variable for observation <span class="math inline">\(i\)</span>,
+- <span class="math inline">\(\beta_0\)</span> is the intercept,
+- <span class="math inline">\(\beta_1\)</span> is the slope,
+- <span class="math inline">\(\epsilon_i\)</span> is the error term.</p>
+<div id="goal-minimize-the-sum-of-squared-errors" class="section level3 hasAnchor" number="8.7.1">
+<h3><span class="header-section-number">8.7.1</span> Goal: Minimize the Sum of Squared Errors<a href="aside-ols-via-algebra-and-matrices.html#goal-minimize-the-sum-of-squared-errors" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The OLS method aims to find the values of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> that minimize the sum of squared errors (SSE):</p>
+<p><span class="math display">\[SSE = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\]</span></p>
+<p>where <span class="math inline">\(\hat{y}_i = \beta_0 + \beta_1 X_i\)</span> is the predicted value of <span class="math inline">\(y_i\)</span>.</p>
 </div>
-<div id="packages-6" class="section level2 hasAnchor" number="8.3">
-<h2><span class="header-section-number">8.3</span> Packages<a href="regression.html#packages-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>You’ll want to install the <code>nlme</code> <span class="citation">(<a href="references-1.html#ref-R-nlme">Pinheiro, Bates, and R Core Team 2025</a>)</span> library if you don’t have it. We are going to fit a linear model using generalized least squares as opposed to ordinary least squares and you’ll need the <code>gls</code> function from <code>nlme</code>. I’ll use <code>forecast</code> <span class="citation">(<a href="references-1.html#ref-R-forecast">Hyndman et al. 2026</a>)</span> as well and tidyverse <span class="citation">(<a href="references-1.html#ref-R-tidyverse">Wickham 2023</a>)</span>.</p>
-<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="regression.html#cb273-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb273-2"><a href="regression.html#cb273-2" tabindex="-1"></a><span class="fu">library</span>(nlme)</span>
-<span id="cb273-3"><a href="regression.html#cb273-3" tabindex="-1"></a><span class="fu">library</span>(forecast)</span></code></pre></div>
+<div id="deriving-the-coefficients" class="section level3 hasAnchor" number="8.7.2">
+<h3><span class="header-section-number">8.7.2</span> Deriving the Coefficients<a href="aside-ols-via-algebra-and-matrices.html#deriving-the-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To minimize the SSE, we take the partial derivatives of the SSE with respect to <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> and set them to zero:</p>
+<p><span class="math display">\[\frac{\partial SSE}{\partial \beta_0} = -2 \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 X_i) = 0\]</span>
+<span class="math display">\[\frac{\partial SSE}{\partial \beta_1} = -2 \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 X_i) X_i = 0\]</span></p>
+<p>Solving these equations gives the OLS estimates:</p>
+<p><span class="math display">\[\hat{\beta_1} = \frac{\sum_{i=1}^{n} (X_i - \bar{X})(y_i - \bar{y})}{\sum_{i=1}^{n} (X_i - \bar{X})^2}\]</span>
+<span class="math display">\[\hat{\beta_0} = \bar{y} - \hat{\beta_1} \bar{X}\]</span></p>
+<p>where <span class="math inline">\(\bar{X}\)</span> and <span class="math inline">\(\bar{y}\)</span> are the means of <span class="math inline">\(X\)</span> and <span class="math inline">\(y\)</span>, respectively.</p>
 </div>
-<div id="regression-1" class="section level2 hasAnchor" number="8.4">
-<h2><span class="header-section-number">8.4</span> Regression<a href="regression.html#regression-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="adjusting-ols" class="section level3 hasAnchor" number="8.4.1">
-<h3><span class="header-section-number">8.4.1</span> Adjusting OLS<a href="regression.html#adjusting-ols" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>As know, time series data are typically autocorrelated in some way. We’ve seen this over and over and we’ve learned to spot it and to fit models of various complexity to describe it.</p>
-<p>A very common situation with environmental data is to want to do an ordinary least squares regression using time series data. If your data are a time series, you are doing time-series regression. And that has different pitfalls than standard regression.</p>
-<p>The biggest issue is that if the residuals (errors) are autocorrelated, you have violated the assumption of independence. What does this mean? Well, <a href="https://en.wikipedia.org/wiki/Autocorrelation#Regression_analysis">the standard errors on the coefficient estimates tend to be underestimated (and the t-scores overestimated) when the autocorrelations of the errors at low lags are positive</a>. This means that any statistical inference could be wrong, e.g., the the p-values from a t-test will be artificially low. But despair not! If we take the the time series structure of the errors into account we can usually still model the association between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> effectively.</p>
-<p>Is this a little opaque? Let’s make up an example. Let’s say you wanted to build a model of salmon in a creek as function of the summer water temperature. Temps get too warm and the wee fish suffer and die before they get counted by the poor intern. You can make up a mechanism however you like. This is just a thought experiment, right? So you make a nice linear model <span class="math inline">\(y=\beta_0 + \beta_1 x + \epsilon\)</span> where <span class="math inline">\(y\)</span> is the number of salmon, <span class="math inline">\(\beta_0\)</span> is the intercept and <span class="math inline">\(\beta_1\)</span> is the coefficient on the variable <span class="math inline">\(x\)</span> which is the water temperature, and <span class="math inline">\(\epsilon\)</span> is the residual. You have a gorgeous time series every year (<span class="math inline">\(t\)</span>) for some number of years which makes this a time series regression: <span class="math inline">\(y_t=\beta_0 + \beta_1 x_t + \epsilon_t\)</span>. You run an OLS regression and get a negative slope and a t-test says that your model has skill (good <span class="math inline">\(R^2\)</span>, <span class="math inline">\(p&lt;0.05\)</span>, etc). Great – you fire off a letter to Nature, or write your thesis, or go put some wood in a stream, or just bathe in the satisfaction of a job well done. But of course your model won’t fit perfectly so you’ll have residuals or errors from the model (<span class="math inline">\(\epsilon\)</span>). Now, if those residuals are not independent and identically distributed (~iid), you have violated the assumptions of the OLS regression. The standard errors might be wrong, the p-values might be inflated. Alas. The classic reason that residuals are not ~iid in time series is because they are not independent and that means autocorrelation.</p>
-<p>In general here is a good approach when dealing with time series variables in a regression.</p>
-<ol style="list-style-type: decimal">
-<li><p>Start by doing an ordinary least squares regression.</p></li>
-<li><p>Look at the AR structure of the residuals with ACF and PACF plots.</p></li>
-<li><p>If the residuals look clean then carry on. Note that it’s OK for the variable <span class="math inline">\(y\)</span> or <span class="math inline">\(x\)</span> to be autocorrelated – watch the residuals. If the residuals have AR structure, estimate and diagnose an appropriate AR or ARMA model.</p></li>
-<li><p>If needed, get the adjusted regression coefficients (estimates, standard errors). We want to have a model that adjusts for the AR structure in the residuals. We can create an adjusted data set by hand and use OLS (see text) or use GLS with an appropriate correlation structure (below).</p></li>
-</ol>
-<p>Let’s create a data set to play with. We will generate two time series. The variable <code>x</code> will be ordinary white noise. The variable <code>y</code> will be a function of <code>x</code> plus AR(1) noise <span class="math inline">\(\epsilon\)</span>. We will pretend we don’t know about <span class="math inline">\(\epsilon\)</span> and perform two regressions of <span class="math inline">\(y=f(x)\)</span> and look at the residuals and the estimate of the slope (<span class="math inline">\(\hat\beta\)</span>).</p>
-<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="regression.html#cb274-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">47</span>) <span class="co"># for reproducibility</span></span>
-<span id="cb274-2"><a href="regression.html#cb274-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb274-3"><a href="regression.html#cb274-3" tabindex="-1"></a>phi <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
-<span id="cb274-4"><a href="regression.html#cb274-4" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(n))</span>
-<span id="cb274-5"><a href="regression.html#cb274-5" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="at">model =</span> <span class="fu">list</span>(<span class="at">ar=</span>phi),<span class="at">n =</span> n)</span>
-<span id="cb274-6"><a href="regression.html#cb274-6" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> epsilon <span class="sc">-</span> <span class="fu">mean</span>(epsilon) <span class="co"># demean</span></span>
-<span id="cb274-7"><a href="regression.html#cb274-7" tabindex="-1"></a>B0 <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co"># intercept</span></span>
-<span id="cb274-8"><a href="regression.html#cb274-8" tabindex="-1"></a>B1 <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="co"># slope</span></span>
-<span id="cb274-9"><a href="regression.html#cb274-9" tabindex="-1"></a>y <span class="ot">&lt;-</span> B0 <span class="sc">+</span> B1<span class="sc">*</span>x <span class="sc">+</span> epsilon</span>
-<span id="cb274-10"><a href="regression.html#cb274-10" tabindex="-1"></a><span class="co"># step 1 - the regular ols regression</span></span>
-<span id="cb274-11"><a href="regression.html#cb274-11" tabindex="-1"></a>ols1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>x)</span>
-<span id="cb274-12"><a href="regression.html#cb274-12" tabindex="-1"></a><span class="co"># step 2 - inspect the residuals</span></span>
-<span id="cb274-13"><a href="regression.html#cb274-13" tabindex="-1"></a><span class="fu">Acf</span>(<span class="fu">residuals</span>(ols1)) <span class="co"># problem with independence</span></span></code></pre></div>
-<p><img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-3-1.png" alt="" width="672" /></p>
-<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="regression.html#cb275-1" tabindex="-1"></a><span class="fu">Pacf</span>(<span class="fu">residuals</span>(ols1)) <span class="co"># looks like an AR1</span></span></code></pre></div>
-<p><img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-3-2.png" alt="" width="672" /></p>
-<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="regression.html#cb276-1" tabindex="-1"></a><span class="co"># step 3 - get a good model</span></span>
-<span id="cb276-2"><a href="regression.html#cb276-2" tabindex="-1"></a>ar1 <span class="ot">&lt;-</span> <span class="fu">ar</span>(<span class="fu">residuals</span>(ols1))<span class="sc">$</span>ar</span>
-<span id="cb276-3"><a href="regression.html#cb276-3" tabindex="-1"></a>ar1</span></code></pre></div>
-<pre><code>## [1] 0.7429079</code></pre>
-<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="regression.html#cb278-1" tabindex="-1"></a><span class="co"># two ways of getting a model that works</span></span>
-<span id="cb278-2"><a href="regression.html#cb278-2" tabindex="-1"></a><span class="co"># step 4 - method 1 - adjust by hand</span></span>
-<span id="cb278-3"><a href="regression.html#cb278-3" tabindex="-1"></a><span class="co"># y lagged at one time step: </span></span>
-<span id="cb278-4"><a href="regression.html#cb278-4" tabindex="-1"></a><span class="co"># (see poscript below of notes on lagging)</span></span>
-<span id="cb278-5"><a href="regression.html#cb278-5" tabindex="-1"></a>y.lag1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>,y[<span class="sc">-</span>n]) </span>
-<span id="cb278-6"><a href="regression.html#cb278-6" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">cbind</span>(y,y.lag1))</span></code></pre></div>
-<pre><code>## Time Series:
-## Start = 1 
-## End = 6 
-## Frequency = 1 
-##             y      y.lag1
-## 1  1.27400585          NA
-## 2 -0.66681772  1.27400585
-## 3 -0.03946659 -0.66681772
-## 4  1.07026783 -0.03946659
-## 5  0.52585722  1.07026783
-## 6  0.86750649  0.52585722</code></pre>
-<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="regression.html#cb280-1" tabindex="-1"></a>y2 <span class="ot">&lt;-</span> y <span class="sc">-</span> ar1<span class="sc">*</span>y.lag1 <span class="co"># Use ar1 to make y white noise</span></span>
-<span id="cb280-2"><a href="regression.html#cb280-2" tabindex="-1"></a></span>
-<span id="cb280-3"><a href="regression.html#cb280-3" tabindex="-1"></a>x.lag1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>,x[<span class="sc">-</span>n]) <span class="co"># x lagged at one time step</span></span>
-<span id="cb280-4"><a href="regression.html#cb280-4" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> x <span class="sc">-</span> ar1<span class="sc">*</span>x.lag1 <span class="co"># Use ar1 to make x white noise</span></span>
-<span id="cb280-5"><a href="regression.html#cb280-5" tabindex="-1"></a></span>
-<span id="cb280-6"><a href="regression.html#cb280-6" tabindex="-1"></a>ols2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y2<span class="sc">~</span>x2)</span>
-<span id="cb280-7"><a href="regression.html#cb280-7" tabindex="-1"></a><span class="fu">Acf</span>(<span class="fu">residuals</span>(ols2)) <span class="co"># clean</span></span></code></pre></div>
-<p><img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-3-3.png" alt="" width="672" /></p>
 </div>
-<div id="gls" class="section level3 hasAnchor" number="8.4.2">
-<h3><span class="header-section-number">8.4.2</span> GLS<a href="regression.html#gls" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>We have all been taught OLS. OLS is a <strong>method</strong> for estimating the unknown parameters in a linear regression model – e.g., estimating the intercept (<span class="math inline">\(\beta_0\)</span>) and slope (<span class="math inline">\(\beta_1\)</span>) of a line in the formula <span class="math inline">\(y=\beta_0 + \beta_1x\)</span>. OLS works by choosing the parameters of a linear function by minimizing the sum of the squares of the differences between the observed dependent variable (<span class="math inline">\(y\)</span>) in the given data set and those predicted by the linear function (e.g., <span class="math inline">\(y=\beta_0 + \beta_1x\)</span> in the example above, but note that you can have more than one independent variable in a multiple regression). If conditions like homoscedasticity, independence, and normality are met, the OLS estimators are optimal (often called BLUE – Best Linear Unbiased Estimators). In other words, when the assumptions are met, OLS works. OLS has a nice property that teaching it is relatively simple and can be done without a bunch of matrix algebra. You can calculate the sum of squares by hand and in intro stats courses we relate OLS to simpler concepts like correlation.</p>
-<p>The other common least squares approach is generalized least squares (GLS). GLS is a <strong>method</strong> of estimation of a linear process which accounts for heteroscedasticity and structure in the error term. If OLS is used for homoscedastic regressions (i.e. <span class="math inline">\(y\)</span> has the same variance for each <span class="math inline">\(x\)</span>), GLS is used for heteroscedastic regression (different variances). GLS can also be used for correlated (non-independent) residuals. The theory with GLS is that the residuals can be transformed so that the variances are equal and uncorrelated. You can think of it like this: OLS minimizes the sum of the squared distances between the observed and predicted values assuming uncorrelated and equal variance in errors. GLS minimizes the squared distances relative to the <strong>covariance structure</strong> of the residuals.</p>
-<p>Formally, the GLS estimator is:
-<span class="math display">\[ \hat{\beta}_{GLS} = (X^\top \Sigma^{-1} X)^{-1} X^\top \Sigma^{-1} y \]</span>
-where <span class="math inline">\(\Sigma\)</span> is the error covariance matrix.</p>
-<p>When using <code>gls()</code> from the <code>nlme</code> package in R, estimation is typically done via <strong>Restricted Maximum Likelihood (REML)</strong>, which is particularly useful when estimating variance parameters in the presence of correlation. But the core idea is still weighted least squares — just with more structure in how we define those weights.</p>
-<p>In spatial and time-series analysis, the error term is often autocorrelated. So, if the important difference between OLS and GLS is the assumptions made about the error term of the model, we can use GLS to allow for autocorrelated errors and avoid having inefficient estimation of the unknown parameters in a linear model. <a href="https://www.reddit.com/r/AskStatistics/comments/36ocl1/why_not_always_use_gls_over_ols/">Why not always use GLS over OLS?</a>. It’s a good question and I think of it along the lines of the <a href="https://en.wikipedia.org/wiki/KISS_principle">KISS principle</a>. If you meet the OLS assumptions, use it. If you don’t then look for alternatives like GLS. Also, GLS requires you to know (or correctly guess) the structure of the residual correlations — if you get that wrong, you might do more harm than good.</p>
-<p>We will start by assuming <code>epsilon</code> follows an iid process (e.g., <span class="math inline">\(N(0,1)\)</span>) and we will fit a model with uncorrelated errors. E.g., here we use <code>gls</code> but this gives the same info as <code>lm</code> would because <code>gls</code> assumes iid errors unless told otherwise.</p>
-<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="regression.html#cb281-1" tabindex="-1"></a><span class="co"># step 1 - the regular ols regression but fit with gls rather than lm</span></span>
-<span id="cb281-2"><a href="regression.html#cb281-2" tabindex="-1"></a>gls1 <span class="ot">&lt;-</span> <span class="fu">gls</span>(y<span class="sc">~</span>x)</span>
-<span id="cb281-3"><a href="regression.html#cb281-3" tabindex="-1"></a><span class="fu">summary</span>(gls1)</span></code></pre></div>
-<pre><code>## Generalized least squares fit by REML
-##   Model: y ~ x 
-##   Data: NULL 
-##        AIC     BIC    logLik
-##   395.8891 403.644 -194.9446
+<div id="matrix-approach-to-ols" class="section level2 hasAnchor" number="8.8">
+<h2><span class="header-section-number">8.8</span> Matrix Approach to OLS<a href="aside-ols-via-algebra-and-matrices.html#matrix-approach-to-ols" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The algebraic method works well for simple linear regression, but for multiple regression, the matrix approach is more convenient. In matrix notation, the linear model is:</p>
+<p><span class="math display">\[\mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\epsilon}\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(\mathbf{y}\)</span> is an <span class="math inline">\(n \times 1\)</span> vector of the response variable,</li>
+<li><span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(n \times p\)</span> matrix of predictors (with a column of ones for the intercept),</li>
+<li><span class="math inline">\(\boldsymbol{\beta}\)</span> is a <span class="math inline">\(p \times 1\)</span> vector of coefficients,</li>
+<li><span class="math inline">\(\boldsymbol{\epsilon}\)</span> is an <span class="math inline">\(n \times 1\)</span> vector of errors.</li>
+</ul>
+<div id="goal-minimize-the-sum-of-squared-errors-1" class="section level3 hasAnchor" number="8.8.1">
+<h3><span class="header-section-number">8.8.1</span> Goal: Minimize the Sum of Squared Errors<a href="aside-ols-via-algebra-and-matrices.html#goal-minimize-the-sum-of-squared-errors-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The OLS method minimizes the sum of squared errors, which in matrix form is:</p>
+<p><span class="math display">\[SSE = (\mathbf{y} - \mathbf{X} \boldsymbol{\beta})^T (\mathbf{y} - \mathbf{X} \boldsymbol{\beta})\]</span></p>
+</div>
+<div id="deriving-the-coefficients-1" class="section level3 hasAnchor" number="8.8.2">
+<h3><span class="header-section-number">8.8.2</span> Deriving the Coefficients<a href="aside-ols-via-algebra-and-matrices.html#deriving-the-coefficients-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To find the coefficients that minimize the SSE, we set the derivative with respect to <span class="math inline">\(\boldsymbol{\beta}\)</span> to zero:</p>
+<p><span class="math display">\[\frac{\partial SSE}{\partial \boldsymbol{\beta}} = -2 \mathbf{X}^T (\mathbf{y} - \mathbf{X} \boldsymbol{\beta}) = 0\]</span></p>
+<p>Solving for <span class="math inline">\(\boldsymbol{\beta}\)</span> gives the OLS estimate:</p>
+<p><span class="math display">\[\hat{\boldsymbol{\beta}} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}\]</span></p>
+</div>
+</div>
+<div id="practical-implementation-in-r" class="section level2 hasAnchor" number="8.9">
+<h2><span class="header-section-number">8.9</span> Practical Implementation in R<a href="aside-ols-via-algebra-and-matrices.html#practical-implementation-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="step-1-prepare-the-data" class="section level3 hasAnchor" number="8.9.1">
+<h3><span class="header-section-number">8.9.1</span> Step 1: Prepare the Data<a href="aside-ols-via-algebra-and-matrices.html#step-1-prepare-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We’ll use a small dataset with one predictor (X) and one response variable (y).</p>
+<div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb293-1"><a href="aside-ols-via-algebra-and-matrices.html#cb293-1" tabindex="-1"></a><span class="co"># Create a simple dataset</span></span>
+<span id="cb293-2"><a href="aside-ols-via-algebra-and-matrices.html#cb293-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  <span class="co"># For reproducibility</span></span>
+<span id="cb293-3"><a href="aside-ols-via-algebra-and-matrices.html#cb293-3" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>), <span class="at">ncol=</span><span class="dv">1</span>)  <span class="co"># 10 random predictors</span></span>
+<span id="cb293-4"><a href="aside-ols-via-algebra-and-matrices.html#cb293-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> X <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)  <span class="co"># Response variable with some noise</span></span>
+<span id="cb293-5"><a href="aside-ols-via-algebra-and-matrices.html#cb293-5" tabindex="-1"></a></span>
+<span id="cb293-6"><a href="aside-ols-via-algebra-and-matrices.html#cb293-6" tabindex="-1"></a><span class="co"># Display the data</span></span>
+<span id="cb293-7"><a href="aside-ols-via-algebra-and-matrices.html#cb293-7" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">X =</span> X, <span class="at">y =</span> y)</span></code></pre></div>
+<pre><code>##              X         y
+## 1  -0.56047565  3.103131
+## 2  -0.23017749  2.899459
+## 3   1.55870831  6.518188
+## 4   0.07050839  3.251699
+## 5   0.12928774  2.702734
+## 6   1.71506499  8.217043
+## 7   0.46091621  4.419683
+## 8  -1.26506123 -1.496740
+## 9  -0.68685285  2.327650
+## 10 -0.44566197  1.635885</code></pre>
+</div>
+<div id="step-2-add-an-intercept-column-to-the-predictor-matrix" class="section level3 hasAnchor" number="8.9.2">
+<h3><span class="header-section-number">8.9.2</span> Step 2: Add an Intercept Column to the Predictor Matrix<a href="aside-ols-via-algebra-and-matrices.html#step-2-add-an-intercept-column-to-the-predictor-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We need to add a column of ones to the predictor matrix to account for the intercept term in the regression model.</p>
+<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="aside-ols-via-algebra-and-matrices.html#cb295-1" tabindex="-1"></a><span class="co"># Add intercept column to the predictor matrix</span></span>
+<span id="cb295-2"><a href="aside-ols-via-algebra-and-matrices.html#cb295-2" tabindex="-1"></a>X_with_intercept <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, X)</span>
+<span id="cb295-3"><a href="aside-ols-via-algebra-and-matrices.html#cb295-3" tabindex="-1"></a><span class="co"># Display the new predictor matrix</span></span>
+<span id="cb295-4"><a href="aside-ols-via-algebra-and-matrices.html#cb295-4" tabindex="-1"></a>X_with_intercept</span></code></pre></div>
+<pre><code>##       [,1]        [,2]
+##  [1,]    1 -0.56047565
+##  [2,]    1 -0.23017749
+##  [3,]    1  1.55870831
+##  [4,]    1  0.07050839
+##  [5,]    1  0.12928774
+##  [6,]    1  1.71506499
+##  [7,]    1  0.46091621
+##  [8,]    1 -1.26506123
+##  [9,]    1 -0.68685285
+## [10,]    1 -0.44566197</code></pre>
+</div>
+<div id="step-3-compute-the-ols-coefficients" class="section level3 hasAnchor" number="8.9.3">
+<h3><span class="header-section-number">8.9.3</span> Step 3: Compute the OLS Coefficients<a href="aside-ols-via-algebra-and-matrices.html#step-3-compute-the-ols-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The OLS coefficients can be computed using the formula <span class="math inline">\(\hat{\boldsymbol{\beta}} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}\)</span>.</p>
+<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="aside-ols-via-algebra-and-matrices.html#cb297-1" tabindex="-1"></a><span class="co"># Compute OLS coefficients</span></span>
+<span id="cb297-2"><a href="aside-ols-via-algebra-and-matrices.html#cb297-2" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_with_intercept) <span class="sc">%*%</span> X_with_intercept) <span class="sc">%*%</span> <span class="fu">t</span>(X_with_intercept) <span class="sc">%*%</span> y</span>
+<span id="cb297-3"><a href="aside-ols-via-algebra-and-matrices.html#cb297-3" tabindex="-1"></a></span>
+<span id="cb297-4"><a href="aside-ols-via-algebra-and-matrices.html#cb297-4" tabindex="-1"></a><span class="co"># Print the coefficients</span></span>
+<span id="cb297-5"><a href="aside-ols-via-algebra-and-matrices.html#cb297-5" tabindex="-1"></a>beta</span></code></pre></div>
+<pre><code>##          [,1]
+## [1,] 3.161708
+## [2,] 2.628661</code></pre>
+</div>
+<div id="step-4-make-predictions" class="section level3 hasAnchor" number="8.9.4">
+<h3><span class="header-section-number">8.9.4</span> Step 4: Make Predictions<a href="aside-ols-via-algebra-and-matrices.html#step-4-make-predictions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We can use the computed coefficients to make predictions for the response variable.</p>
+<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="aside-ols-via-algebra-and-matrices.html#cb299-1" tabindex="-1"></a><span class="co"># Make predictions</span></span>
+<span id="cb299-2"><a href="aside-ols-via-algebra-and-matrices.html#cb299-2" tabindex="-1"></a>y_pred <span class="ot">&lt;-</span> X_with_intercept <span class="sc">%*%</span> beta</span>
+<span id="cb299-3"><a href="aside-ols-via-algebra-and-matrices.html#cb299-3" tabindex="-1"></a></span>
+<span id="cb299-4"><a href="aside-ols-via-algebra-and-matrices.html#cb299-4" tabindex="-1"></a><span class="co"># Print predictions</span></span>
+<span id="cb299-5"><a href="aside-ols-via-algebra-and-matrices.html#cb299-5" tabindex="-1"></a>y_pred</span></code></pre></div>
+<pre><code>##             [,1]
+##  [1,]  1.6884072
+##  [2,]  2.5566491
+##  [3,]  7.2590236
+##  [4,]  3.3470504
+##  [5,]  3.5015614
+##  [6,]  7.6700323
+##  [7,]  4.3733002
+##  [8,] -0.1637095
+##  [9,]  1.3562044
+## [10,]  1.9902135</code></pre>
+</div>
+<div id="step-5-verify-with-lm-function-optional" class="section level3 hasAnchor" number="8.9.5">
+<h3><span class="header-section-number">8.9.5</span> Step 5: Verify with <code>lm</code> Function (Optional)<a href="aside-ols-via-algebra-and-matrices.html#step-5-verify-with-lm-function-optional" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To verify our matrix-based implementation, we can compare the results with the <code>lm</code> function in R.</p>
+<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="aside-ols-via-algebra-and-matrices.html#cb301-1" tabindex="-1"></a><span class="co"># Verify with lm function</span></span>
+<span id="cb301-2"><a href="aside-ols-via-algebra-and-matrices.html#cb301-2" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X)</span>
+<span id="cb301-3"><a href="aside-ols-via-algebra-and-matrices.html#cb301-3" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ X)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.33303 -0.64421 -0.02448  0.49596  1.41472 
 ## 
 ## Coefficients:
-##                  Value Std.Error   t-value p-value
-## (Intercept) 0.01618039 0.1690315 0.0957241  0.9239
-## x           0.18575084 0.1726484 1.0758912  0.2846
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   3.1617     0.2852  11.086 3.91e-06 ***
+## X             2.6287     0.3141   8.368 3.15e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-##  Correlation: 
-##   (Intr)
-## x -0.053
-## 
-## Standardized residuals:
-##        Min         Q1        Med         Q3        Max 
-## -2.4730783 -0.3348105  0.1230050  0.5216485  2.3144795 
-## 
-## Residual standard error: 1.687976 
-## Degrees of freedom: 100 total; 98 residual</code></pre>
-<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb283-1"><a href="regression.html#cb283-1" tabindex="-1"></a><span class="co"># step 2 - inspect the residuals</span></span>
-<span id="cb283-2"><a href="regression.html#cb283-2" tabindex="-1"></a><span class="fu">Acf</span>(<span class="fu">residuals</span>(gls1)) <span class="co"># problem with independence</span></span></code></pre></div>
-<p><img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" /></p>
-<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb284-1"><a href="regression.html#cb284-1" tabindex="-1"></a><span class="fu">Pacf</span>(<span class="fu">residuals</span>(gls1)) <span class="co"># looks like an AR1</span></span></code></pre></div>
-<p><img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-4-2.png" alt="" width="672" /></p>
-<p>The residuals of this model are autocorrelated as an AR(1) process from looking at the plots. Thus, we have violated the assumption of independent residuals. But do not despair. We will use a GLS model that allows us to specify an AR(1) correlation structure for the residuals and perform hypothesis testing in the presence of this temporal structure. Doing so, will give us new and improved estimates of the parameters. We will thus sleep well knowing in our hearts that we have done good.</p>
-<p>We will do this by updating the <code>gls1</code> object and specifying that errors follow an autoregressive process with the <code>corARMA</code> function. By specifying <code>corARMA(p=1)</code> we are asking <code>nlme</code> to fit an AR(1) error structure. An AR(1) assumes that residuals closer in time are more similar and the correlation decays geometrically. If we had residuals that followed a different process (e.g., an ARMA(1,1) model) we could try to fit that with <code>corARMA(p=1, q=1)</code>. The <code>update</code> function will then try to estimate the AR and MA parameters using numerical optimization. This can fail when models are too complex (e.g., too high an order).</p>
-<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="regression.html#cb285-1" tabindex="-1"></a><span class="co"># step 3 - update the model with an appropriate correlation structure</span></span>
-<span id="cb285-2"><a href="regression.html#cb285-2" tabindex="-1"></a>cs1 <span class="ot">&lt;-</span> <span class="fu">corARMA</span>(<span class="at">p=</span><span class="dv">1</span>)</span>
-<span id="cb285-3"><a href="regression.html#cb285-3" tabindex="-1"></a>gls2 <span class="ot">&lt;-</span> <span class="fu">update</span>(gls1,<span class="at">correlation=</span>cs1)</span>
-<span id="cb285-4"><a href="regression.html#cb285-4" tabindex="-1"></a><span class="fu">summary</span>(gls2)</span></code></pre></div>
-<pre><code>## Generalized least squares fit by REML
-##   Model: y ~ x 
-##   Data: NULL 
-##      AIC      BIC  logLik
-##   307.26 317.5998 -149.63
-## 
-## Correlation Structure: AR(1)
-##  Formula: ~1 
-##  Parameter estimate(s):
-##       Phi 
-## 0.7946776 
-## 
-## Coefficients:
-##                  Value Std.Error   t-value p-value
-## (Intercept) -0.0697539 0.5035316 -0.138529  0.8901
-## x            0.4496653 0.0948284  4.741882  0.0000
-## 
-##  Correlation: 
-##   (Intr)
-## x -0.023
-## 
-## Standardized residuals:
-##        Min         Q1        Med         Q3        Max 
-## -2.4516182 -0.4319559  0.1445074  0.5484367  2.1868956 
-## 
-## Residual standard error: 1.767387 
-## Degrees of freedom: 100 total; 98 residual</code></pre>
-<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb287-1"><a href="regression.html#cb287-1" tabindex="-1"></a><span class="co"># step 4 - and inspect the residuals. Note type=&quot;normalized&quot;</span></span>
-<span id="cb287-2"><a href="regression.html#cb287-2" tabindex="-1"></a><span class="co"># in the calls to `residuals`.</span></span>
-<span id="cb287-3"><a href="regression.html#cb287-3" tabindex="-1"></a><span class="fu">Acf</span>(<span class="fu">residuals</span>(gls2,<span class="at">type=</span><span class="st">&quot;normalized&quot;</span>)) <span class="co"># clean!</span></span></code></pre></div>
-<p><img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" /></p>
-<p>We ask for the “normalized” residuals above because they are the transformed residuals that account for the error correlation and heteroscedasticity structure we specified. They’re essentially standardized residuals that assume your model’s covariance matrix is correct.</p>
-<p>Zooming out a bit. We fit a linear model of the form <span class="math inline">\(y=\beta_0 + \beta_1x\)</span> using GLS and got out estimates for the intercept (<span class="math inline">\(\hat\beta_0\)</span>) and slope (<span class="math inline">\(\hat\beta_1\)</span>). First, we assumed that the error term was uncorrelated. Looking at summary, we can see the the estimate of the slope (<span class="math inline">\(\hat\beta_1\)</span>) is 0.186 and significantly different than zero. We also have a variety of goodness of fit statistics and some other goodies. I’ll walk through those in the video. The important thing to wrap your head around here is that we fit GLS with uncorrelated errors meaning it’s essentially identical to OLS. Compare the above to the more familiar <code>summary(lm(y~x))</code>.</p>
-<p>So what’s the big deal? We started with a model that showed <code>x</code> as a significant predictor of <code>y</code>. We ended up, after much wailing and rending of garments, with a model that showed <code>x</code> as a significant predictor of <code>y</code>. Is it a better model? Was it worth the trouble? Let’s consider a few things.</p>
-<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb288-1"><a href="regression.html#cb288-1" tabindex="-1"></a><span class="fu">anova</span>(gls1,gls2)</span></code></pre></div>
-<pre><code>##      Model df      AIC      BIC    logLik   Test  L.Ratio p-value
-## gls1     1  3 395.8891 403.6440 -194.9445                        
-## gls2     2  4 307.2600 317.5998 -149.6300 1 vs 2 90.62914  &lt;.0001</code></pre>
-<ol style="list-style-type: decimal">
-<li><p>The GLS model with the correlated residuals has a lower AIC and BIC than the naive uncorrelated model.</p></li>
-<li><p>The original function we used to make <span class="math inline">\(y\)</span> was <span class="math inline">\(y=\beta_0 + \beta_1x + \epsilon\)</span> where <span class="math inline">\(\beta_0 = 0\)</span> and <span class="math inline">\(\beta_1\)</span> = 0.5. Both the GLS models got the intercept right (-0.07 for <code>gls2</code> and 0.02 for <code>gls1</code>). But the GLS model with the correlated residuals does a better job of getting the true value of the slope (0.45 vs 0.19).</p></li>
-<li><p>The error estimate on <span class="math inline">\(\beta_1\)</span> was lower on the model with correlated residuals than the naive uncorrelated model (0.0948 vs 0.1726). This is because GLS uses the correct structure of error variance and correlation, which improves <strong>efficiency</strong> of parameter estimation.</p></li>
-</ol>
-<p>Finally, we did it “right” – that should be satisfying. What would have happened if <span class="math inline">\(\beta_1\)</span> had been lower? That is, what if <span class="math inline">\(y\)</span> was made up of more noise and less <span class="math inline">\(x\)</span>? E.g., <span class="math inline">\(y=\beta_0 + 0.5(\beta_1)x + 2(\epsilon)\)</span>? This model, with 100 points should be pretty robust on the simple hypothesis test on the slope (H<span class="math inline">\(_1\)</span>: <span class="math inline">\(\beta_1 \neq 0\)</span>) but we know that parameter estimation is inefficient with autocorrelated residuals so having clean residuals and good parameter estimation is important.</p>
-<p>There is a lot to learn about how the <code>nlme</code> library goes about fitting the correlation structures. The definitive book on the subject is Pinheiro and Bates (2000) and should be something you look to for more information. Zuur’s 2009 book “Mixed Effects Models and Extensions in Ecology with R” is also quite good.</p>
+## Residual standard error: 0.8988 on 8 degrees of freedom
+## Multiple R-squared:  0.8975, Adjusted R-squared:  0.8847 
+## F-statistic: 70.03 on 1 and 8 DF,  p-value: 3.153e-05</code></pre>
 </div>
 </div>
-<div id="your-work-6" class="section level2 hasAnchor" number="8.5">
-<h2><span class="header-section-number">8.5</span> Your work<a href="regression.html#your-work-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="what-does-generalized-mean" class="section level3 hasAnchor" number="8.5.1">
-<h3><span class="header-section-number">8.5.1</span> What Does Generalized Mean?<a href="regression.html#what-does-generalized-mean" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Below I’m going to ask you to compare GLS and OLS using some real data. But first, write a paragraph that explains the difference between OLS and GLS. What is a generalized model?</p>
-</div>
-<div id="regression-simulation" class="section level3 hasAnchor" number="8.5.2">
-<h3><span class="header-section-number">8.5.2</span> Regression Simulation<a href="regression.html#regression-simulation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Now, revisit the code above and adjust <code>n</code>, <code>B1</code>, and <code>phi</code> to see how the results of an OLS model change. Is OLS or GLS better at capturing the true value of <code>B1</code> when there are non-independent errors? Or is OLS robust to moderate autocorrelation? You can do this in a full blown simulation of course, but you can just mess around with the values a bit and try to get a feel for it.</p>
-</div>
-<div id="regression-for-real" class="section level3 hasAnchor" number="8.5.3">
-<h3><span class="header-section-number">8.5.3</span> Regression for real<a href="regression.html#regression-for-real" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Finally, let’s look at some data. A great <a href="http://onlinelibrary.wiley.com/doi/10.1002/2015GL067613/full">paper</a> by Connie Woodhouse and colleagues looks at how annual flows on the Colorado River are affected by precipitation, soil moisture, and temperature. Read the paper. It’s great and short.</p>
-<div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb290-1"><a href="regression.html#cb290-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/woodhouse.rds&quot;</span>)</span>
-<span id="cb290-2"><a href="regression.html#cb290-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">MAF =</span> LeesWYflow <span class="sc">/</span> <span class="fl">1e6</span>)</span>
-<span id="cb290-3"><a href="regression.html#cb290-3" tabindex="-1"></a><span class="co"># add a 5-yr moving average</span></span>
-<span id="cb290-4"><a href="regression.html#cb290-4" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">MAF5yr =</span> <span class="fu">c</span>(stats<span class="sc">::</span><span class="fu">filter</span>(MAF,<span class="at">filter =</span> <span class="fu">rep</span>(<span class="fl">0.2</span>,<span class="dv">5</span>))))</span>
-<span id="cb290-5"><a href="regression.html#cb290-5" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat, <span class="fu">aes</span>(<span class="at">x=</span>Year)) <span class="sc">+</span></span>
-<span id="cb290-6"><a href="regression.html#cb290-6" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>MAF),<span class="at">color=</span><span class="st">&quot;lightgreen&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb290-7"><a href="regression.html#cb290-7" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>MAF5yr),<span class="at">color=</span><span class="st">&quot;darkgreen&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb290-8"><a href="regression.html#cb290-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span> <span class="st">&quot;Millions of Acre Feet&quot;</span>, <span class="at">title=</span><span class="st">&quot;Colorado River at Lee&#39;s Ferry&quot;</span>,</span>
-<span id="cb290-9"><a href="regression.html#cb290-9" tabindex="-1"></a>       <span class="at">sub =</span> <span class="st">&quot;Total Flow for Water Year&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb290-10"><a href="regression.html#cb290-10" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))</span></code></pre></div>
-<pre><code>## Ignoring unknown labels:
-## • sub : &quot;Total Flow for Water Year&quot;</code></pre>
-<pre><code>## Warning: Removed 4 rows containing missing values or values outside the scale range
-## (`geom_line()`).</code></pre>
-<p><img src="07TimeSeries-Regression_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" /></p>
-<p>The main gist of the paper is that precipitation explains most of the variability in the river’s flow but that temperature is important under certain conditions. E.g., “Different combinations of temperature, precipitation, and soil moisture can result in flow deficits of similar magnitude, but recent droughts have been amplified by warmer temperatures that exacerbate the effects of relatively modest precipitation deficits.” This is cool: Transpiration and evaporation are greater when it’s warmer, right? The cool thing that Woodhouse et al. have done is tease out the relationship between precipitation and temperature in a new way.</p>
-<p>The data they used are <a href="http://api.onlinelibrary.wiley.com/asset/v1/doi/10.1002%2F2015GL067613/asset/supinfo%2Fgrl54032-sup-0002-supplementary.xls?l=SkaBT8QEx2qJNlNuWYUA8egjXrDIGPrsc%2BJNFhVbgejndxaATsnxsKxw9Obx5z6ES3xmGsI%2BC8dr%0ATCeBc2NX422bcHVTPUXn">online</a> and I’ve grabbed the relevant info and put it in the file <code>woodhouse.rds</code> as a <code>data.frame</code>. Explore the data (go back to week one for ideas of what to do – <strong>plot your data!</strong>) and eventually make a model of river flow (<code>LeesWYflow</code>) as a function of October to April precipitation (<code>OctAprP</code>). The units on flow are cumulative flow over the water year in acre feet and cumulative October to April precipitation is in mm.</p>
-<p>Is it a good model? How do the residuals look in a time series context? Interpret. Does a GLS approach change your interpretation from an OLS approach? Given your work with the simulated data above do you think Woodhouse et al. are on safe footing with OLS?</p>
-</div>
-<div id="write-up-and-reflect-6" class="section level3 hasAnchor" number="8.5.4">
-<h3><span class="header-section-number">8.5.4</span> Write Up and Reflect<a href="regression.html#write-up-and-reflect-6" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Pass in a R Markdown doc with your analysis. Leave all code visible, although you may quiet messages and warnings if desired. Turn in your knitted html. The last section of your document should include a reflection where you explain how it all went. What triumphs did you have? What is still confusing?</p>
+<div id="conclusion-1" class="section level2 hasAnchor" number="8.10">
+<h2><span class="header-section-number">8.10</span> Conclusion<a href="aside-ols-via-algebra-and-matrices.html#conclusion-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this document, we explained OLS regression using both algebra and matrix notation. We demonstrated how to derive the OLS estimates and implemented the matrix-based method in R. This approach helps build a strong understanding of the underlying mechanics of linear regression.</p>
 
-</div>
 </div>
 </div>
             </section>
@@ -1420,8 +1374,8 @@ where <span class="math inline">\(\Sigma\)</span> is the error covariance matrix
           </div>
         </div>
       </div>
-<a href="cross-correlation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="aside-ols-via-algebra-and-matrices.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="filtering-smoothing.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

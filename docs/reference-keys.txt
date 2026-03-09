@@ -21,7 +21,6 @@ your-work
 berkeley-earth-temperature-data
 your-turn
 write-up-and-reflect
-an-aside-understanding-methods-and-generics-in-r
 youve-come-a-long-way-in-r
 why-use-generics
 same-function-different-behavior-what-gives
@@ -73,7 +72,6 @@ extra-challenge-1
 sockeye
 write-up-and-reflect-2
 postscript-a-helpful-plotting-chunk
-aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process
 introduction
 acf-and-pacf-of-a-single-ma1-simulation
 simulation-study-across-many-ma1-coefficients
@@ -139,6 +137,20 @@ what-does-generalized-mean
 regression-simulation
 regression-for-real
 write-up-and-reflect-6
+introduction-2
+algebraic-approach-to-ols
+goal-minimize-the-sum-of-squared-errors
+deriving-the-coefficients
+matrix-approach-to-ols
+goal-minimize-the-sum-of-squared-errors-1
+deriving-the-coefficients-1
+practical-implementation-in-r
+step-1-prepare-the-data
+step-2-add-an-intercept-column-to-the-predictor-matrix
+step-3-compute-the-ols-coefficients
+step-4-make-predictions
+step-5-verify-with-lm-function-optional
+conclusion-1
 filtering-smoothing
 big-idea-7
 packages-7

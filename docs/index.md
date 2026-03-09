@@ -2,7 +2,7 @@
 title: "Time Series Analysis for Environmental Scientists"
 subtitle: "Notes for ESCI 504"
 author: "Andy Bunn"
-date: "08-March-2026"
+date: "09-March-2026"
 description: "Time series analysis notes and exercises for ESCI 504"
 #github-repo: make one OpenDendro/dplR-workshop
 documentclass: book
@@ -13,6 +13,7 @@ link-citations: yes
 site: bookdown::bookdown_site
 output: 
   bookdown::gitbook:
+    css: style.css
     includes:
       in_header: hide_code.html # inspired by: https://stackoverflow.com/questions/45360998/code-folding-in-bookdown
     config:

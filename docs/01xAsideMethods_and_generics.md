@@ -1,4 +1,4 @@
-# An Aside: Understanding Methods and Generics in R
+# Aside: Understanding Methods and Generics in R {- .aside-chapter}
 
 ## You’ve Come a Long Way in R
 
@@ -289,7 +289,7 @@ summary.lm
 ##     class(ans) <- "summary.lm"
 ##     ans
 ## }
-## <bytecode: 0x14cce12a8>
+## <bytecode: 0x11fafe6a8>
 ## <environment: namespace:stats>
 ```
 
@@ -400,7 +400,7 @@ getS3method("summary", "lm")
 ##     class(ans) <- "summary.lm"
 ##     ans
 ## }
-## <bytecode: 0x14cce12a8>
+## <bytecode: 0x11fafe6a8>
 ## <environment: namespace:stats>
 ```
 
@@ -425,7 +425,7 @@ summary
 ```
 ## function (object, ...) 
 ## UseMethod("summary")
-## <bytecode: 0x14cce60d8>
+## <bytecode: 0x11fb034d8>
 ## <environment: namespace:base>
 ```
 
@@ -623,7 +623,7 @@ getS3method("summary", "lm")
 ##     class(ans) <- "summary.lm"
 ##     ans
 ## }
-## <bytecode: 0x14cce12a8>
+## <bytecode: 0x11fafe6a8>
 ## <environment: namespace:stats>
 ```
 

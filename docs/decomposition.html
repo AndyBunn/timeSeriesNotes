@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>4 Decomposition | Time Series Analysis for Environmental Scientists</title>
+  <title>3 Decomposition | Time Series Analysis for Environmental Scientists</title>
   <meta name="description" content="Time series analysis notes and exercises for ESCI 504" />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="4 Decomposition | Time Series Analysis for Environmental Scientists" />
+  <meta property="og:title" content="3 Decomposition | Time Series Analysis for Environmental Scientists" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Time series analysis notes and exercises for ESCI 504" />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="4 Decomposition | Time Series Analysis for Environmental Scientists" />
+  <meta name="twitter:title" content="3 Decomposition | Time Series Analysis for Environmental Scientists" />
   
   <meta name="twitter:description" content="Time series analysis notes and exercises for ESCI 504" />
   
@@ -29,7 +29,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="an-aside-understanding-methods-and-generics-in-r.html"/>
+<link rel="prev" href="aside-understanding-methods-and-generics-in-r.html"/>
 <link rel="next" href="arp-acf-pacf-etc..html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -905,6 +905,7 @@ div.csl-indent {
 }
 </style>
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -952,218 +953,241 @@ div.csl-indent {
 <li class="chapter" data-level="2.10.3" data-path="the-measure-of-time.html"><a href="the-measure-of-time.html#write-up-and-reflect"><i class="fa fa-check"></i><b>2.10.3</b> Write Up and Reflect</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html"><i class="fa fa-check"></i><b>3</b> An Aside: Understanding Methods and Generics in R</a>
+<li class="chapter" data-level="" data-path="aside-understanding-methods-and-generics-in-r.html"><a href="aside-understanding-methods-and-generics-in-r.html"><i class="fa fa-check"></i>Aside: Understanding Methods and Generics in R</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#youve-come-a-long-way-in-r"><i class="fa fa-check"></i><b>3.1</b> You’ve Come a Long Way in R</a></li>
-<li class="chapter" data-level="3.2" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#why-use-generics"><i class="fa fa-check"></i><b>3.2</b> Why Use Generics?</a>
+<li class="chapter" data-level="2.11" data-path="aside-understanding-methods-and-generics-in-r.html"><a href="aside-understanding-methods-and-generics-in-r.html#youve-come-a-long-way-in-r"><i class="fa fa-check"></i><b>2.11</b> You’ve Come a Long Way in R</a></li>
+<li class="chapter" data-level="2.12" data-path="aside-understanding-methods-and-generics-in-r.html"><a href="aside-understanding-methods-and-generics-in-r.html#why-use-generics"><i class="fa fa-check"></i><b>2.12</b> Why Use Generics?</a>
 <ul>
-<li class="chapter" data-level="3.2.1" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#same-function-different-behavior-what-gives"><i class="fa fa-check"></i><b>3.2.1</b> Same Function, Different Behavior — What Gives?</a></li>
+<li class="chapter" data-level="2.12.1" data-path="aside-understanding-methods-and-generics-in-r.html"><a href="aside-understanding-methods-and-generics-in-r.html#same-function-different-behavior-what-gives"><i class="fa fa-check"></i><b>2.12.1</b> Same Function, Different Behavior — What Gives?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#how-this-works"><i class="fa fa-check"></i><b>3.3</b> How This Works</a></li>
-<li class="chapter" data-level="3.4" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#whats-the-difference-between-a-generic-and-a-method"><i class="fa fa-check"></i><b>3.4</b> What’s the Difference Between a Generic and a Method?</a></li>
-<li class="chapter" data-level="3.5" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#common-generic-functions"><i class="fa fa-check"></i><b>3.5</b> Common Generic Functions</a></li>
-<li class="chapter" data-level="3.6" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#how-to-explore-and-understand-methods"><i class="fa fa-check"></i><b>3.6</b> How to Explore and Understand Methods</a></li>
-<li class="chapter" data-level="3.7" data-path="an-aside-understanding-methods-and-generics-in-r.html"><a href="an-aside-understanding-methods-and-generics-in-r.html#why-this-matters"><i class="fa fa-check"></i><b>3.7</b> Why This Matters</a></li>
+<li class="chapter" data-level="2.13" data-path="aside-understanding-methods-and-generics-in-r.html"><a href="aside-understanding-methods-and-generics-in-r.html#how-this-works"><i class="fa fa-check"></i><b>2.13</b> How This Works</a></li>
+<li class="chapter" data-level="2.14" data-path="aside-understanding-methods-and-generics-in-r.html"><a href="aside-understanding-methods-and-generics-in-r.html#whats-the-difference-between-a-generic-and-a-method"><i class="fa fa-check"></i><b>2.14</b> What’s the Difference Between a Generic and a Method?</a></li>
+<li class="chapter" data-level="2.15" data-path="aside-understanding-methods-and-generics-in-r.html"><a href="aside-understanding-methods-and-generics-in-r.html#common-generic-functions"><i class="fa fa-check"></i><b>2.15</b> Common Generic Functions</a></li>
+<li class="chapter" data-level="2.16" data-path="aside-understanding-methods-and-generics-in-r.html"><a href="aside-understanding-methods-and-generics-in-r.html#how-to-explore-and-understand-methods"><i class="fa fa-check"></i><b>2.16</b> How to Explore and Understand Methods</a></li>
+<li class="chapter" data-level="2.17" data-path="aside-understanding-methods-and-generics-in-r.html"><a href="aside-understanding-methods-and-generics-in-r.html#why-this-matters"><i class="fa fa-check"></i><b>2.17</b> Why This Matters</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="decomposition.html"><a href="decomposition.html"><i class="fa fa-check"></i><b>4</b> Decomposition</a>
+<li class="chapter" data-level="3" data-path="decomposition.html"><a href="decomposition.html"><i class="fa fa-check"></i><b>3</b> Decomposition</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="decomposition.html"><a href="decomposition.html#big-idea-1"><i class="fa fa-check"></i><b>4.1</b> Big Idea</a></li>
-<li class="chapter" data-level="4.2" data-path="decomposition.html"><a href="decomposition.html#reading-1"><i class="fa fa-check"></i><b>4.2</b> Reading</a></li>
-<li class="chapter" data-level="4.3" data-path="decomposition.html"><a href="decomposition.html#packages-1"><i class="fa fa-check"></i><b>4.3</b> Packages</a></li>
-<li class="chapter" data-level="4.4" data-path="decomposition.html"><a href="decomposition.html#seasonality-and-decomposition"><i class="fa fa-check"></i><b>4.4</b> Seasonality and decomposition</a>
+<li class="chapter" data-level="3.1" data-path="decomposition.html"><a href="decomposition.html#big-idea-1"><i class="fa fa-check"></i><b>3.1</b> Big Idea</a></li>
+<li class="chapter" data-level="3.2" data-path="decomposition.html"><a href="decomposition.html#reading-1"><i class="fa fa-check"></i><b>3.2</b> Reading</a></li>
+<li class="chapter" data-level="3.3" data-path="decomposition.html"><a href="decomposition.html#packages-1"><i class="fa fa-check"></i><b>3.3</b> Packages</a></li>
+<li class="chapter" data-level="3.4" data-path="decomposition.html"><a href="decomposition.html#seasonality-and-decomposition"><i class="fa fa-check"></i><b>3.4</b> Seasonality and decomposition</a>
 <ul>
-<li class="chapter" data-level="4.4.1" data-path="decomposition.html"><a href="decomposition.html#breaking-down-a-series-the-tedious-way"><i class="fa fa-check"></i><b>4.4.1</b> Breaking down a series the tedious way</a></li>
-<li class="chapter" data-level="4.4.2" data-path="decomposition.html"><a href="decomposition.html#breaking-down-a-series-the-easy-way"><i class="fa fa-check"></i><b>4.4.2</b> Breaking down a series the easy way</a></li>
-<li class="chapter" data-level="4.4.3" data-path="decomposition.html"><a href="decomposition.html#how-does-m-differ-from-the-slope-in-a-lm"><i class="fa fa-check"></i><b>4.4.3</b> How does <code>m</code> differ from the slope in a <code>lm</code>?</a></li>
-<li class="chapter" data-level="4.4.4" data-path="decomposition.html"><a href="decomposition.html#warning"><i class="fa fa-check"></i><b>4.4.4</b> Warning</a></li>
+<li class="chapter" data-level="3.4.1" data-path="decomposition.html"><a href="decomposition.html#breaking-down-a-series-the-tedious-way"><i class="fa fa-check"></i><b>3.4.1</b> Breaking down a series the tedious way</a></li>
+<li class="chapter" data-level="3.4.2" data-path="decomposition.html"><a href="decomposition.html#breaking-down-a-series-the-easy-way"><i class="fa fa-check"></i><b>3.4.2</b> Breaking down a series the easy way</a></li>
+<li class="chapter" data-level="3.4.3" data-path="decomposition.html"><a href="decomposition.html#how-does-m-differ-from-the-slope-in-a-lm"><i class="fa fa-check"></i><b>3.4.3</b> How does <code>m</code> differ from the slope in a <code>lm</code>?</a></li>
+<li class="chapter" data-level="3.4.4" data-path="decomposition.html"><a href="decomposition.html#warning"><i class="fa fa-check"></i><b>3.4.4</b> Warning</a></li>
 </ul></li>
-<li class="chapter" data-level="4.5" data-path="decomposition.html"><a href="decomposition.html#stationarity"><i class="fa fa-check"></i><b>4.5</b> Stationarity</a></li>
-<li class="chapter" data-level="4.6" data-path="decomposition.html"><a href="decomposition.html#your-work-1"><i class="fa fa-check"></i><b>4.6</b> Your Work</a>
+<li class="chapter" data-level="3.5" data-path="decomposition.html"><a href="decomposition.html#stationarity"><i class="fa fa-check"></i><b>3.5</b> Stationarity</a></li>
+<li class="chapter" data-level="3.6" data-path="decomposition.html"><a href="decomposition.html#your-work-1"><i class="fa fa-check"></i><b>3.6</b> Your Work</a>
 <ul>
-<li class="chapter" data-level="4.6.1" data-path="decomposition.html"><a href="decomposition.html#air-passengers"><i class="fa fa-check"></i><b>4.6.1</b> Air Passengers</a></li>
-<li class="chapter" data-level="4.6.2" data-path="decomposition.html"><a href="decomposition.html#kbli"><i class="fa fa-check"></i><b>4.6.2</b> KBLI</a></li>
-<li class="chapter" data-level="4.6.3" data-path="decomposition.html"><a href="decomposition.html#write-up-and-reflect-1"><i class="fa fa-check"></i><b>4.6.3</b> Write Up and Reflect</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html"><i class="fa fa-check"></i><b>5</b> AR(p), ACF, PACF, etc.</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#big-idea-2"><i class="fa fa-check"></i><b>5.1</b> Big Idea</a></li>
-<li class="chapter" data-level="5.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#reading-2"><i class="fa fa-check"></i><b>5.2</b> Reading</a></li>
-<li class="chapter" data-level="5.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#packages-2"><i class="fa fa-check"></i><b>5.3</b> Packages</a></li>
-<li class="chapter" data-level="5.4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#correlation-and-covariance"><i class="fa fa-check"></i><b>5.4</b> Correlation and Covariance</a></li>
-<li class="chapter" data-level="5.5" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation"><i class="fa fa-check"></i><b>5.5</b> Autocorrelation</a></li>
-<li class="chapter" data-level="5.6" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation-function"><i class="fa fa-check"></i><b>5.6</b> Autocorrelation Function</a>
-<ul>
-<li class="chapter" data-level="5.6.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#the-very-fun-presentation"><i class="fa fa-check"></i><b>5.6.1</b> The Very Fun Presentation</a></li>
-</ul></li>
-<li class="chapter" data-level="5.7" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#the-boring-presentation"><i class="fa fa-check"></i><b>5.7</b> The Boring Presentation</a>
-<ul>
-<li class="chapter" data-level="5.7.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#tidy"><i class="fa fa-check"></i><b>5.7.1</b> Tidy</a></li>
-</ul></li>
-<li class="chapter" data-level="5.8" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#partial-autocorrelation-function"><i class="fa fa-check"></i><b>5.8</b> Partial Autocorrelation Function</a>
-<ul>
-<li class="chapter" data-level="5.8.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#pacf"><i class="fa fa-check"></i><b>5.8.1</b> PACF</a></li>
-<li class="chapter" data-level="5.8.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#underneath-the-hood-of-pacf"><i class="fa fa-check"></i><b>5.8.2</b> Underneath the Hood of PACF</a></li>
-</ul></li>
-<li class="chapter" data-level="5.9" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#ar1-to-arp"><i class="fa fa-check"></i><b>5.9</b> AR(1) to AR(p)</a></li>
-<li class="chapter" data-level="5.10" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#random-walks"><i class="fa fa-check"></i><b>5.10</b> Random walks</a>
-<ul>
-<li class="chapter" data-level="5.10.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#stationarity-is-dead"><i class="fa fa-check"></i><b>5.10.1</b> Stationarity is dead</a></li>
-</ul></li>
-<li class="chapter" data-level="5.11" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation-examples-with-real-data"><i class="fa fa-check"></i><b>5.11</b> Autocorrelation examples with real data</a>
-<ul>
-<li class="chapter" data-level="5.11.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#nile"><i class="fa fa-check"></i><b>5.11.1</b> Nile</a></li>
-<li class="chapter" data-level="5.11.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#air-temperature"><i class="fa fa-check"></i><b>5.11.2</b> Air Temperature</a></li>
-<li class="chapter" data-level="5.11.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#sunspots"><i class="fa fa-check"></i><b>5.11.3</b> Sunspots</a></li>
-</ul></li>
-<li class="chapter" data-level="5.12" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#choosing-the-order-of-an-arp-model-by-aic"><i class="fa fa-check"></i><b>5.12</b> Choosing the Order of an AR(p) Model by AIC</a></li>
-<li class="chapter" data-level="5.13" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#your-work-2"><i class="fa fa-check"></i><b>5.13</b> Your work</a>
-<ul>
-<li class="chapter" data-level="5.13.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#acf-and-pacf-with-different-values-of-phi."><i class="fa fa-check"></i><b>5.13.1</b> ACF and PACF with different values of <span class="math inline">\(\phi\)</span>.</a></li>
-<li class="chapter" data-level="5.13.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#roll-your-own-ar2"><i class="fa fa-check"></i><b>5.13.2</b> Roll your own AR(2)</a></li>
-<li class="chapter" data-level="5.13.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#sockeye"><i class="fa fa-check"></i><b>5.13.3</b> Sockeye</a></li>
-<li class="chapter" data-level="5.13.4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#write-up-and-reflect-2"><i class="fa fa-check"></i><b>5.13.4</b> Write Up and Reflect</a></li>
-</ul></li>
-<li class="chapter" data-level="5.14" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#postscript-a-helpful-plotting-chunk"><i class="fa fa-check"></i><b>5.14</b> Postscript: A Helpful Plotting Chunk</a></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><i class="fa fa-check"></i><b>6</b> Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process</a>
-<ul>
-<li class="chapter" data-level="6.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#introduction"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
-<li class="chapter" data-level="6.2" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#acf-and-pacf-of-a-single-ma1-simulation"><i class="fa fa-check"></i><b>6.2</b> ACF and PACF of a Single MA(1) Simulation</a></li>
-<li class="chapter" data-level="6.3" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#simulation-study-across-many-ma1-coefficients"><i class="fa fa-check"></i><b>6.3</b> Simulation Study Across Many MA(1) Coefficients</a></li>
-<li class="chapter" data-level="6.4" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-1-pacf-lag-1-underestimates-theta"><i class="fa fa-check"></i><b>6.4</b> Insight 1: PACF Lag 1 Underestimates <span class="math inline">\(\theta\)</span></a>
-<ul>
-<li class="chapter" data-level="6.4.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens"><i class="fa fa-check"></i><b>6.4.1</b> Why This Happens</a></li>
-</ul></li>
-<li class="chapter" data-level="6.5" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-2-pacf-lag-2-is-consistently-negative"><i class="fa fa-check"></i><b>6.5</b> Insight 2: PACF Lag 2 is Consistently Negative</a>
-<ul>
-<li class="chapter" data-level="6.5.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens-1"><i class="fa fa-check"></i><b>6.5.1</b> Why This Happens</a></li>
-</ul></li>
-<li class="chapter" data-level="6.6" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#conclusion"><i class="fa fa-check"></i><b>6.6</b> Conclusion</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="armapq.html"><a href="armapq.html"><i class="fa fa-check"></i><b>7</b> ARMA(p,q)</a>
-<ul>
-<li class="chapter" data-level="7.1" data-path="armapq.html"><a href="armapq.html#big-idea-3"><i class="fa fa-check"></i><b>7.1</b> Big Idea</a></li>
-<li class="chapter" data-level="7.2" data-path="armapq.html"><a href="armapq.html#reading-3"><i class="fa fa-check"></i><b>7.2</b> Reading</a></li>
-<li class="chapter" data-level="7.3" data-path="armapq.html"><a href="armapq.html#packages-3"><i class="fa fa-check"></i><b>7.3</b> Packages</a></li>
-<li class="chapter" data-level="7.4" data-path="armapq.html"><a href="armapq.html#arp-to-maq"><i class="fa fa-check"></i><b>7.4</b> AR(p) to MA(q)</a></li>
-<li class="chapter" data-level="7.5" data-path="armapq.html"><a href="armapq.html#armapq-1"><i class="fa fa-check"></i><b>7.5</b> ARMA(p,q)</a></li>
-<li class="chapter" data-level="7.6" data-path="armapq.html"><a href="armapq.html#what-about-arimap-d-q"><i class="fa fa-check"></i><b>7.6</b> What about ARIMA(p, d, q)?</a>
-<ul>
-<li class="chapter" data-level="7.6.1" data-path="armapq.html"><a href="armapq.html#why-do-arma-models-require-stationarity"><i class="fa fa-check"></i><b>7.6.1</b> Why Do ARMA Models Require Stationarity?</a></li>
-<li class="chapter" data-level="7.6.2" data-path="armapq.html"><a href="armapq.html#simulated-data"><i class="fa fa-check"></i><b>7.6.2</b> Simulated Data</a></li>
-</ul></li>
-<li class="chapter" data-level="7.7" data-path="armapq.html"><a href="armapq.html#evaluating-arma-models"><i class="fa fa-check"></i><b>7.7</b> Evaluating ARMA models</a>
-<ul>
-<li class="chapter" data-level="7.7.1" data-path="armapq.html"><a href="armapq.html#simulated-data-1"><i class="fa fa-check"></i><b>7.7.1</b> Simulated Data</a></li>
-<li class="chapter" data-level="7.7.2" data-path="armapq.html"><a href="armapq.html#sst-data"><i class="fa fa-check"></i><b>7.7.2</b> SST Data</a></li>
-<li class="chapter" data-level="7.7.3" data-path="armapq.html"><a href="armapq.html#how-do-you-decide-which-information-criterion-to-use"><i class="fa fa-check"></i><b>7.7.3</b> How Do You Decide Which Information Criterion to Use?</a></li>
-</ul></li>
-<li class="chapter" data-level="7.8" data-path="armapq.html"><a href="armapq.html#your-work-3"><i class="fa fa-check"></i><b>7.8</b> Your work</a>
-<ul>
-<li class="chapter" data-level="7.8.1" data-path="armapq.html"><a href="armapq.html#bunnies-and-kitties"><i class="fa fa-check"></i><b>7.8.1</b> Bunnies and Kitties</a></li>
-<li class="chapter" data-level="7.8.2" data-path="armapq.html"><a href="armapq.html#write-up-and-reflect-3"><i class="fa fa-check"></i><b>7.8.2</b> Write up and Reflect</a></li>
+<li class="chapter" data-level="3.6.1" data-path="decomposition.html"><a href="decomposition.html#air-passengers"><i class="fa fa-check"></i><b>3.6.1</b> Air Passengers</a></li>
+<li class="chapter" data-level="3.6.2" data-path="decomposition.html"><a href="decomposition.html#kbli"><i class="fa fa-check"></i><b>3.6.2</b> KBLI</a></li>
+<li class="chapter" data-level="3.6.3" data-path="decomposition.html"><a href="decomposition.html#write-up-and-reflect-1"><i class="fa fa-check"></i><b>3.6.3</b> Write Up and Reflect</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i><b>8</b> Forecasting</a>
+<li class="chapter" data-level="4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html"><i class="fa fa-check"></i><b>4</b> AR(p), ACF, PACF, etc.</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="forecasting.html"><a href="forecasting.html#big-idea-4"><i class="fa fa-check"></i><b>8.1</b> Big Idea</a></li>
-<li class="chapter" data-level="8.2" data-path="forecasting.html"><a href="forecasting.html#reading-4"><i class="fa fa-check"></i><b>8.2</b> Reading</a></li>
-<li class="chapter" data-level="8.3" data-path="forecasting.html"><a href="forecasting.html#packages-4"><i class="fa fa-check"></i><b>8.3</b> Packages</a></li>
-<li class="chapter" data-level="8.4" data-path="forecasting.html"><a href="forecasting.html#introduction-1"><i class="fa fa-check"></i><b>8.4</b> Introduction</a></li>
-<li class="chapter" data-level="8.5" data-path="forecasting.html"><a href="forecasting.html#a-simple-forecast"><i class="fa fa-check"></i><b>8.5</b> A simple forecast</a>
+<li class="chapter" data-level="4.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#big-idea-2"><i class="fa fa-check"></i><b>4.1</b> Big Idea</a></li>
+<li class="chapter" data-level="4.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#reading-2"><i class="fa fa-check"></i><b>4.2</b> Reading</a></li>
+<li class="chapter" data-level="4.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#packages-2"><i class="fa fa-check"></i><b>4.3</b> Packages</a></li>
+<li class="chapter" data-level="4.4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#correlation-and-covariance"><i class="fa fa-check"></i><b>4.4</b> Correlation and Covariance</a></li>
+<li class="chapter" data-level="4.5" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation"><i class="fa fa-check"></i><b>4.5</b> Autocorrelation</a></li>
+<li class="chapter" data-level="4.6" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation-function"><i class="fa fa-check"></i><b>4.6</b> Autocorrelation Function</a>
 <ul>
-<li class="chapter" data-level="8.5.1" data-path="forecasting.html"><a href="forecasting.html#two-step-ahead-forecast"><i class="fa fa-check"></i><b>8.5.1</b> Two-step-ahead forecast</a></li>
-<li class="chapter" data-level="8.5.2" data-path="forecasting.html"><a href="forecasting.html#example"><i class="fa fa-check"></i><b>8.5.2</b> Example</a></li>
+<li class="chapter" data-level="4.6.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#the-very-fun-presentation"><i class="fa fa-check"></i><b>4.6.1</b> The Very Fun Presentation</a></li>
 </ul></li>
-<li class="chapter" data-level="8.6" data-path="forecasting.html"><a href="forecasting.html#using-arma-coefficients-to-forecast"><i class="fa fa-check"></i><b>8.6</b> Using ARMA coefficients to forecast</a></li>
-<li class="chapter" data-level="8.7" data-path="forecasting.html"><a href="forecasting.html#holt-winters"><i class="fa fa-check"></i><b>8.7</b> Holt-Winters</a></li>
-<li class="chapter" data-level="8.8" data-path="forecasting.html"><a href="forecasting.html#your-work-4"><i class="fa fa-check"></i><b>8.8</b> Your work</a>
+<li class="chapter" data-level="4.7" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#the-boring-presentation"><i class="fa fa-check"></i><b>4.7</b> The Boring Presentation</a>
 <ul>
-<li class="chapter" data-level="8.8.1" data-path="forecasting.html"><a href="forecasting.html#a-silly-prediction"><i class="fa fa-check"></i><b>8.8.1</b> A silly prediction</a></li>
-<li class="chapter" data-level="8.8.2" data-path="forecasting.html"><a href="forecasting.html#write-up-and-reflect-4"><i class="fa fa-check"></i><b>8.8.2</b> Write Up and Reflect</a></li>
+<li class="chapter" data-level="4.7.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#tidy"><i class="fa fa-check"></i><b>4.7.1</b> Tidy</a></li>
 </ul></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="cross-correlation.html"><a href="cross-correlation.html"><i class="fa fa-check"></i><b>9</b> Cross Correlation</a>
+<li class="chapter" data-level="4.8" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#partial-autocorrelation-function"><i class="fa fa-check"></i><b>4.8</b> Partial Autocorrelation Function</a>
 <ul>
-<li class="chapter" data-level="9.1" data-path="cross-correlation.html"><a href="cross-correlation.html#big-idea-5"><i class="fa fa-check"></i><b>9.1</b> Big Idea</a></li>
-<li class="chapter" data-level="9.2" data-path="cross-correlation.html"><a href="cross-correlation.html#reading-5"><i class="fa fa-check"></i><b>9.2</b> Reading</a></li>
-<li class="chapter" data-level="9.3" data-path="cross-correlation.html"><a href="cross-correlation.html#packages-5"><i class="fa fa-check"></i><b>9.3</b> Packages</a></li>
-<li class="chapter" data-level="9.4" data-path="cross-correlation.html"><a href="cross-correlation.html#lags"><i class="fa fa-check"></i><b>9.4</b> Lags</a></li>
-<li class="chapter" data-level="9.5" data-path="cross-correlation.html"><a href="cross-correlation.html#from-acf-to-ccf"><i class="fa fa-check"></i><b>9.5</b> From ACF to CCF</a></li>
-<li class="chapter" data-level="9.6" data-path="cross-correlation.html"><a href="cross-correlation.html#how-ccf-normalizes-correlations"><i class="fa fa-check"></i><b>9.6</b> How <code>Ccf()</code> Normalizes Correlations</a></li>
-<li class="chapter" data-level="9.7" data-path="cross-correlation.html"><a href="cross-correlation.html#your-work-5"><i class="fa fa-check"></i><b>9.7</b> Your work</a>
+<li class="chapter" data-level="4.8.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#pacf"><i class="fa fa-check"></i><b>4.8.1</b> PACF</a></li>
+<li class="chapter" data-level="4.8.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#underneath-the-hood-of-pacf"><i class="fa fa-check"></i><b>4.8.2</b> Underneath the Hood of PACF</a></li>
+</ul></li>
+<li class="chapter" data-level="4.9" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#ar1-to-arp"><i class="fa fa-check"></i><b>4.9</b> AR(1) to AR(p)</a></li>
+<li class="chapter" data-level="4.10" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#random-walks"><i class="fa fa-check"></i><b>4.10</b> Random walks</a>
 <ul>
-<li class="chapter" data-level="9.7.1" data-path="cross-correlation.html"><a href="cross-correlation.html#write-up-and-reflect-5"><i class="fa fa-check"></i><b>9.7.1</b> Write Up and Reflect</a></li>
+<li class="chapter" data-level="4.10.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#stationarity-is-dead"><i class="fa fa-check"></i><b>4.10.1</b> Stationarity is dead</a></li>
 </ul></li>
-</ul></li>
-<li class="chapter" data-level="10" data-path="regression.html"><a href="regression.html"><i class="fa fa-check"></i><b>10</b> Regression</a>
+<li class="chapter" data-level="4.11" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#autocorrelation-examples-with-real-data"><i class="fa fa-check"></i><b>4.11</b> Autocorrelation examples with real data</a>
 <ul>
-<li class="chapter" data-level="10.1" data-path="regression.html"><a href="regression.html#big-idea-6"><i class="fa fa-check"></i><b>10.1</b> Big Idea</a></li>
-<li class="chapter" data-level="10.2" data-path="regression.html"><a href="regression.html#reading-6"><i class="fa fa-check"></i><b>10.2</b> Reading</a></li>
-<li class="chapter" data-level="10.3" data-path="regression.html"><a href="regression.html#packages-6"><i class="fa fa-check"></i><b>10.3</b> Packages</a></li>
-<li class="chapter" data-level="10.4" data-path="regression.html"><a href="regression.html#regression-1"><i class="fa fa-check"></i><b>10.4</b> Regression</a>
+<li class="chapter" data-level="4.11.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#nile"><i class="fa fa-check"></i><b>4.11.1</b> Nile</a></li>
+<li class="chapter" data-level="4.11.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#air-temperature"><i class="fa fa-check"></i><b>4.11.2</b> Air Temperature</a></li>
+<li class="chapter" data-level="4.11.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#sunspots"><i class="fa fa-check"></i><b>4.11.3</b> Sunspots</a></li>
+</ul></li>
+<li class="chapter" data-level="4.12" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#choosing-the-order-of-an-arp-model-by-aic"><i class="fa fa-check"></i><b>4.12</b> Choosing the Order of an AR(p) Model by AIC</a></li>
+<li class="chapter" data-level="4.13" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#your-work-2"><i class="fa fa-check"></i><b>4.13</b> Your work</a>
 <ul>
-<li class="chapter" data-level="10.4.1" data-path="regression.html"><a href="regression.html#adjusting-ols"><i class="fa fa-check"></i><b>10.4.1</b> Adjusting OLS</a></li>
-<li class="chapter" data-level="10.4.2" data-path="regression.html"><a href="regression.html#gls"><i class="fa fa-check"></i><b>10.4.2</b> GLS</a></li>
+<li class="chapter" data-level="4.13.1" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#acf-and-pacf-with-different-values-of-phi."><i class="fa fa-check"></i><b>4.13.1</b> ACF and PACF with different values of <span class="math inline">\(\phi\)</span>.</a></li>
+<li class="chapter" data-level="4.13.2" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#roll-your-own-ar2"><i class="fa fa-check"></i><b>4.13.2</b> Roll your own AR(2)</a></li>
+<li class="chapter" data-level="4.13.3" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#sockeye"><i class="fa fa-check"></i><b>4.13.3</b> Sockeye</a></li>
+<li class="chapter" data-level="4.13.4" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#write-up-and-reflect-2"><i class="fa fa-check"></i><b>4.13.4</b> Write Up and Reflect</a></li>
 </ul></li>
-<li class="chapter" data-level="10.5" data-path="regression.html"><a href="regression.html#your-work-6"><i class="fa fa-check"></i><b>10.5</b> Your work</a>
+<li class="chapter" data-level="4.14" data-path="arp-acf-pacf-etc..html"><a href="arp-acf-pacf-etc..html#postscript-a-helpful-plotting-chunk"><i class="fa fa-check"></i><b>4.14</b> Postscript: A Helpful Plotting Chunk</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><i class="fa fa-check"></i>Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process</a>
 <ul>
-<li class="chapter" data-level="10.5.1" data-path="regression.html"><a href="regression.html#what-does-generalized-mean"><i class="fa fa-check"></i><b>10.5.1</b> What Does Generalized Mean?</a></li>
-<li class="chapter" data-level="10.5.2" data-path="regression.html"><a href="regression.html#regression-simulation"><i class="fa fa-check"></i><b>10.5.2</b> Regression Simulation</a></li>
-<li class="chapter" data-level="10.5.3" data-path="regression.html"><a href="regression.html#regression-for-real"><i class="fa fa-check"></i><b>10.5.3</b> Regression for real</a></li>
-<li class="chapter" data-level="10.5.4" data-path="regression.html"><a href="regression.html#write-up-and-reflect-6"><i class="fa fa-check"></i><b>10.5.4</b> Write Up and Reflect</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="11" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html"><i class="fa fa-check"></i><b>11</b> Filtering, smoothing</a>
+<li class="chapter" data-level="4.15" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#introduction"><i class="fa fa-check"></i><b>4.15</b> Introduction</a></li>
+<li class="chapter" data-level="4.16" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#acf-and-pacf-of-a-single-ma1-simulation"><i class="fa fa-check"></i><b>4.16</b> ACF and PACF of a Single MA(1) Simulation</a></li>
+<li class="chapter" data-level="4.17" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#simulation-study-across-many-ma1-coefficients"><i class="fa fa-check"></i><b>4.17</b> Simulation Study Across Many MA(1) Coefficients</a></li>
+<li class="chapter" data-level="4.18" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-1-pacf-lag-1-underestimates-theta"><i class="fa fa-check"></i><b>4.18</b> Insight 1: PACF Lag 1 Underestimates <span class="math inline">\(\theta\)</span></a>
 <ul>
-<li class="chapter" data-level="11.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#big-idea-7"><i class="fa fa-check"></i><b>11.1</b> Big Idea</a></li>
-<li class="chapter" data-level="11.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#packages-7"><i class="fa fa-check"></i><b>11.2</b> Packages</a></li>
-<li class="chapter" data-level="11.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#filters-as-visual-aids"><i class="fa fa-check"></i><b>11.3</b> Filters as visual aids</a>
+<li class="chapter" data-level="4.18.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens"><i class="fa fa-check"></i><b>4.18.1</b> Why This Happens</a></li>
+</ul></li>
+<li class="chapter" data-level="4.19" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#insight-2-pacf-lag-2-is-consistently-negative"><i class="fa fa-check"></i><b>4.19</b> Insight 2: PACF Lag 2 is Consistently Negative</a>
 <ul>
-<li class="chapter" data-level="11.3.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#moving-running-average"><i class="fa fa-check"></i><b>11.3.1</b> Moving (running) average</a></li>
-<li class="chapter" data-level="11.3.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#hanning"><i class="fa fa-check"></i><b>11.3.2</b> Hanning</a></li>
-<li class="chapter" data-level="11.3.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#smoothing-splines"><i class="fa fa-check"></i><b>11.3.3</b> Smoothing splines</a></li>
-<li class="chapter" data-level="11.3.4" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#loess"><i class="fa fa-check"></i><b>11.3.4</b> Loess</a></li>
+<li class="chapter" data-level="4.19.1" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#why-this-happens-1"><i class="fa fa-check"></i><b>4.19.1</b> Why This Happens</a></li>
 </ul></li>
-<li class="chapter" data-level="11.4" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#using-filters"><i class="fa fa-check"></i><b>11.4</b> Using filters</a>
+<li class="chapter" data-level="4.20" data-path="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html"><a href="aside-why-the-acf-and-pacf-look-the-way-they-do-in-an-ma1-process.html#conclusion"><i class="fa fa-check"></i><b>4.20</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="armapq.html"><a href="armapq.html"><i class="fa fa-check"></i><b>5</b> ARMA(p,q)</a>
 <ul>
-<li class="chapter" data-level="11.4.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#aggregating"><i class="fa fa-check"></i><b>11.4.1</b> Aggregating</a></li>
-<li class="chapter" data-level="11.4.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#removing-low-frequency-variability"><i class="fa fa-check"></i><b>11.4.2</b> Removing low frequency variability</a></li>
-</ul></li>
-<li class="chapter" data-level="11.5" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#the-case-of-the-poorly-launched-sensors"><i class="fa fa-check"></i><b>11.5</b> The Case of the Poorly-Launched Sensors</a>
+<li class="chapter" data-level="5.1" data-path="armapq.html"><a href="armapq.html#big-idea-3"><i class="fa fa-check"></i><b>5.1</b> Big Idea</a></li>
+<li class="chapter" data-level="5.2" data-path="armapq.html"><a href="armapq.html#reading-3"><i class="fa fa-check"></i><b>5.2</b> Reading</a></li>
+<li class="chapter" data-level="5.3" data-path="armapq.html"><a href="armapq.html#packages-3"><i class="fa fa-check"></i><b>5.3</b> Packages</a></li>
+<li class="chapter" data-level="5.4" data-path="armapq.html"><a href="armapq.html#arp-to-maq"><i class="fa fa-check"></i><b>5.4</b> AR(p) to MA(q)</a></li>
+<li class="chapter" data-level="5.5" data-path="armapq.html"><a href="armapq.html#armapq-1"><i class="fa fa-check"></i><b>5.5</b> ARMA(p,q)</a></li>
+<li class="chapter" data-level="5.6" data-path="armapq.html"><a href="armapq.html#what-about-arimap-d-q"><i class="fa fa-check"></i><b>5.6</b> What about ARIMA(p, d, q)?</a>
 <ul>
-<li class="chapter" data-level="11.5.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#fix-time-on-temperature"><i class="fa fa-check"></i><b>11.5.1</b> Fix time on temperature</a></li>
-<li class="chapter" data-level="11.5.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#fill-missing-data-on-radiation"><i class="fa fa-check"></i><b>11.5.2</b> Fill missing data on radiation</a></li>
+<li class="chapter" data-level="5.6.1" data-path="armapq.html"><a href="armapq.html#why-do-arma-models-require-stationarity"><i class="fa fa-check"></i><b>5.6.1</b> Why Do ARMA Models Require Stationarity?</a></li>
+<li class="chapter" data-level="5.6.2" data-path="armapq.html"><a href="armapq.html#simulated-data"><i class="fa fa-check"></i><b>5.6.2</b> Simulated Data</a></li>
 </ul></li>
-<li class="chapter" data-level="11.6" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#your-work-7"><i class="fa fa-check"></i><b>11.6</b> Your work</a>
+<li class="chapter" data-level="5.7" data-path="armapq.html"><a href="armapq.html#evaluating-arma-models"><i class="fa fa-check"></i><b>5.7</b> Evaluating ARMA models</a>
 <ul>
-<li class="chapter" data-level="11.6.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#filter"><i class="fa fa-check"></i><b>11.6.1</b> Filter</a></li>
-<li class="chapter" data-level="11.6.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#revisit-the-case-of-the-poorly-launched-sensors"><i class="fa fa-check"></i><b>11.6.2</b> Revisit the case of the poorly launched sensors</a></li>
-<li class="chapter" data-level="11.6.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#write-up-and-reflect-7"><i class="fa fa-check"></i><b>11.6.3</b> Write Up and Reflect</a></li>
+<li class="chapter" data-level="5.7.1" data-path="armapq.html"><a href="armapq.html#simulated-data-1"><i class="fa fa-check"></i><b>5.7.1</b> Simulated Data</a></li>
+<li class="chapter" data-level="5.7.2" data-path="armapq.html"><a href="armapq.html#sst-data"><i class="fa fa-check"></i><b>5.7.2</b> SST Data</a></li>
+<li class="chapter" data-level="5.7.3" data-path="armapq.html"><a href="armapq.html#how-do-you-decide-which-information-criterion-to-use"><i class="fa fa-check"></i><b>5.7.3</b> How Do You Decide Which Information Criterion to Use?</a></li>
 </ul></li>
-</ul></li>
-<li class="chapter" data-level="12" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html"><i class="fa fa-check"></i><b>12</b> The Freqs Come out at Night</a>
+<li class="chapter" data-level="5.8" data-path="armapq.html"><a href="armapq.html#your-work-3"><i class="fa fa-check"></i><b>5.8</b> Your work</a>
 <ul>
-<li class="chapter" data-level="12.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#big-idea-8"><i class="fa fa-check"></i><b>12.1</b> Big Idea</a></li>
-<li class="chapter" data-level="12.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#reading-7"><i class="fa fa-check"></i><b>12.2</b> Reading</a></li>
-<li class="chapter" data-level="12.3" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#packages-8"><i class="fa fa-check"></i><b>12.3</b> Packages</a></li>
-<li class="chapter" data-level="12.4" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#the-frequency-domain"><i class="fa fa-check"></i><b>12.4</b> The Frequency Domain</a>
+<li class="chapter" data-level="5.8.1" data-path="armapq.html"><a href="armapq.html#bunnies-and-kitties"><i class="fa fa-check"></i><b>5.8.1</b> Bunnies and Kitties</a></li>
+<li class="chapter" data-level="5.8.2" data-path="armapq.html"><a href="armapq.html#write-up-and-reflect-3"><i class="fa fa-check"></i><b>5.8.2</b> Write up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i><b>6</b> Forecasting</a>
 <ul>
-<li class="chapter" data-level="12.4.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#same-data-two-domains"><i class="fa fa-check"></i><b>12.4.1</b> Same Data, Two Domains</a></li>
-<li class="chapter" data-level="12.4.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#worked-example"><i class="fa fa-check"></i><b>12.4.2</b> Worked example</a></li>
-</ul></li>
-<li class="chapter" data-level="12.5" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#sunspot-example"><i class="fa fa-check"></i><b>12.5</b> Sunspot Example</a></li>
-<li class="chapter" data-level="12.6" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#your-work-8"><i class="fa fa-check"></i><b>12.6</b> Your work</a>
+<li class="chapter" data-level="6.1" data-path="forecasting.html"><a href="forecasting.html#big-idea-4"><i class="fa fa-check"></i><b>6.1</b> Big Idea</a></li>
+<li class="chapter" data-level="6.2" data-path="forecasting.html"><a href="forecasting.html#reading-4"><i class="fa fa-check"></i><b>6.2</b> Reading</a></li>
+<li class="chapter" data-level="6.3" data-path="forecasting.html"><a href="forecasting.html#packages-4"><i class="fa fa-check"></i><b>6.3</b> Packages</a></li>
+<li class="chapter" data-level="6.4" data-path="forecasting.html"><a href="forecasting.html#introduction-1"><i class="fa fa-check"></i><b>6.4</b> Introduction</a></li>
+<li class="chapter" data-level="6.5" data-path="forecasting.html"><a href="forecasting.html#a-simple-forecast"><i class="fa fa-check"></i><b>6.5</b> A simple forecast</a>
 <ul>
-<li class="chapter" data-level="12.6.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#generate-three-signals"><i class="fa fa-check"></i><b>12.6.1</b> Generate three signals</a></li>
-<li class="chapter" data-level="12.6.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#milankovitch"><i class="fa fa-check"></i><b>12.6.2</b> Milankovitch</a></li>
-<li class="chapter" data-level="12.6.3" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#write-up-and-reflect-8"><i class="fa fa-check"></i><b>12.6.3</b> Write Up and Reflect</a></li>
+<li class="chapter" data-level="6.5.1" data-path="forecasting.html"><a href="forecasting.html#two-step-ahead-forecast"><i class="fa fa-check"></i><b>6.5.1</b> Two-step-ahead forecast</a></li>
+<li class="chapter" data-level="6.5.2" data-path="forecasting.html"><a href="forecasting.html#example"><i class="fa fa-check"></i><b>6.5.2</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="12.7" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#references"><i class="fa fa-check"></i><b>12.7</b> References</a></li>
-<li class="chapter" data-level="12.8" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#postscript-a-glimpse-of-wavelets"><i class="fa fa-check"></i><b>12.8</b> Postscript: A Glimpse of Wavelets</a></li>
+<li class="chapter" data-level="6.6" data-path="forecasting.html"><a href="forecasting.html#using-arma-coefficients-to-forecast"><i class="fa fa-check"></i><b>6.6</b> Using ARMA coefficients to forecast</a></li>
+<li class="chapter" data-level="6.7" data-path="forecasting.html"><a href="forecasting.html#holt-winters"><i class="fa fa-check"></i><b>6.7</b> Holt-Winters</a></li>
+<li class="chapter" data-level="6.8" data-path="forecasting.html"><a href="forecasting.html#your-work-4"><i class="fa fa-check"></i><b>6.8</b> Your work</a>
+<ul>
+<li class="chapter" data-level="6.8.1" data-path="forecasting.html"><a href="forecasting.html#a-silly-prediction"><i class="fa fa-check"></i><b>6.8.1</b> A silly prediction</a></li>
+<li class="chapter" data-level="6.8.2" data-path="forecasting.html"><a href="forecasting.html#write-up-and-reflect-4"><i class="fa fa-check"></i><b>6.8.2</b> Write Up and Reflect</a></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="references-1.html"><a href="references-1.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="cross-correlation.html"><a href="cross-correlation.html"><i class="fa fa-check"></i><b>7</b> Cross Correlation</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="cross-correlation.html"><a href="cross-correlation.html#big-idea-5"><i class="fa fa-check"></i><b>7.1</b> Big Idea</a></li>
+<li class="chapter" data-level="7.2" data-path="cross-correlation.html"><a href="cross-correlation.html#reading-5"><i class="fa fa-check"></i><b>7.2</b> Reading</a></li>
+<li class="chapter" data-level="7.3" data-path="cross-correlation.html"><a href="cross-correlation.html#packages-5"><i class="fa fa-check"></i><b>7.3</b> Packages</a></li>
+<li class="chapter" data-level="7.4" data-path="cross-correlation.html"><a href="cross-correlation.html#lags"><i class="fa fa-check"></i><b>7.4</b> Lags</a></li>
+<li class="chapter" data-level="7.5" data-path="cross-correlation.html"><a href="cross-correlation.html#from-acf-to-ccf"><i class="fa fa-check"></i><b>7.5</b> From ACF to CCF</a></li>
+<li class="chapter" data-level="7.6" data-path="cross-correlation.html"><a href="cross-correlation.html#how-ccf-normalizes-correlations"><i class="fa fa-check"></i><b>7.6</b> How <code>Ccf()</code> Normalizes Correlations</a></li>
+<li class="chapter" data-level="7.7" data-path="cross-correlation.html"><a href="cross-correlation.html#your-work-5"><i class="fa fa-check"></i><b>7.7</b> Your work</a>
+<ul>
+<li class="chapter" data-level="7.7.1" data-path="cross-correlation.html"><a href="cross-correlation.html#write-up-and-reflect-5"><i class="fa fa-check"></i><b>7.7.1</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="regression.html"><a href="regression.html"><i class="fa fa-check"></i><b>8</b> Regression</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="regression.html"><a href="regression.html#big-idea-6"><i class="fa fa-check"></i><b>8.1</b> Big Idea</a></li>
+<li class="chapter" data-level="8.2" data-path="regression.html"><a href="regression.html#reading-6"><i class="fa fa-check"></i><b>8.2</b> Reading</a></li>
+<li class="chapter" data-level="8.3" data-path="regression.html"><a href="regression.html#packages-6"><i class="fa fa-check"></i><b>8.3</b> Packages</a></li>
+<li class="chapter" data-level="8.4" data-path="regression.html"><a href="regression.html#regression-1"><i class="fa fa-check"></i><b>8.4</b> Regression</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="regression.html"><a href="regression.html#adjusting-ols"><i class="fa fa-check"></i><b>8.4.1</b> Adjusting OLS</a></li>
+<li class="chapter" data-level="8.4.2" data-path="regression.html"><a href="regression.html#gls"><i class="fa fa-check"></i><b>8.4.2</b> GLS</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="regression.html"><a href="regression.html#your-work-6"><i class="fa fa-check"></i><b>8.5</b> Your work</a>
+<ul>
+<li class="chapter" data-level="8.5.1" data-path="regression.html"><a href="regression.html#what-does-generalized-mean"><i class="fa fa-check"></i><b>8.5.1</b> What Does Generalized Mean?</a></li>
+<li class="chapter" data-level="8.5.2" data-path="regression.html"><a href="regression.html#regression-simulation"><i class="fa fa-check"></i><b>8.5.2</b> Regression Simulation</a></li>
+<li class="chapter" data-level="8.5.3" data-path="regression.html"><a href="regression.html#regression-for-real"><i class="fa fa-check"></i><b>8.5.3</b> Regression for real</a></li>
+<li class="chapter" data-level="8.5.4" data-path="regression.html"><a href="regression.html#write-up-and-reflect-6"><i class="fa fa-check"></i><b>8.5.4</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html"><i class="fa fa-check"></i>Aside: OLS via Algebra and Matrices</a>
+<ul>
+<li class="chapter" data-level="8.6" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html#introduction-2"><i class="fa fa-check"></i><b>8.6</b> Introduction</a></li>
+<li class="chapter" data-level="8.7" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html#algebraic-approach-to-ols"><i class="fa fa-check"></i><b>8.7</b> Algebraic Approach to OLS</a>
+<ul>
+<li class="chapter" data-level="8.7.1" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html#goal-minimize-the-sum-of-squared-errors"><i class="fa fa-check"></i><b>8.7.1</b> Goal: Minimize the Sum of Squared Errors</a></li>
+<li class="chapter" data-level="8.7.2" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html#deriving-the-coefficients"><i class="fa fa-check"></i><b>8.7.2</b> Deriving the Coefficients</a></li>
+</ul></li>
+<li class="chapter" data-level="8.8" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html#matrix-approach-to-ols"><i class="fa fa-check"></i><b>8.8</b> Matrix Approach to OLS</a>
+<ul>
+<li class="chapter" data-level="8.8.1" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html#goal-minimize-the-sum-of-squared-errors-1"><i class="fa fa-check"></i><b>8.8.1</b> Goal: Minimize the Sum of Squared Errors</a></li>
+<li class="chapter" data-level="8.8.2" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html#deriving-the-coefficients-1"><i class="fa fa-check"></i><b>8.8.2</b> Deriving the Coefficients</a></li>
+</ul></li>
+<li class="chapter" data-level="8.9" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html#practical-implementation-in-r"><i class="fa fa-check"></i><b>8.9</b> Practical Implementation in R</a>
+<ul>
+<li class="chapter" data-level="8.9.1" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html#step-1-prepare-the-data"><i class="fa fa-check"></i><b>8.9.1</b> Step 1: Prepare the Data</a></li>
+<li class="chapter" data-level="8.9.2" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html#step-2-add-an-intercept-column-to-the-predictor-matrix"><i class="fa fa-check"></i><b>8.9.2</b> Step 2: Add an Intercept Column to the Predictor Matrix</a></li>
+<li class="chapter" data-level="8.9.3" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html#step-3-compute-the-ols-coefficients"><i class="fa fa-check"></i><b>8.9.3</b> Step 3: Compute the OLS Coefficients</a></li>
+<li class="chapter" data-level="8.9.4" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html#step-4-make-predictions"><i class="fa fa-check"></i><b>8.9.4</b> Step 4: Make Predictions</a></li>
+<li class="chapter" data-level="8.9.5" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html#step-5-verify-with-lm-function-optional"><i class="fa fa-check"></i><b>8.9.5</b> Step 5: Verify with <code>lm</code> Function (Optional)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.10" data-path="aside-ols-via-algebra-and-matrices.html"><a href="aside-ols-via-algebra-and-matrices.html#conclusion-1"><i class="fa fa-check"></i><b>8.10</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html"><i class="fa fa-check"></i><b>9</b> Filtering, smoothing</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#big-idea-7"><i class="fa fa-check"></i><b>9.1</b> Big Idea</a></li>
+<li class="chapter" data-level="9.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#packages-7"><i class="fa fa-check"></i><b>9.2</b> Packages</a></li>
+<li class="chapter" data-level="9.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#filters-as-visual-aids"><i class="fa fa-check"></i><b>9.3</b> Filters as visual aids</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#moving-running-average"><i class="fa fa-check"></i><b>9.3.1</b> Moving (running) average</a></li>
+<li class="chapter" data-level="9.3.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#hanning"><i class="fa fa-check"></i><b>9.3.2</b> Hanning</a></li>
+<li class="chapter" data-level="9.3.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#smoothing-splines"><i class="fa fa-check"></i><b>9.3.3</b> Smoothing splines</a></li>
+<li class="chapter" data-level="9.3.4" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#loess"><i class="fa fa-check"></i><b>9.3.4</b> Loess</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#using-filters"><i class="fa fa-check"></i><b>9.4</b> Using filters</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#aggregating"><i class="fa fa-check"></i><b>9.4.1</b> Aggregating</a></li>
+<li class="chapter" data-level="9.4.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#removing-low-frequency-variability"><i class="fa fa-check"></i><b>9.4.2</b> Removing low frequency variability</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#the-case-of-the-poorly-launched-sensors"><i class="fa fa-check"></i><b>9.5</b> The Case of the Poorly-Launched Sensors</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#fix-time-on-temperature"><i class="fa fa-check"></i><b>9.5.1</b> Fix time on temperature</a></li>
+<li class="chapter" data-level="9.5.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#fill-missing-data-on-radiation"><i class="fa fa-check"></i><b>9.5.2</b> Fill missing data on radiation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#your-work-7"><i class="fa fa-check"></i><b>9.6</b> Your work</a>
+<ul>
+<li class="chapter" data-level="9.6.1" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#filter"><i class="fa fa-check"></i><b>9.6.1</b> Filter</a></li>
+<li class="chapter" data-level="9.6.2" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#revisit-the-case-of-the-poorly-launched-sensors"><i class="fa fa-check"></i><b>9.6.2</b> Revisit the case of the poorly launched sensors</a></li>
+<li class="chapter" data-level="9.6.3" data-path="filtering-smoothing.html"><a href="filtering-smoothing.html#write-up-and-reflect-7"><i class="fa fa-check"></i><b>9.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html"><i class="fa fa-check"></i><b>10</b> The Freqs Come out at Night</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#big-idea-8"><i class="fa fa-check"></i><b>10.1</b> Big Idea</a></li>
+<li class="chapter" data-level="10.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#reading-7"><i class="fa fa-check"></i><b>10.2</b> Reading</a></li>
+<li class="chapter" data-level="10.3" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#packages-8"><i class="fa fa-check"></i><b>10.3</b> Packages</a></li>
+<li class="chapter" data-level="10.4" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#the-frequency-domain"><i class="fa fa-check"></i><b>10.4</b> The Frequency Domain</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#same-data-two-domains"><i class="fa fa-check"></i><b>10.4.1</b> Same Data, Two Domains</a></li>
+<li class="chapter" data-level="10.4.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#worked-example"><i class="fa fa-check"></i><b>10.4.2</b> Worked example</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#sunspot-example"><i class="fa fa-check"></i><b>10.5</b> Sunspot Example</a></li>
+<li class="chapter" data-level="10.6" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#your-work-8"><i class="fa fa-check"></i><b>10.6</b> Your work</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#generate-three-signals"><i class="fa fa-check"></i><b>10.6.1</b> Generate three signals</a></li>
+<li class="chapter" data-level="10.6.2" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#milankovitch"><i class="fa fa-check"></i><b>10.6.2</b> Milankovitch</a></li>
+<li class="chapter" data-level="10.6.3" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#write-up-and-reflect-8"><i class="fa fa-check"></i><b>10.6.3</b> Write Up and Reflect</a></li>
+</ul></li>
+<li class="chapter" data-level="10.7" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#references"><i class="fa fa-check"></i><b>10.7</b> References</a></li>
+<li class="chapter" data-level="10.8" data-path="the-freqs-come-out-at-night.html"><a href="the-freqs-come-out-at-night.html#postscript-a-glimpse-of-wavelets"><i class="fa fa-check"></i><b>10.8</b> Postscript: A Glimpse of Wavelets</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="references-1.html"><a href="references-1.html"><i class="fa fa-check"></i><b>11</b> References</a></li>
 </ul>
 
       </nav>
@@ -1181,26 +1205,26 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="decomposition" class="section level1 hasAnchor" number="4">
-<h1><span class="header-section-number">4</span> Decomposition<a href="decomposition.html#decomposition" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="big-idea-1" class="section level2 hasAnchor" number="4.1">
-<h2><span class="header-section-number">4.1</span> Big Idea<a href="decomposition.html#big-idea-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="decomposition" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">3</span> Decomposition<a href="decomposition.html#decomposition" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="big-idea-1" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Big Idea<a href="decomposition.html#big-idea-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We can model seasonal signals and find trends in time series.</p>
 </div>
-<div id="reading-1" class="section level2 hasAnchor" number="4.2">
-<h2><span class="header-section-number">4.2</span> Reading<a href="decomposition.html#reading-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="reading-1" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Reading<a href="decomposition.html#reading-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Read Chapter one from <span class="citation">Cowpertwait and Metcalfe (<a href="references-1.html#ref-Cowpertwait2009">2009</a>)</span>. It’s OK to skim the readings in this book. It’s not a great book for our purposes as many of you haven’t taken linear algebra and the book occasionally goes that way. But it’s useful to hum your way through the chapter nonetheless.</p>
 </div>
-<div id="packages-1" class="section level2 hasAnchor" number="4.3">
-<h2><span class="header-section-number">4.3</span> Packages<a href="decomposition.html#packages-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="packages-1" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Packages<a href="decomposition.html#packages-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>You’ll want <code>zoo</code> <span class="citation">(<a href="references-1.html#ref-R-zoo">Zeileis, Grothendieck, and Ryan 2025</a>)</span>, for the assignment and <code>tidyverse</code> <span class="citation">(<a href="references-1.html#ref-R-tidyverse">Wickham 2023</a>)</span>. Note that I often use base R syntax rather than tidy with time series. This is mostly because the formats are most often used for time-series data (e.g., <code>zoo</code> and <code>ts</code>) don’t work as naturally with tidy syntax. Not using <code>ggplot</code> is a special hell for me. So you’ll see that I often break and go back to <code>ggplot</code> and use <code>tidyverse</code> syntax like <code>mutate</code> etc.</p>
 <div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="decomposition.html#cb79-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb79-2"><a href="decomposition.html#cb79-2" tabindex="-1"></a><span class="fu">library</span>(zoo)</span></code></pre></div>
 </div>
-<div id="seasonality-and-decomposition" class="section level2 hasAnchor" number="4.4">
-<h2><span class="header-section-number">4.4</span> Seasonality and decomposition<a href="decomposition.html#seasonality-and-decomposition" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="breaking-down-a-series-the-tedious-way" class="section level3 hasAnchor" number="4.4.1">
-<h3><span class="header-section-number">4.4.1</span> Breaking down a series the tedious way<a href="decomposition.html#breaking-down-a-series-the-tedious-way" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="seasonality-and-decomposition" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Seasonality and decomposition<a href="decomposition.html#seasonality-and-decomposition" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="breaking-down-a-series-the-tedious-way" class="section level3 hasAnchor" number="3.4.1">
+<h3><span class="header-section-number">3.4.1</span> Breaking down a series the tedious way<a href="decomposition.html#breaking-down-a-series-the-tedious-way" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>In my work I routinely use time series that have a seasonal component. E.g., monthly weather data. Environmental time series often have a periodic component that relates to geophysics or biology in some way. This is called “seasonal” whether it relates to actual seasons (e.g., summer) or not. Let’s look at some data on atmospheric carbon dioxide (aka the Keeling curve) that have a long-term trend as well as a seasonal component and figure out a way to break it down. We already saw the onboard data set <code>co2</code> which only goes to 1998 (it’s frozen in time for reproducibility). So let’s get the most up-to-date data from NOAA.</p>
 <div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="decomposition.html#cb80-1" tabindex="-1"></a>fname <span class="ot">&lt;-</span> <span class="st">&quot;https://www.esrl.noaa.gov/gmd/webdata/ccgg/trends/co2/co2_mm_mlo.txt&quot;</span></span>
 <span id="cb80-2"><a href="decomposition.html#cb80-2" tabindex="-1"></a>co2 <span class="ot">&lt;-</span> <span class="fu">read.table</span>(fname)</span>
@@ -1271,8 +1295,8 @@ div.csl-indent {
 <p><img src="02DecompTrends_files/figure-html/unnamed-chunk-11-1.png" alt="" width="672" /></p>
 <p>We just did some fancy model building and broke an additive time series into its constituent parts! Walk through each line of code above and make sure you understand what we did.</p>
 </div>
-<div id="breaking-down-a-series-the-easy-way" class="section level3 hasAnchor" number="4.4.2">
-<h3><span class="header-section-number">4.4.2</span> Breaking down a series the easy way<a href="decomposition.html#breaking-down-a-series-the-easy-way" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="breaking-down-a-series-the-easy-way" class="section level3 hasAnchor" number="3.4.2">
+<h3><span class="header-section-number">3.4.2</span> Breaking down a series the easy way<a href="decomposition.html#breaking-down-a-series-the-easy-way" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Now, as much as I’m sure you enjoyed the journey above, you’ll be pleased to know that <code>R</code> has function for doing this much more quickly:</p>
 <div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="decomposition.html#cb93-1" tabindex="-1"></a>co2Decomp <span class="ot">&lt;-</span> <span class="fu">decompose</span>(co2,<span class="at">type =</span> <span class="st">&quot;additive&quot;</span>)</span>
 <span id="cb93-2"><a href="decomposition.html#cb93-2" tabindex="-1"></a><span class="fu">plot</span>(co2Decomp)</span></code></pre></div>
@@ -1291,8 +1315,8 @@ div.csl-indent {
 <p><span class="math display">\[y_t = m_t \times s_t \times z_t\]</span></p>
 <p>The book has good stuff on the multiplicative model but also has a typo in Eq 1.3. The equation above is correct. See text for details and the help page for <code>decompose</code>. I don’t want to spoil the fun.</p>
 </div>
-<div id="how-does-m-differ-from-the-slope-in-a-lm" class="section level3 hasAnchor" number="4.4.3">
-<h3><span class="header-section-number">4.4.3</span> How does <code>m</code> differ from the slope in a <code>lm</code>?<a href="decomposition.html#how-does-m-differ-from-the-slope-in-a-lm" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="how-does-m-differ-from-the-slope-in-a-lm" class="section level3 hasAnchor" number="3.4.3">
+<h3><span class="header-section-number">3.4.3</span> How does <code>m</code> differ from the slope in a <code>lm</code>?<a href="decomposition.html#how-does-m-differ-from-the-slope-in-a-lm" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Let’s think for a minute about what a “trend” is. Note that we said above that <span class="math inline">\(m_t\)</span> is the trend in the data. We’ve also said that we can use the slope in a linear model to describe the trend. Like this:</p>
 <div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="decomposition.html#cb96-1" tabindex="-1"></a>co2LinearModel <span class="ot">&lt;-</span> <span class="fu">lm</span>(co2<span class="sc">~</span><span class="fu">time</span>(co2))</span>
 <span id="cb96-2"><a href="decomposition.html#cb96-2" tabindex="-1"></a><span class="fu">plot</span>(co2,<span class="at">ylab=</span><span class="fu">expression</span>(CO[<span class="dv">2</span>]<span class="sc">~</span>(ppm)))</span>
@@ -1304,8 +1328,8 @@ div.csl-indent {
 <p><img src="02DecompTrends_files/figure-html/unnamed-chunk-15-1.png" alt="" width="672" /></p>
 <p>Take a minute to appreciate how and why these are both trends and how and why they differ.</p>
 </div>
-<div id="warning" class="section level3 hasAnchor" number="4.4.4">
-<h3><span class="header-section-number">4.4.4</span> Warning<a href="decomposition.html#warning" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="warning" class="section level3 hasAnchor" number="3.4.4">
+<h3><span class="header-section-number">3.4.4</span> Warning<a href="decomposition.html#warning" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Computers just do what they are told. The <code>decompose</code> function will find a trend and seasonal component even in data that don’t have one. I’m going to create a time series of “monthly” data that runs 10 years starting in the year 2010. Then I’ll decompose it.</p>
 <div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="decomposition.html#cb98-1" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(<span class="dv">120</span>),<span class="at">start=</span><span class="fu">c</span>(<span class="dv">2010</span>,<span class="dv">1</span>),<span class="at">frequency =</span> <span class="dv">12</span>)</span>
 <span id="cb98-2"><a href="decomposition.html#cb98-2" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">decompose</span>(y))</span></code></pre></div>
@@ -1313,22 +1337,22 @@ div.csl-indent {
 <p>Note that there is NO trend in <code>y</code> – it’s just random numbers. And there is no seasonal structure in <code>y</code> – it’s just random numbers. But <code>decompose</code> was very content to pull out the trend and seasonal parts of the data. Note the magnitude of the y-axes and you can see that there isn’t a lot of there there. But, if you didn’t know better you might obsess over this plot and trick yourself into finding patterns where none exist.</p>
 </div>
 </div>
-<div id="stationarity" class="section level2 hasAnchor" number="4.5">
-<h2><span class="header-section-number">4.5</span> Stationarity<a href="decomposition.html#stationarity" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="stationarity" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> Stationarity<a href="decomposition.html#stationarity" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>I linked to a nice video on stationarity in time series. It’s worth a watch and clearer than the book. I’ll spare you much more than that statement for now and not ask you to wade through any code. But be aware that data with a persistent trend are not stationary, nor are data with changing variance, nor data which have a seasonal component. E.g., look at the <code>AirPassengers</code> data below. It’s a classic time series that have been used to teach generations of time-series students and is featured in the reading. It fails on all three aspects of stationarity!</p>
 <div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="decomposition.html#cb99-1" tabindex="-1"></a><span class="fu">data</span>(AirPassengers)</span>
 <span id="cb99-2"><a href="decomposition.html#cb99-2" tabindex="-1"></a><span class="fu">plot</span>(AirPassengers)</span></code></pre></div>
 <p><img src="02DecompTrends_files/figure-html/unnamed-chunk-17-1.png" alt="" width="672" /></p>
 <p>We will talk more in the future about when you should test for stationarity – maybe because a test you are using a model that assumes stationarity. And when you should just note it as a descriptive feature of a time series – remember, your eye is a really good diagnostic tool.</p>
 </div>
-<div id="your-work-1" class="section level2 hasAnchor" number="4.6">
-<h2><span class="header-section-number">4.6</span> Your Work<a href="decomposition.html#your-work-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="air-passengers" class="section level3 hasAnchor" number="4.6.1">
-<h3><span class="header-section-number">4.6.1</span> Air Passengers<a href="decomposition.html#air-passengers" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="your-work-1" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> Your Work<a href="decomposition.html#your-work-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="air-passengers" class="section level3 hasAnchor" number="3.6.1">
+<h3><span class="header-section-number">3.6.1</span> Air Passengers<a href="decomposition.html#air-passengers" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>First, look at the <code>AirPassengers</code> data above. Decompose it with an additive model and then a multiplicative model. Report on what you have found. Pay attention to the the units on the multiplicative model. Compare the two models using MSE (again, watch the units).</p>
 </div>
-<div id="kbli" class="section level3 hasAnchor" number="4.6.2">
-<h3><span class="header-section-number">4.6.2</span> KBLI<a href="decomposition.html#kbli" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="kbli" class="section level3 hasAnchor" number="3.6.2">
+<h3><span class="header-section-number">3.6.2</span> KBLI<a href="decomposition.html#kbli" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Second, revisit the climate data from the Bellingham airport from last week. Note the use of <code>ggplot</code> – which I prefer for my own work.</p>
 <div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="decomposition.html#cb100-1" tabindex="-1"></a>kbli <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/kbli.rds&quot;</span>)</span>
 <span id="cb100-2"><a href="decomposition.html#cb100-2" tabindex="-1"></a>kbli_tb <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(kbli)</span>
@@ -1354,8 +1378,8 @@ div.csl-indent {
 <p><img src="02DecompTrends_files/figure-html/unnamed-chunk-19-1.png" alt="" width="672" /></p>
 <p>You can report the slopes in a table if you like. Easier and clearer than plotting everything probably.</p>
 </div>
-<div id="write-up-and-reflect-1" class="section level3 hasAnchor" number="4.6.3">
-<h3><span class="header-section-number">4.6.3</span> Write Up and Reflect<a href="decomposition.html#write-up-and-reflect-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="write-up-and-reflect-1" class="section level3 hasAnchor" number="3.6.3">
+<h3><span class="header-section-number">3.6.3</span> Write Up and Reflect<a href="decomposition.html#write-up-and-reflect-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Pass in a R Markdown doc with your analysis. Leave all code visible, although you may quiet messages and warnings if desired. Turn in your knitted html. The last section of your document should include a reflection where you explain how it all went. What triumphs did you have? What is still confusing? Are you clear on why <span class="math inline">\(m_t\)</span> from <code>decompose</code> is not the same as the coefficient from a linear model (<code>lm</code>)?</p>
 
 </div>
@@ -1366,7 +1390,7 @@ div.csl-indent {
           </div>
         </div>
       </div>
-<a href="an-aside-understanding-methods-and-generics-in-r.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="aside-understanding-methods-and-generics-in-r.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="arp-acf-pacf-etc..html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

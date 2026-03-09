@@ -1,4 +1,4 @@
-# Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process
+# Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process {- .aside-chapter}
 
 ## Introduction
 
