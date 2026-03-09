@@ -289,7 +289,7 @@ summary.lm
 ##     class(ans) <- "summary.lm"
 ##     ans
 ## }
-## <bytecode: 0x11a5512a8>
+## <bytecode: 0x157f818a8>
 ## <environment: namespace:stats>
 ```
 
@@ -400,7 +400,7 @@ getS3method("summary", "lm")
 ##     class(ans) <- "summary.lm"
 ##     ans
 ## }
-## <bytecode: 0x11a5512a8>
+## <bytecode: 0x157f818a8>
 ## <environment: namespace:stats>
 ```
 
@@ -425,7 +425,7 @@ summary
 ```
 ## function (object, ...) 
 ## UseMethod("summary")
-## <bytecode: 0x11a5560d8>
+## <bytecode: 0x157f866d8>
 ## <environment: namespace:base>
 ```
 
@@ -623,7 +623,7 @@ getS3method("summary", "lm")
 ##     class(ans) <- "summary.lm"
 ##     ans
 ## }
-## <bytecode: 0x11a5512a8>
+## <bytecode: 0x157f818a8>
 ## <environment: namespace:stats>
 ```
 

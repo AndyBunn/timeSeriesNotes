@@ -1,5 +1,5 @@
 --- 
-title: "Time Series Analysis for Environmental Scientists"
+title: "Time Series Analysis for Environmental Science"
 subtitle: "Notes for ESCI 504"
 author: "Andy Bunn"
 date: "09-March-2026"
