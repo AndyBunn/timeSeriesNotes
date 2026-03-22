@@ -337,7 +337,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="technical-setup" class="level2">
 <h2 class="anchored" data-anchor-id="technical-setup">Technical Setup</h2>
-<p>This document was written in Markdown using quatro and built with <strong>R version 4.5.2</strong>. You should be reasonably up to date on your versions of R, RStudio, and relevant packages. You can update your packages by running:</p>
+<p>This document was written in Markdown using quarto and built with <strong>R version 4.5.2</strong>. You should be reasonably up to date on your versions of R, RStudio, and relevant packages. You can update your packages by running:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">update.packages</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <section id="project-structure" class="level3">
 <h3 class="anchored" data-anchor-id="project-structure">Project Structure</h3>
@@ -367,6 +367,24 @@ The datasets used in the examples are available in the <code>data/</code> folder
 </section>
 
 </main> <!-- /main -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Find every part-header link in the sidebar that has no real href
+  // (Quarto renders them as <a href="#"> or with no href at all)
+  document.querySelectorAll(".sidebar-item-section > .sidebar-item-container > a").forEach(function (link) {
+    // Only patch links that don't go anywhere useful
+    if (!link.getAttribute("href") || link.getAttribute("href") === "#") {
+      // Find the first real chapter link nested under this part
+      var firstChild = link.closest(".sidebar-item-section")
+                           .querySelector(".sidebar-item-container a[href]:not([href='#'])");
+      if (firstChild) {
+        link.setAttribute("href", firstChild.getAttribute("href"));
+        link.style.cursor = "pointer";
+      }
+    }
+  });
+});
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

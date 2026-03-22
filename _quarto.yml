@@ -54,9 +54,9 @@ format:
     toc: true
     toc-depth: 3
     number-sections: false
+    include-after-body: toc-links.html
 
 execute:
   warning: false
   message: false
   freeze: auto
-  

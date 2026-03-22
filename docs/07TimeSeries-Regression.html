@@ -659,6 +659,24 @@ gls2     2  4 307.2600 317.5998 -149.6300 1 vs 2 90.62914  &lt;.0001</code></pre
 </section>
 
 </main> <!-- /main -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Find every part-header link in the sidebar that has no real href
+  // (Quarto renders them as <a href="#"> or with no href at all)
+  document.querySelectorAll(".sidebar-item-section > .sidebar-item-container > a").forEach(function (link) {
+    // Only patch links that don't go anywhere useful
+    if (!link.getAttribute("href") || link.getAttribute("href") === "#") {
+      // Find the first real chapter link nested under this part
+      var firstChild = link.closest(".sidebar-item-section")
+                           .querySelector(".sidebar-item-container a[href]:not([href='#'])");
+      if (firstChild) {
+        link.setAttribute("href", firstChild.getAttribute("href"));
+        link.style.cursor = "pointer";
+      }
+    }
+  });
+});
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
