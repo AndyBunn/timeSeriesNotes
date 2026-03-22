@@ -25,3 +25,6 @@ todo.txt
 data.zip
 # docs is kept for GitHub Pages
 # build via bookdown::render_book("index.Rmd", "bookdown::gitbook")
+/.quarto/
+**/*.quarto_ipynb
+_freeze

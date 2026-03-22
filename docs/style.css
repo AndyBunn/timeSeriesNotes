@@ -1,148 +1,272 @@
 /* ============================================================
-   style.css  —  Time Series Analysis for Environmental Scientists
+   style.css — Time Series Analysis for Environmental Science
+   Quarto / flatly theme companion
    ============================================================ */
 
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Source+Code+Pro:wght@400;600&family=Libre+Baskerville:ital@1&display=swap');
 
-/* ── 1. CONTENT WIDTH ───────────────────────────────────────
-   Keeps long lines readable on wide monitors.                */
-
-.book .book-body .page-wrapper .page-inner {
-  max-width: 920px;
-  margin: 0 auto;
+/* ── CSS custom properties (palette) ── */
+:root {
+  --ts-amber:      #c8922a;
+  --ts-amber-lt:   #e0b050;
+  --ts-blue:       #3a86c8;
+  --ts-blue-lt:    #7ab0d8;
+  --ts-navy:       #1a3a5c;   /* ink-blue — matches cover title block */
+  --ts-blue-ink:   #2a6aaa;   /* mid-blue — cover eyebrow / tags */
+  --ts-slate:      #1a2535;   /* deep text — matches cover h1 */
+  --ts-text:       #2c3e50;       /* flatly body text */
+  --ts-muted:      #6c7a8a;
+  --ts-rule:       #dde3e8;
+  --ts-code-bg:    #f5f7f9;
+  --ts-aside-bg:   #fdf8f0;       /* warm cream for aside chapters */
+  --ts-aside-rule: #c8922a40;
 }
 
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
 
-/* ── 2. LINKS ───────────────────────────────────────────────
-   Warm accent colour from hide_code.html palette.           */
+/* Chapter titles */
+h1.title, .quarto-section-identifier h1,
+.chapter > h1:first-of-type {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ts-text);
+  border-bottom: 2px solid var(--ts-amber);
+  padding-bottom: 0.35em;
+  margin-bottom: 1.1em;
+}
 
-.book .book-body a {
+/* Section headings */
+h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.35rem;
+  color: var(--ts-text);
+  border-bottom: 1px solid var(--ts-rule);
+  padding-bottom: 0.2em;
+  margin-top: 2rem;
+}
+
+h3 {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ts-muted);
+  margin-top: 1.6rem;
+}
+
+/* Body text */
+body {
+  font-size: 1.02rem;
+  line-height: 1.72;
+  color: var(--ts-text);
+}
+
+/* ============================================================
+   CODE BLOCKS
+   ============================================================ */
+
+/* Inline code */
+code:not(pre > code) {
+  background: var(--ts-code-bg);
+  border: 1px solid #dde3e8;
+  border-radius: 3px;
+  padding: 0.1em 0.38em;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.88em;
   color: #c0392b;
 }
 
-.book .book-body a:hover {
-  color: #e95420;
-  text-decoration: underline;
+/* Fenced code blocks */
+pre.sourceCode, div.sourceCode {
+  background: var(--ts-code-bg);
+  border: 1px solid #dde3e8;
+  border-left: 3px solid var(--ts-amber);
+  border-radius: 4px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.87em;
+  line-height: 1.55;
 }
 
-
-/* ── 3. CODE BLOCKS ─────────────────────────────────────────
-   Softer background, subtle left border, gentle rounding.   */
-
-pre {
-  background-color: #f7f4f1;
-  border-left: 3px solid #aea79f;
-  border-radius: 0 4px 4px 0;
-  padding: 1em 1em 1em 1.2em;
-}
-
-/* Inline code */
-code {
-  background-color: #f7f4f1;
-  color: #5a3e2b;
-  padding: 0.15em 0.35em;
+/* Code fold button */
+.code-fold-btn {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.8em;
+  color: var(--ts-muted);
+  border: 1px solid var(--ts-rule);
   border-radius: 3px;
-  font-size: 0.88em;
+  padding: 1px 8px;
+  background: var(--ts-code-bg);
+  cursor: pointer;
+}
+.code-fold-btn:hover {
+  color: var(--ts-amber);
+  border-color: var(--ts-amber);
 }
 
-/* Don't double-style code inside pre blocks */
-pre code {
-  background-color: transparent;
-  color: inherit;
-  padding: 0;
-  font-size: inherit;
-}
+/* ============================================================
+   "BIG IDEA" CALLOUT STYLE
+   ============================================================ */
 
-
-/* ── 4. FIGURE CAPTIONS ─────────────────────────────────────
-   Smaller, italic, centred — distinguishes caption from body.*/
-
-.figure p,
-p.caption,
-caption {
-  font-size: 0.88em;
+/* Wrap Big Idea sections in a subtle amber callout.
+   This targets the ## Big Idea heading + following paragraph. */
+h2:has(+ p) + p,
+.callout-tip {
+  border-left: 3px solid var(--ts-amber);
+  background: #fffaf0;
+  padding: 0.8em 1.1em;
+  border-radius: 0 4px 4px 0;
+  margin: 0.5em 0 1.5em;
   font-style: italic;
-  color: #6d6d6d;
+  color: #5a4a20;
+}
+
+/* Standard Quarto callout overrides */
+.callout {
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+.callout-tip    { border-left-color: var(--ts-amber) !important; }
+.callout-note   { border-left-color: var(--ts-blue)  !important; }
+.callout-warning { border-left-color: #e67e22       !important; }
+
+/* ============================================================
+   ASIDE CHAPTERS
+   Chapters with class .aside-chapter get a distinct treatment
+   ============================================================ */
+
+.aside-chapter h1,
+section.aside-chapter > h1:first-of-type {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  color: var(--ts-muted);
+  border-bottom: 1.5px dashed var(--ts-amber);
+}
+
+/* Sidebar aside label badge */
+.aside-chapter-badge {
+  display: inline-block;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ts-amber);
+  border: 1px solid var(--ts-amber-lt);
+  background: var(--ts-aside-bg);
+  padding: 2px 8px;
+  border-radius: 2px;
+  margin-bottom: 0.6em;
+}
+
+/* ============================================================
+   SIDEBAR / NAVIGATION
+   ============================================================ */
+
+/* Active chapter highlight */
+.sidebar-item-container .active > .sidebar-item-text {
+  color: var(--ts-amber) !important;
+  font-weight: 600;
+}
+
+/* Part headers in sidebar */
+.sidebar-section > .sidebar-item-text {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ts-muted);
+  margin-top: 0.5em;
+}
+
+/* ============================================================
+   TABLES
+   ============================================================ */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.92rem;
+  margin: 1.2em 0;
+}
+
+thead tr {
+  background: var(--ts-slate);
+  color: #f0ede6;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.82rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+thead th {
+  padding: 8px 12px;
+  border: none;
+}
+
+tbody tr:nth-child(even) { background: #f5f7f9; }
+tbody tr:hover           { background: #eef2f6; }
+
+tbody td {
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--ts-rule);
+}
+
+/* ============================================================
+   FIGURES & CAPTIONS
+   ============================================================ */
+
+figure {
+  margin: 1.5em 0;
+}
+
+figcaption, .figure-caption {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.82rem;
+  color: var(--ts-muted);
+  letter-spacing: 0.03em;
   text-align: center;
   margin-top: 0.4em;
 }
 
+/* ============================================================
+   MATH
+   ============================================================ */
 
-/* ── 5. BLOCKQUOTES ─────────────────────────────────────────
-   Warm left border, muted text — good for asides/quotes.    */
-
-blockquote {
-  border-left: 4px solid #aea79f;
-  background-color: #faf7f4;
-  margin: 1.5em 0;
-  padding: 0.8em 1.2em;
-  color: #555;
-  font-style: italic;
+/* Give display math a little breathing room */
+.math.display {
+  overflow-x: auto;
+  padding: 0.4em 0;
 }
 
-blockquote p {
-  margin: 0;
+/* ============================================================
+   TOC (right-hand in-page)
+   ============================================================ */
+
+#TOC {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.82rem;
 }
 
-
-/* ── 6. CALLOUT BOXES ───────────────────────────────────────
-   Use in your .Rmd with:
-     ::: {.callout-note}
-     Your note text here.
-     :::
-   Three flavours: note (blue), tip (green), warning (orange).*/
-
-.callout-note,
-.callout-tip,
-.callout-warning {
-  border-left: 4px solid;
-  border-radius: 0 4px 4px 0;
-  padding: 0.8em 1.2em;
-  margin: 1.5em 0;
+#TOC a {
+  color: var(--ts-muted);
+  text-decoration: none;
 }
 
-.callout-note {
-  background-color: #eef4fb;
-  border-color: #5b8db8;
-  color: #2c4a6e;
+#TOC a:hover,
+#TOC a.active {
+  color: var(--ts-amber);
 }
 
-.callout-tip {
-  background-color: #eef7f0;
-  border-color: #5a9e6f;
-  color: #2d5a3d;
-}
+/* ============================================================
+   RESPONSIVE TWEAKS
+   ============================================================ */
 
-.callout-warning {
-  background-color: #fdf3ec;
-  border-color: #e95420;
-  color: #7a2d0e;
-}
-
-/* Bold label at the start of callouts, e.g. **Note:** */
-.callout-note strong,
-.callout-tip strong,
-.callout-warning strong {
-  display: block;
-  margin-bottom: 0.3em;
-  font-size: 0.95em;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
-
-/* ── 7. ASIDE CHAPTERS ──────────────────────────────────────
-   Unnumbered chapters marked with {- .aside-chapter}        */
-
-.aside-chapter h1 {
-  color: #6d6d6d;
-  font-style: italic;
-  border-left: 4px solid #aea79f;
-  padding-left: 0.6em;
-}
-
-/* TOC entries for aside files (matched by filename convention) */
-.book .book-summary ul.summary li a[href*="xAside"] {
-  color: #999;
-  font-style: italic;
-  font-size: 0.9em;
+@media (max-width: 768px) {
+  h1.title, .chapter > h1:first-of-type { font-size: 1.8rem; }
+  h2 { font-size: 1.2rem; }
 }

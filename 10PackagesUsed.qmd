@@ -1,0 +1,10 @@
+---
+suppress-bibliography: false
+---
+
+# References
+
+This document was built using the R packages and references listed below. Citations are automatically generated from `packages.bib`, `dplR.bib`, and `otherRefs.bib`.
+
+::: {#refs}
+:::

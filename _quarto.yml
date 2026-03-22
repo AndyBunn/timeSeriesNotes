@@ -1,0 +1,62 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "Time Series Analysis for Environmental Science"
+  subtitle: "Course Notes"
+  author: "Andy Bunn"
+  date: today
+  description: "Time series notes and exercises"
+  navbar:
+    background: dark
+    search: true
+  chapters:
+    - file: index.qmd
+      text: "Cover Page"
+    - 00Welcome.qmd
+    - 01Intro.qmd
+    - part: "Decomposition & Autocorrelation"
+      chapters:
+        - 02DecompTrends.qmd
+        - 03TimeSeries-Autocorrelation.qmd
+        - 04TimeSeries-ARMA.qmd
+    - part: "Forecasting & Cross-Correlation"
+      chapters:
+        - 05TimeSeries-Forecast.qmd
+        - 06CrossCorrelation.qmd
+    - part: "Regression, Filters & Frequency"
+      chapters:
+        - 07TimeSeries-Regression.qmd
+        - 08TimeSeries-Filters.qmd
+        - 09TimeSeries-Freq.qmd
+    - part: "Asides"
+      chapters:
+        - 01xAsideMethods_and_generics.qmd
+        - 03xAsideMA1-ACF-PACF-Interp.qmd
+        - 07xAsideOLS_Algebric_Matrix.qmd
+    - 10PackagesUsed.qmd
+  repo-url: https://github.com/AndyBunn/timeSeriesNotes
+  repo-actions: [edit, issue]
+
+bibliography:
+  - packages.bib
+  - dplR.bib
+  - otherRefs.bib
+reference-location: document
+suppress-bibliography: true
+
+format:
+  html:
+    theme: flatly
+    css: style.css
+    code-fold: show
+    toc: true
+    toc-depth: 3
+    number-sections: false
+
+execute:
+  warning: false
+  message: false
+  freeze: auto
+  
