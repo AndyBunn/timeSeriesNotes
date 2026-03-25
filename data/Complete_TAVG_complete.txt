@@ -1,4 +1,4 @@
-% Update as needed. This file contains a detailed summary of the land-surface average 
+% This file contains a detailed summary of the land-surface average 
 % results produced by the Berkeley Averaging method.  Temperatures are 
 % in Celsius and reported as anomalies relative to the Jan 1951-Dec 1980 
 % average.  Uncertainties represent the 95% confidence interval for 

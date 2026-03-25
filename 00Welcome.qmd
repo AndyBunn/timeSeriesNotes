@@ -30,7 +30,7 @@ Each chapter builds on the last, so working through them in order is recommended
 
 ## Technical Setup
 
-This document was written in Markdown using quarto and built with **R version `r getRversion()`**. You should be reasonably up to date on your versions of R, RStudio, and relevant packages. You can update your packages by running:
+This document was written in Markdown using [quarto](https://quarto.org) and built with **R version `r getRversion()`**. You should be reasonably up to date on your versions of R, RStudio, and relevant packages. You can update your packages by running:
 
 ``` r
 update.packages()

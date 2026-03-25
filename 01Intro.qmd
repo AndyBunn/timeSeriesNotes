@@ -228,7 +228,7 @@ kbli_tb %>%
   ggplot(mapping = aes(x=index,y=value)) +
   geom_line() +
   facet_wrap(~series,scales = "free_y",ncol=1) +
-    labs(x="Date",y=element_blank(),
+    labs(x="Date",y=NULL,
        title="Average Temperature and Precipitation, Bellingham WA") +
     theme_minimal()
 ```
