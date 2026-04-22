@@ -2,14 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="description" content="Time series notes and exercises">
 
-<title>Welcome – Time Series Analysis for Environmental Science</title>
+<title>Why Time Series – Time Series Analysis for Environmental Science</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -70,15 +73,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-85a4b3e826de5f106d660c7ca6d4d11b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-bd5c691c2bf3d48110e8e92f1357ab66.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -118,8 +120,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Time Series Analysis for Environmental Science</span>
     </a>
@@ -135,7 +135,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./00Welcome.html"><span class="chapter-title">Welcome</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./00Welcome.html"><span class="chapter-title">Why Time Series</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -145,10 +145,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
-      </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -158,12 +154,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./00Welcome.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Welcome</span></a>
+  <a href="./00Welcome.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Why Time Series</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01Intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">The Measure of Time</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01xAsideMethods_and_generics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Aside: Understanding Methods and Generics in R</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -183,6 +185,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03TimeSeries-Autocorrelation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AR(p), ACF, PACF, etc.</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03xAsideCorrelationVersusRegression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Aside: Correlation is not Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03xAsideMA1-ACF-PACF-Interp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -229,41 +243,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./07xAsideOLS_Algebric_Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Aside: OLS via Algebra and Matrices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./08TimeSeries-Filters.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Filtering, smoothing</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./09TimeSeries-Freq.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">The Freqs Come out at Night</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Asides</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./01xAsideMethods_and_generics.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Aside: Understanding Methods and Generics in R</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./03xAsideMA1-ACF-PACF-Interp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./07xAsideOLS_Algebric_Matrix.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Aside: OLS via Algebra and Matrices</span></a>
   </div>
 </li>
       </ul>
@@ -283,10 +274,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#whats-in-these-notes" id="toc-whats-in-these-notes" class="nav-link active" data-scroll-target="#whats-in-these-notes">What’s in These Notes</a></li>
+  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a>
+  <ul class="collapse">
+  <li><a href="#how-these-notes-are-laid-out" id="toc-how-these-notes-are-laid-out" class="nav-link" data-scroll-target="#how-these-notes-are-laid-out">How These Notes Are Laid Out</a></li>
+  <li><a href="#whats-in-these-notes" id="toc-whats-in-these-notes" class="nav-link" data-scroll-target="#whats-in-these-notes">What’s in These Notes</a></li>
+  <li><a href="#go-do-great-things" id="toc-go-do-great-things" class="nav-link" data-scroll-target="#go-do-great-things">Go Do Great Things</a></li>
   <li><a href="#technical-setup" id="toc-technical-setup" class="nav-link" data-scroll-target="#technical-setup">Technical Setup</a>
   <ul class="collapse">
   <li><a href="#project-structure" id="toc-project-structure" class="nav-link" data-scroll-target="#project-structure">Project Structure</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/AndyBunn/timeSeriesNotes/edit/main/00Welcome.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/AndyBunn/timeSeriesNotes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -296,7 +292,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Welcome</span></h1>
+<h1 class="title"><span class="chapter-title">Why Time Series</span></h1>
 </div>
 
 
@@ -313,32 +309,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This document is a compilation of notes, examples, and exercises developed for our course on time series analysis, with a particular focus on environmental applications. Rather than follow a traditional textbook, we’ve taken a modular, hands-on approach. Each section builds on what came before, emphasizing interpretation, practical tools, and critical thinking about how time series models apply to real-world environmental questions.</p>
-<p>You’ll find annotated code, worked examples, and commentary throughout — some informal, some technical — all aimed at helping you <em>do</em> time series work, not just read about it. The examples often draw from environmental data: climate records, ecological time series, and other systems that change over time and space. But the core ideas and tools are broadly applicable.</p>
-<p>From time to time, I’ll refer you to more formal textbooks or peer-reviewed articles to go deeper into theory, context, or application. These serve as complements, not replacements, for what we’re doing here.</p>
-<p>The tone of these notes is meant to be accessible, pragmatic, and occasionally opinionated. You’ll see suggestions, cautions, and nudges — all based on what I’ve found helpful (and confusing) when learning and teaching these methods.</p>
-<p>This isn’t a comprehensive or final text. It’s a live document, shaped by your questions, feedback, and curiosity. Think of it as a field guide: not everything you’ll ever need, but hopefully exactly what you need to get your bearings, spot the patterns, and know what to do next.</p>
-<p><em>This is a living document — feedback and corrections are always welcome.</em></p>
+<p>Most environmental data are time series data. Temperature records. Streamflow. Tree rings. Species abundance counts. CO<sub>2</sub> measured at Mauna Loa. All of it indexed to time, all of it carrying a signature of the processes that generated it.</p>
+<p>But it goes further than that. Even data sets that aren’t obviously temporal – a soil sample, a species survey, a water chemistry measurement – exist in time. They were collected at a moment, and the system that produced them has a history. Time is the dimension that almost every environmental process moves through, and most of those processes have structure in time: cycles, trends, memory, responses to forcing. Learning to read that structure is part of what it means to do environmental science.</p>
+<p>It also matters for getting the statistics right. Temporal dependence – the fact that observations close together in time tend to be more similar than observations far apart – violates the independence assumption that underlies most standard statistical methods. Ignore it, and your standard errors are too small, your p-values too optimistic, your conclusions too confident. Time series analysis gives you the tools to account for that dependence rather than pretend it isn’t there.</p>
+<p>And beyond the bookkeeping, temporal structure is information. A seasonal cycle tells you something about the drivers of a system. A long-term trend tells you something has changed. Lagged correlations between two series can reveal how one system influences another. The goal of this course is to help you extract that information, work with it honestly, and communicate what it means.</p>
+<section id="welcome" class="level1">
+<h1>Welcome</h1>
+<p>These are the course notes and not a textbook. They are more like a field guide written by someone who has gotten lost in these woods before and wants to help you find your way through.</p>
+<p>The notes are hands-on by design. You will write code, look at data, fit models, and interpret results. Each section builds on what came before. The math shows up when it needs to, but the emphasis throughout is on doing time series analysis and understanding what you’re doing – not on deriving things for their own sake.</p>
+<p>I’ll point you to textbooks and papers along the way. Read them. They complement what we’re doing here and will matter when you’re working on your own data and I’m not around to ask.</p>
+<p>These notes are a living document. They change based on what works, what doesn’t, and what you ask about in class. If something is wrong or unclear, tell me.</p>
+<section id="how-these-notes-are-laid-out" class="level2">
+<h2 class="anchored" data-anchor-id="how-these-notes-are-laid-out">How These Notes Are Laid Out</h2>
+<p>Most of the chapters follow a natural progression – each one builds on the last, and working through them in order is the right call. But scattered through the notes you’ll find <strong>Asides</strong>: short detours that dig into something that doesn’t quite fit the main flow. An Aside might work through the math behind a method, explain how R handles something under the hood, or fill in background that makes the surrounding chapters make more sense.</p>
+<p>You can skip the Asides and still follow the core material. But they’re there because the questions they answer are real ones – the kind that come up when you’re working through a chapter and start wondering why something works the way it does. If that’s how your brain works, the Asides are for you.</p>
+</section>
 <section id="whats-in-these-notes" class="level2">
 <h2 class="anchored" data-anchor-id="whats-in-these-notes">What’s in These Notes</h2>
 <p>The notes move through the core ideas of time series analysis in roughly this order:</p>
 <ul>
-<li><strong>Introduction</strong> — what time series data are and how R represents them (the <code>ts</code> and <code>zoo</code> classes)</li>
-<li><strong>Decomposition and trends</strong> — separating a series into trend, seasonal, and irregular components</li>
-<li><strong>Autocorrelation</strong> — measuring and interpreting temporal dependence (ACF and PACF)</li>
-<li><strong>ARMA models</strong> — autoregressive and moving average models for stationary series</li>
-<li><strong>Forecasting</strong> — using a model’s correlation structure to predict future values</li>
-<li><strong>Cross-correlation</strong> — relationships between two time series</li>
-<li><strong>Time series regression</strong> — regression when your residuals aren’t independent</li>
-<li><strong>Filters</strong> — smoothing and extracting signals from noisy data</li>
-<li><strong>Frequency domain analysis</strong> — spectral methods for identifying periodic signals</li>
+<li><strong>The Measure of Time</strong> – What a time series is, how R represents temporal data, and the vocabulary we’ll use throughout.</li>
+<li><strong>Aside: Methods and Generics in R</strong> – A quick look under the hood at how R dispatches functions like <code>plot()</code> and <code>summary()</code> depending on the class of the object you give them. Useful background for the whole course.</li>
+<li><strong>Decomposition</strong> – How to separate a time series into trend, seasonal, and irregular components. The core ideas are simple; the implications for analysis are not.</li>
+<li><strong>AR(p), ACF, PACF</strong> – Autocorrelation: what it is, how to measure it, and what the ACF and PACF are actually telling you. This chapter is foundational for everything that follows.</li>
+<li><strong>Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process</strong> – Works through the theory behind those canonical ACF and PACF shapes. Worth reading once you’ve seen the patterns and started wondering where they come from.</li>
+<li><strong>ARMA(p,q)</strong> – Autoregressive and moving average models for stationary series. How to identify, fit, and check them.</li>
+<li><strong>Forecasting</strong> – Using a fitted model’s correlation structure to predict future values, and being honest about what that uncertainty actually looks like.</li>
+<li><strong>Cross Correlation</strong> – How to measure the relationship between two time series, including lagged relationships. A sockeye salmon run and the climate that shaped it. That kind of thing.</li>
+<li><strong>Regression</strong> – What happens when your regression residuals are autocorrelated, why it matters, and how to deal with it.</li>
+<li><strong>Aside: OLS via Algebra and Matrices</strong> – Derives the OLS solution from scratch in both algebraic and matrix form, then implements it in R. Useful background before we generalize to GLS in the regression chapter.</li>
+<li><strong>Filtering and Smoothing</strong> – Extracting signals from noisy data using moving averages, splines, and other filters. When you want to see the forest, not the individual trees.</li>
+<li><strong>The Frequency Domain</strong> – Spectral methods for identifying periodic signals. If you’ve ever wondered how to find a cycle in noisy data, this is the chapter.</li>
 </ul>
-<p>Each chapter builds on the last, so working through them in order is recommended — though the asides can be read independently.</p>
+</section>
+<section id="go-do-great-things" class="level2">
+<h2 class="anchored" data-anchor-id="go-do-great-things">Go Do Great Things</h2>
+<p>You are going to learn to see the world in time. That sounds dramatic, but I mean it practically: by the end of this course you will be able to look at a time series, describe its structure, fit a model, check your assumptions, and say something about what the data suggest.</p>
+<p>The people who do this work well are not necessarily the ones who find it easiest. They’re the ones who run the code when it breaks, read the error messages, ask questions, and keep going.</p>
+<p>So: set up your project, download the data, and let’s get to work.</p>
 </section>
 <section id="technical-setup" class="level2">
 <h2 class="anchored" data-anchor-id="technical-setup">Technical Setup</h2>
-<p>This document was written in Markdown using quarto and built with <strong>R version 4.5.2</strong>. You should be reasonably up to date on your versions of R, RStudio, and relevant packages. You can update your packages by running:</p>
+<p>This document was written in Markdown using <a href="https://quarto.org">quarto</a> and built with <strong>R version 4.5.2</strong>. You should be reasonably up to date on your versions of R, RStudio, and relevant packages. You can update your packages by running:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">update.packages</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Run that now.</strong> And anytime it occurs to you. It’s always a good idea to be up to date with your packages.</p>
 <section id="project-structure" class="level3">
 <h3 class="anchored" data-anchor-id="project-structure">Project Structure</h3>
 <p>To follow along with the examples, you’ll want a working RStudio project.</p>
@@ -348,7 +362,8 @@ Go to <strong>File → New Project → New Directory → New Project</strong>. G
 <li><p><strong>Download the <code>data/</code> folder</strong><br>
 The datasets used in the examples are available in the <code>data/</code> folder of the course repository. Download that folder and place it inside your project directory.</p></li>
 </ol>
-<p>You can download the data directly from the GitHub <a href="https://github.com/AndyBunn/timeseriesNotes">repo</a>. The hard link to it is: https://github.com/AndyBunn/timeseriesNotes/releases/download/data-latest/data.zip</p>
+<p>You can <a href="https://github.com/AndyBunn/timeseriesNotes/releases/download/data-latest/data.zip">download the data directly</a> from the GitHub <a href="https://github.com/AndyBunn/timeseriesNotes">repo</a>. Here is a hard link to it:</p>
+<pre><code>https://github.com/AndyBunn/timeseriesNotes/releases/download/data-latest/data.zip</code></pre>
 <p>Once it’s unzipped your folder structure should look something like this:</p>
 <pre><code>timeseries-course/
 ├── data/
@@ -360,9 +375,27 @@ The datasets used in the examples are available in the <code>data/</code> folder
 <li><strong>Refer to data files using relative paths</strong></li>
 </ol>
 <p>In your code, use paths like <code>"data/HansenSockeye.rds"</code> rather than full file paths. This keeps the code portable and ensures it will run on different machines without modification. E.g.,</p>
-<pre><code>sockeye &lt;- readRDS("data/HansenSockeye.rds")</code></pre>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sockeye <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/HansenSockeye.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<ol start="4" type="1">
+<li><strong>Save your work files in the project root</strong></li>
+</ol>
+<p>When you create Rmd or qmd files for assignments, save them in the project’s root directory. Your folder structure might eventually look something like this:</p>
+<pre><code>timeseries-course/
+├── data/
+│   ├── HansenSockeye.rds
+│   ├── jul65N.rds
+│   └── ...
+├── decompositionHomework.Rmd
+├── forecastingHomework.Rmd
+└── timeseries-course.Rproj</code></pre>
 
 
+</section>
 </section>
 </section>
 

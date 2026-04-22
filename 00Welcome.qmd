@@ -1,32 +1,53 @@
+## Why Time Series
+
+Most environmental data are time series data. Temperature records. Streamflow. Tree rings. Species abundance counts. CO~2~ measured at Mauna Loa. All of it indexed to time, all of it carrying a signature of the processes that generated it.
+
+But it goes further than that. Even data sets that aren't obviously temporal -- a soil sample, a species survey, a water chemistry measurement -- exist in time. They were collected at a moment, and the system that produced them has a history. Time is the dimension that almost every environmental process moves through, and most of those processes have structure in time: cycles, trends, memory, responses to forcing. Learning to read that structure is part of what it means to do environmental science.
+
+It also matters for getting the statistics right. Temporal dependence -- the fact that observations close together in time tend to be more similar than observations far apart -- violates the independence assumption that underlies most standard statistical methods. Ignore it, and your standard errors are too small, your p-values too optimistic, your conclusions too confident. Time series analysis gives you the tools to account for that dependence rather than pretend it isn't there.
+
+And beyond the bookkeeping, temporal structure is information. A seasonal cycle tells you something about the drivers of a system. A long-term trend tells you something has changed. Lagged correlations between two series can reveal how one system influences another. The goal of this course is to help you extract that information, work with it honestly, and communicate what it means.
+
 # Welcome
 
-This document is a compilation of notes, examples, and exercises developed for our course on time series analysis, with a particular focus on environmental applications. Rather than follow a traditional textbook, we’ve taken a modular, hands-on approach. Each section builds on what came before, emphasizing interpretation, practical tools, and critical thinking about how time series models apply to real-world environmental questions.
+These are the course notes and not a textbook. They are more like a field guide written by someone who has gotten lost in these woods before and wants to help you find your way through.
 
-You’ll find annotated code, worked examples, and commentary throughout — some informal, some technical — all aimed at helping you *do* time series work, not just read about it. The examples often draw from environmental data: climate records, ecological time series, and other systems that change over time and space. But the core ideas and tools are broadly applicable.
+The notes are hands-on by design. You will write code, look at data, fit models, and interpret results. Each section builds on what came before. The math shows up when it needs to, but the emphasis throughout is on doing time series analysis and understanding what you're doing -- not on deriving things for their own sake.
 
-From time to time, I’ll refer you to more formal textbooks or peer-reviewed articles to go deeper into theory, context, or application. These serve as complements, not replacements, for what we’re doing here.
+I'll point you to textbooks and papers along the way. Read them. They complement what we're doing here and will matter when you're working on your own data and I'm not around to ask.
 
-The tone of these notes is meant to be accessible, pragmatic, and occasionally opinionated. You’ll see suggestions, cautions, and nudges — all based on what I’ve found helpful (and confusing) when learning and teaching these methods.
+These notes are a living document. They change based on what works, what doesn't, and what you ask about in class. If something is wrong or unclear, tell me.
 
-This isn’t a comprehensive or final text. It’s a live document, shaped by your questions, feedback, and curiosity. Think of it as a field guide: not everything you’ll ever need, but hopefully exactly what you need to get your bearings, spot the patterns, and know what to do next.
+## How These Notes Are Laid Out
 
-*This is a living document — feedback and corrections are always welcome.*
+Most of the chapters follow a natural progression -- each one builds on the last, and working through them in order is the right call. But scattered through the notes you'll find **Asides**: short detours that dig into something that doesn't quite fit the main flow. An Aside might work through the math behind a method, explain how R handles something under the hood, or fill in background that makes the surrounding chapters make more sense.
 
-## What’s in These Notes
+You can skip the Asides and still follow the core material. But they're there because the questions they answer are real ones -- the kind that come up when you're working through a chapter and start wondering why something works the way it does. If that's how your brain works, the Asides are for you.
+
+## What's in These Notes
 
 The notes move through the core ideas of time series analysis in roughly this order:
 
-- **Introduction** — what time series data are and how R represents them (the `ts` and `zoo` classes)
-- **Decomposition and trends** — separating a series into trend, seasonal, and irregular components
-- **Autocorrelation** — measuring and interpreting temporal dependence (ACF and PACF)
-- **ARMA models** — autoregressive and moving average models for stationary series
-- **Forecasting** — using a model’s correlation structure to predict future values
-- **Cross-correlation** — relationships between two time series
-- **Time series regression** — regression when your residuals aren’t independent
-- **Filters** — smoothing and extracting signals from noisy data
-- **Frequency domain analysis** — spectral methods for identifying periodic signals
+- **The Measure of Time** -- What a time series is, how R represents temporal data, and the vocabulary we'll use throughout.
+- **Aside: Methods and Generics in R** -- A quick look under the hood at how R dispatches functions like `plot()` and `summary()` depending on the class of the object you give them. Useful background for the whole course.
+- **Decomposition** -- How to separate a time series into trend, seasonal, and irregular components. The core ideas are simple; the implications for analysis are not.
+- **AR(p), ACF, PACF** -- Autocorrelation: what it is, how to measure it, and what the ACF and PACF are actually telling you. This chapter is foundational for everything that follows.
+- **Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process** -- Works through the theory behind those canonical ACF and PACF shapes. Worth reading once you've seen the patterns and started wondering where they come from.
+- **ARMA(p,q)** -- Autoregressive and moving average models for stationary series. How to identify, fit, and check them.
+- **Forecasting** -- Using a fitted model's correlation structure to predict future values, and being honest about what that uncertainty actually looks like.
+- **Cross Correlation** -- How to measure the relationship between two time series, including lagged relationships. A sockeye salmon run and the climate that shaped it. That kind of thing.
+- **Regression** -- What happens when your regression residuals are autocorrelated, why it matters, and how to deal with it.
+- **Aside: OLS via Algebra and Matrices** -- Derives the OLS solution from scratch in both algebraic and matrix form, then implements it in R. Useful background before we generalize to GLS in the regression chapter.
+- **Filtering and Smoothing** -- Extracting signals from noisy data using moving averages, splines, and other filters. When you want to see the forest, not the individual trees.
+- **The Frequency Domain** -- Spectral methods for identifying periodic signals. If you've ever wondered how to find a cycle in noisy data, this is the chapter.
 
-Each chapter builds on the last, so working through them in order is recommended — though the asides can be read independently.
+## Go Do Great Things
+
+You are going to learn to see the world in time. That sounds dramatic, but I mean it practically: by the end of this course you will be able to look at a time series, describe its structure, fit a model, check your assumptions, and say something about what the data suggest.
+
+The people who do this work well are not necessarily the ones who find it easiest. They're the ones who run the code when it breaks, read the error messages, ask questions, and keep going.
+
+So: set up your project, download the data, and let's get to work.
 
 ## Technical Setup
 
@@ -36,36 +57,56 @@ This document was written in Markdown using [quarto](https://quarto.org) and bui
 update.packages()
 ```
 
+**Run that now.** And anytime it occurs to you. It's always a good idea to be up to date with your packages.
+
 ### Project Structure
 
 To follow along with the examples, you'll want a working RStudio project.
 
 1.  **Create a new RStudio project**\
-Go to **File → New Project → New Directory → New Project**. Give it a name (for example `timeseries-course`) and choose where to save it.
+    Go to **File → New Project → New Directory → New Project**. Give it a name (for example `timeseries-course`) and choose where to save it.
 
 2.  **Download the `data/` folder**\
-The datasets used in the examples are available in the `data/` folder of the course repository. Download that folder and place it inside your project directory.
+    The datasets used in the examples are available in the `data/` folder of the course repository. Download that folder and place it inside your project directory.
 
-You can download the data directly from the GitHub [repo](https://github.com/AndyBunn/timeseriesNotes). The hard link to it is:
+You can [download the data directly](https://github.com/AndyBunn/timeseriesNotes/releases/download/data-latest/data.zip) from the GitHub [repo](https://github.com/AndyBunn/timeseriesNotes). Here is a hard link to it:
+
+```
 https://github.com/AndyBunn/timeseriesNotes/releases/download/data-latest/data.zip
+```
 
 Once it's unzipped your folder structure should look something like this:
 
-   ```
-   timeseries-course/
-   ├── data/
-   │   ├── HansenSockeye.rds
-   │   ├── jul65N.rds
-   │   └── ...
-   └── timeseries-course.Rproj
-   ```
+```
+timeseries-course/
+├── data/
+│   ├── HansenSockeye.rds
+│   ├── jul65N.rds
+│   └── ...
+└── timeseries-course.Rproj
+```
 
 3.  **Refer to data files using relative paths**
 
-In your code, use paths like `"data/HansenSockeye.rds"` rather than full file paths. This keeps the code portable and ensures it will run on different machines without modification. E.g., 
+In your code, use paths like `"data/HansenSockeye.rds"` rather than full file paths. This keeps the code portable and ensures it will run on different machines without modification. E.g.,
+
+```{r}
+sockeye <- readRDS("data/HansenSockeye.rds")
+```
+
+4.  **Save your work files in the project root**
+
+When you create Rmd or qmd files for assignments, save them in the project's root directory. Your folder structure might eventually look something like this:
 
 ```
-sockeye <- readRDS("data/HansenSockeye.rds")
+timeseries-course/
+├── data/
+│   ├── HansenSockeye.rds
+│   ├── jul65N.rds
+│   └── ...
+├── decompositionHomework.Rmd
+├── forecastingHomework.Rmd
+└── timeseries-course.Rproj
 ```
 
 ```{r include=FALSE}
@@ -75,7 +116,4 @@ knitr::write_bib(c(
   'nlme', 'zoo', 'Hmisc', 'broom', 'gridExtra', 
   'dplR','hydroTSM','cowplot','waveslim'), 
   'packages.bib')
-
-# bookdown::render_book() to build everything in docs/.
 ```
-

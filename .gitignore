@@ -1,17 +1,15 @@
-# RStudio junk
+# RStudio
 .Rproj.user/
 .Rhistory
 .RData
 .Ruserdata
 
-# bookdown build artifacts
-_book/
-_bookdown_files/
+# Quarto
+/.quarto/
+**/*.quarto_ipynb
 
-# knitr cache
-_cache/
-*.utf8.md
-*.knit.md
+# knitr cache (chapter-level folders e.g. 02DecompTrends_cache/)
+*_cache/
 
 # intermediate files
 *.log
@@ -23,8 +21,7 @@ _cache/
 todo.txt
 .DS_Store
 data.zip
-# docs is kept for GitHub Pages
-# build via bookdown::render_book("index.Rmd", "bookdown::gitbook")
-/.quarto/
-**/*.quarto_ipynb
-_freeze
+.positai
+
+# docs/ is kept for GitHub Pages
+# _freeze/ is kept for freeze: auto (do not ignore)

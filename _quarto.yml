@@ -16,10 +16,13 @@ book:
       text: "Cover Page"
     - 00Welcome.qmd
     - 01Intro.qmd
+    - 01xAsideMethods_and_generics.qmd
     - part: "Decomposition & Autocorrelation"
       chapters:
         - 02DecompTrends.qmd
         - 03TimeSeries-Autocorrelation.qmd
+        - 03xAsideCorrelationVersusRegression.qmd
+        - 03xAsideMA1-ACF-PACF-Interp.qmd
         - 04TimeSeries-ARMA.qmd
     - part: "Forecasting & Cross-Correlation"
       chapters:
@@ -28,13 +31,9 @@ book:
     - part: "Regression, Filters & Frequency"
       chapters:
         - 07TimeSeries-Regression.qmd
+        - 07xAsideOLS_Algebric_Matrix.qmd
         - 08TimeSeries-Filters.qmd
         - 09TimeSeries-Freq.qmd
-    - part: "Asides"
-      chapters:
-        - 01xAsideMethods_and_generics.qmd
-        - 03xAsideMA1-ACF-PACF-Interp.qmd
-        - 07xAsideOLS_Algebric_Matrix.qmd
     - 10PackagesUsed.qmd
   repo-url: https://github.com/AndyBunn/timeSeriesNotes
   repo-actions: [edit, issue]

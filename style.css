@@ -136,31 +136,54 @@ h2:has(+ p) + p,
 .callout-warning { border-left-color: #e67e22       !important; }
 
 /* ============================================================
-   ASIDE CHAPTERS
-   Chapters with class .aside-chapter get a distinct treatment
+   ASIDE CHAPTERS — page treatment
+   {- .aside-chapter} puts the class directly on the h1 in
+   Quarto, so we target h1.aside-chapter, not .aside-chapter h1
    ============================================================ */
 
-.aside-chapter h1,
-section.aside-chapter > h1:first-of-type {
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  color: var(--ts-muted);
-  border-bottom: 1.5px dashed var(--ts-amber);
-}
-
-/* Sidebar aside label badge */
-.aside-chapter-badge {
-  display: inline-block;
+/* "aside" label injected above the chapter title — no extra
+   markup needed in the .qmd files */
+h1.aside-chapter::before {
+  content: "aside";
+  display: block;
   font-family: 'Source Code Pro', monospace;
   font-size: 0.72rem;
-  letter-spacing: 0.12em;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ts-amber);
-  border: 1px solid var(--ts-amber-lt);
-  background: var(--ts-aside-bg);
-  padding: 2px 8px;
-  border-radius: 2px;
-  margin-bottom: 0.6em;
+  opacity: 0.85;
+  margin-bottom: 0.3em;
+}
+
+/* Chapter title itself: italic Playfair, dashed amber underline */
+h1.aside-chapter {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 700;
+  color: var(--ts-muted);
+  border-bottom: 1.5px dashed var(--ts-amber);
+  padding-bottom: 0.35em;
+  margin-bottom: 1.1em;
+}
+
+/* ============================================================
+   ASIDE CHAPTERS — sidebar treatment
+   Targets any sidebar link whose href contains "Aside"
+   (matches the xAside filename convention used in this book)
+   ============================================================ */
+
+.sidebar-item a[href*="Aside"] {
+  font-style: italic;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  padding-left: 1.1em;
+}
+
+.sidebar-item a[href*="Aside"]::before {
+  content: "↳ ";
+  font-style: normal;
+  opacity: 0.6;
 }
 
 /* ============================================================
