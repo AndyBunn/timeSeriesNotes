@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./07xAsideOLS_ Algebra_Matrix.html" rel="next">
+<link href="./07xAsideOLS-Algebra-Matrix.html" rel="next">
 <link href="./06CrossCorrelation.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -283,7 +283,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07xAsideOLS_ Algebra_Matrix.html" class="sidebar-item-text sidebar-link">
+  <a href="./07xAsideOLS-Algebra-Matrix.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Aside: OLS via Algebra and Matrices</span></a>
   </div>
 </li>
@@ -482,7 +482,7 @@ Frequency = 1
 <p>Generalized least squares (GLS) is the natural fix. The key difference between OLS and GLS is in what they assume about the errors. OLS assumes the errors are independent and identically distributed. GLS allows the errors to have a richer structure – specifically, a covariance matrix <span class="math inline">\(\Sigma\)</span> that can encode both unequal variances and correlations between observations. You can think of it this way: OLS minimizes the sum of squared distances between observed and predicted values, treating all observations equally. GLS minimizes those same distances but <strong>weighted</strong> by the covariance structure of the residuals, so observations whose errors are strongly correlated with their neighbors get less weight – they are carrying redundant information.</p>
 <p>Formally, the OLS and GLS estimators sit side by side like this:</p>
 <p><span class="math display">\[\hat{\boldsymbol{\beta}}_{OLS} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}\]</span> <span class="math display">\[\hat{\boldsymbol{\beta}}_{GLS} = (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1} \mathbf{X})^{-1} \mathbf{X}^\top \boldsymbol{\Sigma}^{-1} \mathbf{y}\]</span></p>
-<p>GLS is OLS with <span class="math inline">\(\boldsymbol{\Sigma}^{-1}\)</span> inserted as a weighting matrix. When <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is just <span class="math inline">\(\sigma^2 \mathbf{I}\)</span> (equal variances, no correlation), the two formulas are identical – OLS is a special case of GLS. If the matrix notation here is unfamiliar, the <a href="07xAsideOLS_Algebric_Matrix.html">OLS via Algebra and Matrices aside</a> walks through where both formulas come from and why they are structured the way they are.</p>
+<p>GLS is OLS with <span class="math inline">\(\boldsymbol{\Sigma}^{-1}\)</span> inserted as a weighting matrix. When <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is just <span class="math inline">\(\sigma^2 \mathbf{I}\)</span> (equal variances, no correlation), the two formulas are identical – OLS is a special case of GLS. If the matrix notation here is unfamiliar, the <a href="07xAsideOLS-Algebra-Matrix.html">OLS via Algebra and Matrices aside</a> walks through where both formulas come from and why they are structured the way they are.</p>
 <p>In practice you do not know <span class="math inline">\(\boldsymbol{\Sigma}\)</span> exactly. When using <code>gls()</code> from the <code>nlme</code> package, you specify the <em>structure</em> of <span class="math inline">\(\boldsymbol{\Sigma}\)</span> – for example, that the errors follow an AR(1) process – and the software estimates the parameters of that structure from the data using maximum likelihood or restricted maximum likelihood (REML). This is also a reason not to use GLS carelessly. <a href="https://www.reddit.com/r/AskStatistics/comments/36ocl1/why_not_always_use_gls_over_ols/">Why not always use GLS over OLS?</a> It’s a fair question, and the answer comes down to the <a href="https://en.wikipedia.org/wiki/KISS_principle">KISS principle</a>. If you meet the OLS assumptions, use OLS. If you do not, GLS is a good option – but it requires you to correctly specify the structure of the residual correlations. Get that wrong and you might do more harm than good.</p>
 <p>We will start by assuming <code>epsilon</code> follows an iid process (e.g., <span class="math inline">\(N(0,1)\)</span>) and we will fit a model with uncorrelated errors. E.g., here we use <code>gls</code> but this gives the same info as <code>lm</code> would because <code>gls</code> assumes iid errors unless told otherwise.</p>
 <div class="cell">
@@ -1070,7 +1070,7 @@ gls2     2  4 307.2600 317.5998 -149.6300 1 vs 2 90.62914  &lt;.0001</code></pre
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./07xAsideOLS_ Algebra_Matrix.html" class="pagination-link" aria-label="Aside: OLS via Algebra and Matrices">
+      <a href="./07xAsideOLS-Algebra-Matrix.html" class="pagination-link" aria-label="Aside: OLS via Algebra and Matrices">
         <span class="nav-page-text">Aside: OLS via Algebra and Matrices</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>

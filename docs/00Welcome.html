@@ -254,7 +254,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07xAsideOLS_ Algebra_Matrix.html" class="sidebar-item-text sidebar-link">
+  <a href="./07xAsideOLS-Algebra-Matrix.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Aside: OLS via Algebra and Matrices</span></a>
   </div>
 </li>
@@ -332,23 +332,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>These notes are a living document. They change based on what works, what doesn’t, and what you ask about in class. If something is wrong or unclear, tell me.</p>
 <section id="how-these-notes-are-laid-out" class="level2">
 <h2 class="anchored" data-anchor-id="how-these-notes-are-laid-out">How These Notes Are Laid Out</h2>
-<p>Most of the chapters follow a natural progression – each one builds on the last, and working through them in order is the right call. But scattered through the notes you’ll find <strong>Asides</strong>: short detours that dig into something that doesn’t quite fit the main flow. An Aside might work through the math behind a method, explain how R handles something under the hood, or fill in background that makes the surrounding chapters make more sense.</p>
-<p>You can skip the Asides and still follow the core material. But they’re there because the questions they answer are real ones – the kind that come up when you’re working through a chapter and start wondering why something works the way it does. If that’s how your brain works, the Asides are for you.</p>
+<p>Most of the chapters follow a natural progression – each one builds on the last, and working through them in order is the right call. But scattered through the notes you’ll find <em>Asides</em>: short detours that dig into something that doesn’t quite fit the main flow. An Aside might work through the math behind a method, explain how R handles something under the hood, or fill in background that makes the surrounding chapters make more sense.</p>
+<p>You can skip the Asides and still follow the core material. But they’re there because the questions they answer are real ones – the kind that come up when you’re working through a chapter and start wondering why something works the way it does. If that’s how your brain works, the <em>Asides</em> are for you.</p>
 </section>
 <section id="whats-in-these-notes" class="level2">
 <h2 class="anchored" data-anchor-id="whats-in-these-notes">What’s in These Notes</h2>
 <p>The notes move through the core ideas of time series analysis in roughly this order:</p>
 <ul>
-<li><strong>The Measure of Time</strong> – What a time series is, how R represents temporal data, and the vocabulary we’ll use throughout.</li>
-<li><strong>Aside: Methods and Generics in R</strong> – A quick look under the hood at how R dispatches functions like <code>plot()</code> and <code>summary()</code> depending on the class of the object you give them. Useful background for the whole course.</li>
+<li><strong>The Measure of Time</strong> – What a time series is, how R represents temporal data, and the vocabulary we’ll use throughout.
+<ul>
+<li><em>Aside: Methods and Generics in R</em> – A quick look under the hood at how R dispatches functions like <code>plot()</code> and <code>summary()</code> depending on the class of the object you give them. Useful background for the whole course.</li>
+</ul></li>
 <li><strong>Decomposition</strong> – How to separate a time series into trend, seasonal, and irregular components. The core ideas are simple; the implications for analysis are not.</li>
-<li><strong>AR(p), ACF, PACF</strong> – Autocorrelation: what it is, how to measure it, and what the ACF and PACF are actually telling you. This chapter is foundational for everything that follows.</li>
-<li><strong>Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process</strong> – Works through the theory behind those canonical ACF and PACF shapes. Worth reading once you’ve seen the patterns and started wondering where they come from.</li>
+<li><strong>AR(p), ACF, PACF</strong> – Autocorrelation: what it is, how to measure it, and what the ACF and PACF are actually telling you. This chapter is foundational for everything that follows.
+<ul>
+<li><em>Aside: Why the ACF and PACF Look the Way They Do in an MA(1) Process</em> – Works through the theory behind those canonical ACF and PACF shapes. Worth reading once you’ve seen the patterns and started wondering where they come from.</li>
+</ul></li>
 <li><strong>ARMA(p,q)</strong> – Autoregressive and moving average models for stationary series. How to identify, fit, and check them.</li>
 <li><strong>Forecasting</strong> – Using a fitted model’s correlation structure to predict future values, and being honest about what that uncertainty actually looks like.</li>
 <li><strong>Cross Correlation</strong> – How to measure the relationship between two time series, including lagged relationships. A sockeye salmon run and the climate that shaped it. That kind of thing.</li>
-<li><strong>Regression</strong> – What happens when your regression residuals are autocorrelated, why it matters, and how to deal with it.</li>
-<li><strong>Aside: OLS via Algebra and Matrices</strong> – Derives the OLS solution from scratch in both algebraic and matrix form, then implements it in R. Useful background before we generalize to GLS in the regression chapter.</li>
+<li><strong>Regression</strong> – What happens when your regression residuals are autocorrelated, why it matters, and how to deal with it.
+<ul>
+<li><em>Aside: OLS via Algebra and Matrices</em> – Derives the OLS solution from scratch in both algebraic and matrix form, then implements it in R. Useful background before we generalize to GLS in the regression chapter.</li>
+</ul></li>
 <li><strong>Filtering and Smoothing</strong> – Extracting signals from noisy data using moving averages, splines, and other filters. When you want to see the forest, not the individual trees.</li>
 <li><strong>The Frequency Domain</strong> – Spectral methods for identifying periodic signals. If you’ve ever wondered how to find a cycle in noisy data, this is the chapter.</li>
 </ul>
