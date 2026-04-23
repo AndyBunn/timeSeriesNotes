@@ -51,7 +51,7 @@ gridExtra::grid.arrange(p1,p2,p3,
                         layout_matrix=simpleLayoutMatrix)
 ```
 
-This is an interesting pattern and characteristic of a MA(1) model. Note the strong first order autocorrelation. It doesn't have the decay that you have in an AR(1) model. That is characteristic of the MA processes. The PACF shows a strong negative correlation at lag 2 and then oscillates. This is characteristic behavior of the MA process as well but the reasons take a little work to wrap your head around. [This](https://stats.stackexchange.com/questions/281666/how-does-acf-pacf-identify-the-order-of-ma-and-ar-terms) is the best explanation I've seen for why this occurs that doesn't invovle a bunch of linear algebra. 
+This is an interesting pattern and characteristic of a MA(1) model. Note the strong first order autocorrelation. It doesn't have the decay that you have in an AR(1) model. That is characteristic of the MA processes. The PACF shows a strong negative correlation at lag 2 and then oscillates. This is characteristic behavior of the MA process as well but the reasons take a little work to wrap your head around. Look at [Why the ACF and PACF Look the Way They Do in an MA(1) Process aside](03xAsideMA1-ACF-PACF-Interp.html) for the details.
 
 As with AR($p$), we can extend this to longer lags and call this MA($q$):
 $$ y_t = \sum\limits_{i=1}^q \theta_i \epsilon_{t-i} + \epsilon_t$$

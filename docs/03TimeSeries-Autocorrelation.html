@@ -406,6 +406,7 @@ window.Quarto = {
 <section id="correlation-and-covariance" class="level2">
 <h2 class="anchored" data-anchor-id="correlation-and-covariance">Correlation and Covariance</h2>
 <p>The book spends a good deal of time on how to define correlation and covariance in the context of time series analysis. Read that stuff over even though you’ve covered it all before. This is important material to be aware of for a few reasons when doing time series but the biggest is the idea of stationarity. A stationary time series is one whose statistical properties such as mean and variance are constant over time and do not follow any trends. A little more formally, that means that a stationary time series is a random process whose joint probability distribution does not change over time. We will come back to this as we get into forecasting.</p>
+<p>Brush up on what correlation is and why is isn’t regression in the <a href="03xAsideCorrelationVersusRegression.html">Correlation is not Regression aside</a></p>
 </section>
 <section id="autocorrelation" class="level2">
 <h2 class="anchored" data-anchor-id="autocorrelation">Autocorrelation</h2>
@@ -557,7 +558,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Interpreting ACF plots is pretty straightforward, but what does the PACF plot mean? Well, if you have an AR(1) process the remaining autocorrelation at higher lags will be near zero in your PACF plot. That is, if the true process is AR(1), all autocorrelation is removed from the model – even the residual autocorrelation from the geometric decrease seen at higher lags in the ACF plot. Thus, if you have an AR(1) process, the ACF decays geometrically while the PACF falls to zero (zero’ish) abruptly after lag 1. If you still see a geometric progression decline in a PACF plot you might be looking at different process, like an MA(1) process. We will get there next week.</p>
+<p>Interpreting ACF plots is pretty straightforward, but what does the PACF plot mean? Well, if you have an AR(1) process the remaining autocorrelation at higher lags will be near zero in your PACF plot. That is, if the true process is AR(1), all autocorrelation is removed from the model – even the residual autocorrelation from the geometric decrease seen at higher lags in the ACF plot. Thus, if you have an AR(1) process, the ACF decays geometrically while the PACF falls to zero (zero’ish) abruptly after lag 1. If you still see a geometric progression decline in a PACF plot you might be looking at different process, like an MA(1) process. We will get there next week but look at <a href="03xAsideMA1-ACF-PACF-Interp.html">Why the ACF and PACF Look the Way They Do in an MA(1) Process aside</a> now for the details if you like.</p>
 </section>
 <section id="underneath-the-hood-of-pacf" class="level3">
 <h3 class="anchored" data-anchor-id="underneath-the-hood-of-pacf">Underneath the Hood of PACF</h3>

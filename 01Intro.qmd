@@ -68,7 +68,7 @@ Look at the help page for `ts` to understand what that structure looks like. The
 tsp(LakeHuron)
 ```
 
-This tells us the start time, end time, and frequency of the data. The `LakeHuron` time series starts in the year 1875 and runs until 1972 with one observation per year. Before we go on, note that there are several methods for working with this class (like plotting). Recall that classes with methods can have shortcuts to commonly used functions. For instance, calling `plot(LakeHuron)` is the same as calling `plot.ts(LakeHuron)` because the `ts` class has a plot method. We will talk more about this later but you can see all of the methods that are in the `ts` class via `methods(class="ts")`.
+This tells us the start time, end time, and frequency of the data. The `LakeHuron` time series starts in the year 1875 and runs until 1972 with one observation per year. Before we go on, note that there are several methods for working with this class (like plotting). Recall that classes with methods can have shortcuts to commonly used functions. For instance, calling `plot(LakeHuron)` is the same as calling `plot.ts(LakeHuron)` because the `ts` class has a plot method. You can learn about methods and generics in the [Understanding Methods and Generics in R aside](01xAsideMethods_and_generics.html). E.g., you can see all of the methods that are in the `ts` class via `methods(class="ts")`.
 
 Let's look at another data set:
 ```{r}
