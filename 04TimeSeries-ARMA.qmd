@@ -363,9 +363,9 @@ When fitting ARMA models, you're often faced with multiple competing options —
 
 | Criterion | Penalty for Complexity | Best For | Notes |
 |:----------|:-----------------------|:---------|:------|
-| **AIC** (Akaike Information Criterion) | \(2k\) | Prediction | May overfit; balances fit and complexity |
-| **BIC** (Bayesian Information Criterion) | \(k \cdot \log(n)\) | Finding the "true" model | Stronger penalty on complexity |
-| **AICc** (Corrected AIC) | AIC + small-sample correction | Small samples | Recommended when \( n / k < 40 \) |
+| **AIC** (Akaike Information Criterion) | $2k$ | Prediction | May overfit; balances fit and complexity |
+| **BIC** (Bayesian Information Criterion) | $k \cdot \log(n)$ | Finding the "true" model | Stronger penalty on complexity |
+| **AICc** (Corrected AIC) | AIC + small-sample correction | Small samples | Recommended when $ n / k < 40 $ |
 
 In general:
 
@@ -374,14 +374,14 @@ In general:
 
 - **Use AIC**:
   - For predictive performance
-  - When \( n \) is moderate to large
+  - When $ n $ is moderate to large
 
 - **Use BIC**:
   - When aiming to identify the "true" model
   - When sample size is large
 
 - **Use AICc**:
-  - When sample size is small (typically \( n < 50 \))
+  - When sample size is small (typically $ n < 50 $)
   - To avoid overfitting in small-sample contexts
 
 

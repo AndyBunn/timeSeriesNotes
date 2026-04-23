@@ -24,111 +24,111 @@ There are entire books written about forecasting time series data and many of th
 
 ## A simple forecast
 
-Let's imagine an AR(1) model and show how we can forecast it using \( y_{t-1} \) and \( \phi \) to model \( y_t \).
+Let's imagine an AR(1) model and show how we can forecast it using $ y_{t-1} $ and $ \phi $ to model $ y_t $.
 
 Suppose we have a model:
 
-\[
+$$
 y_t = \phi y_{t-1} + \epsilon_t
-\]
+$$
 
-where \( \phi = 0.7 \) and \( \epsilon_t \sim \mathcal{N}(0, 1) \).
+where $ \phi = 0.7 $ and $ \epsilon_t \sim \mathcal{N}(0, 1) $.
 
-If we know the current value \( y_t \), we can forecast the next value \( y_{t+1} \) as:
+If we know the current value $ y_t $, we can forecast the next value $ y_{t+1} $ as:
 
-\[
+$$
 \hat{y}_{t+1} = \phi y_t = 0.7 \times y_t
-\]
+$$
 
-Since this is a one-step-ahead forecast, the expected value of the error term \( \epsilon_{t+1} \) is zero, so our best forecast is just the deterministic part.
+Since this is a one-step-ahead forecast, the expected value of the error term $ \epsilon_{t+1} $ is zero, so our best forecast is just the deterministic part.
 
 However, that forecast has some uncertainty associated with it that we can model as well. The forecast error is defined as:
 
-\[
+$$
 e_{t+1} = y_{t+1} - \hat{y}_{t+1} = \phi y_t + \epsilon_{t+1} - \phi y_t = \epsilon_{t+1}
-\]
+$$
 
 So the one-step-ahead forecast error has variance:
 
-\[
+$$
 \text{Var}(e_{t+1}) = \text{Var}(\epsilon_{t+1}) = 1
-\]
+$$
 
 This means our forecast is unbiased, but there is always a ±1 SD range of uncertainty.
 
 ### Two-step-ahead forecast
 
-To forecast two steps ahead, we use our prediction for \( y_{t+1} \) to forecast \( y_{t+2} \). The true value is:
+To forecast two steps ahead, we use our prediction for $ y_{t+1} $ to forecast $ y_{t+2} $. The true value is:
 
-\[
+$$
 y_{t+2} = \phi y_{t+1} + \epsilon_{t+2}
-\]
+$$
 
-We don't know \( y_{t+1} \), but we can plug in our forecast:
+We don't know $ y_{t+1} $, but we can plug in our forecast:
 
-\[
+$$
 \hat{y}_{t+2} = \phi \hat{y}_{t+1} = \phi^2 y_t
-\]
+$$
 
-This is the best guess based on information available at time \( t \). But now there are two sources of uncertainty: the new shock \( \epsilon_{t+2} \), and the fact that \( y_{t+1} \) itself was only an estimate. When we expand the expression for \( y_{t+2} \), we get:
+This is the best guess based on information available at time $ t $. But now there are two sources of uncertainty: the new shock $ \epsilon_{t+2} $, and the fact that $ y_{t+1} $ itself was only an estimate. When we expand the expression for $ y_{t+2} $, we get:
 
-\[
+$$
 y_{t+2} = \phi (\phi y_t + \epsilon_{t+1}) + \epsilon_{t+2} = \phi^2 y_t + \phi \epsilon_{t+1} + \epsilon_{t+2}
-\]
+$$
 
 So the two-step-ahead forecast error is:
 
-\[
+$$
 e_{t+2} = y_{t+2} - \hat{y}_{t+2} = \phi \epsilon_{t+1} + \epsilon_{t+2}
-\]
+$$
 
 And the variance of this error is:
 
-\[
+$$
 \text{Var}(e_{t+2}) = \phi^2 \text{Var}(\epsilon_{t+1}) + \text{Var}(\epsilon_{t+2}) = \phi^2 + 1
-\]
+$$
 
-With \( \phi = 0.7 \), that gives:
+With $ \phi = 0.7 $, that gives:
 
-\[
+$$
 \text{Var}(e_{t+2}) = (0.7)^2 + 1 = 0.49 + 1 = 1.49
-\]
+$$
 
 So, while the one-step-ahead forecast has a variance of 1, the two-step-ahead forecast has a higher variance of 1.49. This increase reflects the compounding uncertainty as we project further into the future.
 
-And you can foresee that if you want to forecast three steps out, the variance would increase again as additional error terms enter the expression, each scaled by a power of \( \phi \). The forecast error would include \( \phi^2 \epsilon_{t+1} + \phi \epsilon_{t+2} + \epsilon_{t+3} \), and its variance would be:
+And you can foresee that if you want to forecast three steps out, the variance would increase again as additional error terms enter the expression, each scaled by a power of $ \phi $. The forecast error would include $ \phi^2 \epsilon_{t+1} + \phi \epsilon_{t+2} + \epsilon_{t+3} $, and its variance would be:
 
-\[
+$$
 \text{Var}(e_{t+3}) = \phi^4 + \phi^2 + 1
-\]
+$$
 
-In general, for an \( k \)-step-ahead forecast in an AR(1) model with white noise variance \( \sigma^2 \), the forecast error variance is:
+In general, for an $ k $-step-ahead forecast in an AR(1) model with white noise variance $ \sigma^2 $, the forecast error variance is:
 
-\[
+$$
 \text{Var}(e_{t+k}) = \sigma^2 \sum_{j=0}^{k-1} \phi^{2j}
-\]
+$$
 
-This is a geometric series, and if \( |\phi| < 1 \), it converges to:
+This is a geometric series, and if $ |\phi| < 1 $, it converges to:
 
-\[
+$$
 \lim_{k \to \infty} \text{Var}(e_{t+k}) = \frac{\sigma^2}{1 - \phi^2}
-\]
+$$
 
 So even though uncertainty grows with forecast horizon, it levels off to a fixed upper bound when the process is stationary. Recall how the ACF function in an AR(1) trailed off geometrically? This is the same idea.
 
 ### Example
 
-Let's show this in a simple simulation. Below, we use the last observed value \( y_t \) to generate a one-step-ahead forecast:
+Let's show this in a simple simulation. Below, we use the last observed value $ y_t $ to generate a one-step-ahead forecast:
 
-\[
+$$
 \hat{y}_{t+1} = \phi y_t
-\]
+$$
 
 Then, we use this forecasted value to produce a two-step-ahead forecast:
 
-\[
+$$
 \hat{y}_{t+2} = \phi \hat{y}_{t+1}
-\]
+$$
 
 and so on. This is called **chained forecasting**, and it mimics what we would do in practice when future values are unknown. While each step uses the same rule, the uncertainty compounds because each forecast depends on previous estimates rather than actual values.
 

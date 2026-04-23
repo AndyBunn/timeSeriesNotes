@@ -13,10 +13,12 @@ book:
     search: true
   chapters:
     - file: index.qmd
-      text: "Cover Page"
-    - 00Welcome.qmd
-    - 01Intro.qmd
-    - 01xAsideMethods_and_generics.qmd
+      text: "Cover"
+    - part: "Preamble"
+      chapters:
+        - 00Welcome.qmd
+        - 01Intro.qmd
+        - 01xAsideMethods_and_generics.qmd
     - part: "Decomposition & Autocorrelation"
       chapters:
         - 02DecompTrends.qmd
@@ -31,7 +33,7 @@ book:
     - part: "Regression, Filters & Frequency"
       chapters:
         - 07TimeSeries-Regression.qmd
-        - 07xAsideOLS_Algebric_Matrix.qmd
+        - 07xAsideOLS_ Algebra_Matrix.qmd
         - 08TimeSeries-Filters.qmd
         - 09TimeSeries-Freq.qmd
     - 10PackagesUsed.qmd
@@ -51,9 +53,8 @@ format:
     css: style.css
     code-fold: show
     toc: true
-    toc-depth: 3
+    toc-depth: 4
     number-sections: false
-    include-after-body: toc-links.html
 
 execute:
   warning: false

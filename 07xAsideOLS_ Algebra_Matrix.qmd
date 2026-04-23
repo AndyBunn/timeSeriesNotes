@@ -1,0 +1,209 @@
+# Aside: OLS via Algebra and Matrices {- .aside-chapter}
+
+## Why Are We Here?
+
+In your introductory statistics course, you have probably saw OLS regression derived using algebra and maybe a little calculus. You found the slope and intercept by minimizing a sum of squared errors, took some derivatives, set them to zero, and got formulas you could compute by hand (or at least imagine computing by hand). That approach works, and it builds genuine intuition about what regression is doing.
+
+So why does this aside exist? Because when you start using methods like Generalized Least Squares (GLS) or Generalized Linear Models (GLM), the algebraic approach hits a wall -- and they hit it in different ways.
+
+GLS is used when the errors in your model are not independent or do not have equal variance, exactly the situation you run into with spatial and time-series data. It still has a closed-form solution, but it is written in matrix notation:
+
+$$\hat{\boldsymbol{\beta}}_{GLS} = (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1} \mathbf{X})^{-1} \mathbf{X}^\top \boldsymbol{\Sigma}^{-1} \mathbf{y}$$
+
+where $\boldsymbol{\Sigma}$ is the covariance matrix of the errors. Once you see where the OLS formula comes from in matrix form, the GLS formula becomes obvious -- it is just OLS with a weighting matrix inserted. Without that foundation, it just looks like someone sneezed Greek letters onto the page.
+
+GLM is a different problem. Logistic regression, Poisson regression, negative binomial regression -- these come up constantly in ecological and environmental work, and they do not even have a closed-form solution. There is no formula you can write down for $\hat{\boldsymbol{\beta}}$ and solve directly. Instead, the coefficients are estimated iteratively using an algorithm called iteratively reweighted least squares (IRLS), which is entirely matrix operations at every step. If you have ever used `glm()` in R and wondered what the software is actually doing when it says it is iterating to convergence, the answer is: a sequence of weighted matrix problems that look a lot like the GLS formula above. There is no algebraic shortcut to fall back on.
+
+So GLS and GLM hit the same wall from different directions. GLS has a formula you can write down but cannot easily interpret without matrices. GLM does not even have a formula -- it has an algorithm, and the algorithm is matrices. In both cases, understanding the matrix form of OLS is the entry point.
+
+A reasonable question: why didn't your intro stats course teach OLS this way? The honest answer is that it is a pedagogical choice. Matrix notation requires linear algebra, which is typically a separate course. Intro stats is already asking a lot of students, so the matrix approach gets deferred. There is nothing wrong with that. But it does mean that when matrix notation shows up later -- in GLS, in GLM, in mixed models, in spatial statistics -- it can feel unfamiliar. This aside is a bridge.
+
+## OLS the Way You Know It
+
+In simple linear regression, we model the relationship between a predictor $x$ and a response $y$ as:
+
+$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$
+
+where $\epsilon_i$ is an error term that we assume is independent and identically distributed with mean zero and variance $\sigma^2$. In other words, the errors are white noise: no autocorrelation, no trend, nothing interesting. When those assumptions hold, OLS works well.
+
+### Minimizing the Sum of Squared Errors
+
+OLS finds the values of $\beta_0$ and $\beta_1$ that minimize the sum of squared errors (SSE):
+
+$$\text{SSE} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2$$
+
+To minimize, take partial derivatives with respect to $\beta_0$ and $\beta_1$ and set them to zero:
+
+$$\frac{\partial \text{SSE}}{\partial \beta_0} = -2 \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i) = 0$$
+
+$$\frac{\partial \text{SSE}}{\partial \beta_1} = -2 \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)\, x_i = 0$$
+
+These are called the **normal equations**. Solving them gives the familiar OLS estimates:
+
+$$\hat{\beta}_1 = \frac{\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^{n} (x_i - \bar{x})^2}$$
+
+$$\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}$$
+
+where $\bar{x}$ and $\bar{y}$ are the sample means. You have seen this before. Good. Now let's see what it looks like in matrix form -- and why that matters.
+
+## OLS in Matrix Notation
+
+The algebraic approach works fine for one predictor. But in multiple regression -- where you have several predictors -- the algebra gets messy fast. The matrix approach handles any number of predictors with the same compact formula.
+
+### Setting Up the Model
+
+We write the full model for all $n$ observations at once:
+
+$$\mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\epsilon}$$
+
+where:
+
+- $\mathbf{y}$ is an $n \times 1$ vector of response values,
+- $\mathbf{X}$ is an $n \times p$ matrix of predictors (called the **design matrix**),
+- $\boldsymbol{\beta}$ is a $p \times 1$ vector of coefficients,
+- $\boldsymbol{\epsilon}$ is an $n \times 1$ vector of errors.
+
+For simple linear regression with one predictor, the design matrix $\mathbf{X}$ has two columns: a column of ones (for the intercept) and a column of $x$ values:
+
+$$\mathbf{X} = \begin{bmatrix} 1 & x_1 \\ 1 & x_2 \\ \vdots & \vdots \\ 1 & x_n \end{bmatrix}, \quad \boldsymbol{\beta} = \begin{bmatrix} \beta_0 \\ \beta_1 \end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_n \end{bmatrix}$$
+
+The column of ones is not a trick -- it is what produces the intercept term. When you multiply $\mathbf{X} \boldsymbol{\beta}$, the first column gives you $\beta_0 \cdot 1 = \beta_0$ for every observation, and the second column gives you $\beta_1 x_i$. So each row of $\mathbf{X} \boldsymbol{\beta}$ is $\beta_0 + \beta_1 x_i$, exactly as in the scalar equation above.
+
+### The Assumptions on the Errors
+
+In matrix form, the OLS assumptions about the errors are written as:
+
+$$\boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0},\, \sigma^2 \mathbf{I})$$
+
+This means the errors have mean zero and a covariance matrix equal to $\sigma^2 \mathbf{I}$, where $\mathbf{I}$ is the identity matrix. The identity matrix is just a square matrix with ones on the diagonal and zeros everywhere else:
+
+$$\sigma^2 \mathbf{I} = \begin{bmatrix} \sigma^2 & 0 & \cdots & 0 \\ 0 & \sigma^2 & \cdots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \cdots & \sigma^2 \end{bmatrix}$$
+
+The diagonal entries are the variances of each error ($\sigma^2$, equal for all observations -- that is the homoscedasticity assumption). The off-diagonal entries are the covariances between errors, which are all zero -- that is the independence assumption. When you have spatial or temporal data and the errors are correlated, those off-diagonal entries are no longer zero. That is where GLS comes in. But we are getting ahead of ourselves.
+
+### Minimizing the SSE in Matrix Form
+
+The sum of squared errors in matrix form is:
+
+$$\text{SSE} = \boldsymbol{\epsilon}^\top \boldsymbol{\epsilon} = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\top (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$$
+
+To see why this is the same thing, expand it:
+
+$$\text{SSE} = \mathbf{y}^\top \mathbf{y} - 2\boldsymbol{\beta}^\top \mathbf{X}^\top \mathbf{y} + \boldsymbol{\beta}^\top \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta}$$
+
+Taking the derivative with respect to $\boldsymbol{\beta}$ and setting it to zero (using matrix calculus rules that are analogous to ordinary calculus):
+
+$$\frac{\partial \text{SSE}}{\partial \boldsymbol{\beta}} = -2 \mathbf{X}^\top \mathbf{y} + 2 \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = \mathbf{0}$$
+
+Rearranging:
+
+$$\mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^\top \mathbf{y}$$
+
+These are the **normal equations** again -- the same ones you derived algebraically, just written compactly. Solving for $\boldsymbol{\beta}$ by multiplying both sides by $(\mathbf{X}^\top \mathbf{X})^{-1}$:
+
+$$\hat{\boldsymbol{\beta}}_{OLS} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}$$
+
+That is the OLS estimator in matrix form. For simple linear regression with one predictor, this formula and the algebraic formulas for $\hat{\beta}_0$ and $\hat{\beta}_1$ give identical results. They are the same thing.
+
+## From OLS to GLS
+
+Now here is the payoff. Recall that OLS assumes the error covariance matrix is $\sigma^2 \mathbf{I}$ -- equal variances and no correlation between errors. What if that is not true? What if you have spatial data where nearby observations tend to have similar errors, or time-series data where errors at adjacent time steps are correlated? Then the off-diagonal entries of the covariance matrix are not zero, and OLS is no longer the best estimator.
+
+GLS generalizes OLS by allowing an arbitrary covariance structure $\boldsymbol{\Sigma}$ for the errors:
+
+$$\boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0},\, \boldsymbol{\Sigma})$$
+
+Instead of minimizing $(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\top (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$, GLS minimizes a **weighted** sum of squared errors:
+
+$$(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$$
+
+The matrix $\boldsymbol{\Sigma}^{-1}$ acts as a set of weights. Observations whose errors are large or correlated with other observations get downweighted relative to observations whose errors are smaller and more independent. Going through the same derivative-and-solve steps as before, the GLS estimator is:
+
+$$\hat{\boldsymbol{\beta}}_{GLS} = (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1} \mathbf{X})^{-1} \mathbf{X}^\top \boldsymbol{\Sigma}^{-1} \mathbf{y}$$
+
+Compare this to the OLS formula:
+
+$$\hat{\boldsymbol{\beta}}_{OLS} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}$$
+
+The structure is identical. GLS is OLS with $\boldsymbol{\Sigma}^{-1}$ inserted in strategic places. When $\boldsymbol{\Sigma} = \sigma^2 \mathbf{I}$, the $\boldsymbol{\Sigma}^{-1}$ terms reduce to $\frac{1}{\sigma^2} \mathbf{I}$, which cancels out, and you are back to OLS. OLS is a special case of GLS.
+
+Without matrix notation, there is no clean way to write the GLS estimator, let alone understand where it comes from. That is the main reason this aside exists.
+
+::: {.callout-note}
+**In practice**, you typically do not know $\boldsymbol{\Sigma}$ exactly. When using functions like `gls()` in R, you specify the *structure* of $\boldsymbol{\Sigma}$ (e.g., AR(1) correlation) and the software estimates the parameters of that structure from the data -- usually via maximum likelihood or restricted maximum likelihood (REML). The formula above still describes what the estimator is doing conceptually.
+:::
+
+## Implementation in R
+
+Let's verify that the matrix formula gives the same answer as `lm()`. We will use a small simulated dataset with one predictor.
+
+```{r}
+set.seed(123)
+n <- 30
+x <- rnorm(n)
+y <- 2 + 0.7 * x + rnorm(n)  # true intercept = 2, true slope = 0.7
+```
+
+Build the design matrix by prepending a column of ones for the intercept:
+
+```{r}
+X <- cbind(1, x)
+head(X)
+```
+
+Compute $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}$ directly:
+
+```{r}
+beta_hat <- solve(t(X) %*% X) %*% t(X) %*% y
+beta_hat
+```
+
+Compare to `lm()`:
+
+```{r}
+coef(lm(y ~ x))
+```
+
+They match. The `lm()` function is doing the same matrix arithmetic under the hood, just with more numerically stable algorithms.
+
+Now let's see what happens when we introduce correlated errors and compare OLS to GLS.
+
+```{r, message=FALSE}
+library(nlme)
+set.seed(456)
+n <- 100
+phi <- 0.7  # AR(1) coefficient for errors
+x <- rnorm(n)
+epsilon <- arima.sim(model = list(ar = phi), n = n)
+epsilon <- epsilon - mean(epsilon)
+y_ar <- 2 + 0.7 * x + epsilon  # same true coefficients, but autocorrelated errors
+
+# OLS -- ignores error correlation
+ols_fit <- lm(y_ar ~ x)
+
+# GLS -- accounts for AR(1) error correlation
+gls_fit <- gls(y_ar ~ x, correlation = corAR1())
+
+# Compare coefficient estimates
+cat("True slope: 0.7\n")
+cat("OLS slope: ", round(coef(ols_fit)[2], 3), "\n")
+cat("GLS slope: ", round(coef(gls_fit)[2], 3), "\n")
+
+# Compare standard errors on the slope
+cat("\nOLS SE on slope: ", round(summary(ols_fit)$coefficients[2, 2], 3), "\n")
+cat("GLS SE on slope: ", round(summary(gls_fit)$tTable[2, 2], 3), "\n")
+```
+
+With strongly autocorrelated errors, OLS tends to underestimate the standard errors on the coefficients, which makes it too easy to declare a significant effect. GLS, by accounting for the correlation structure in $\boldsymbol{\Sigma}$, gives better-calibrated uncertainty. The coefficient estimates themselves may not differ dramatically, but the standard errors -- and therefore any hypothesis tests or confidence intervals -- can differ quite a bit.
+
+## Summary
+
+The key takeaways from this aside are:
+
+- The algebraic OLS formulas you learned in intro stats and the matrix formula $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}$ are the same thing. The matrix form just handles multiple predictors without getting unwieldy.
+
+- OLS assumes the error covariance matrix is $\sigma^2 \mathbf{I}$: equal variances, no correlation between errors.
+
+- GLS relaxes that assumption by replacing $\sigma^2 \mathbf{I}$ with a general covariance matrix $\boldsymbol{\Sigma}$. The estimator becomes $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1} \mathbf{X})^{-1} \mathbf{X}^\top \boldsymbol{\Sigma}^{-1} \mathbf{y}$, which is the OLS formula with $\boldsymbol{\Sigma}^{-1}$ inserted as a weighting matrix.
+
+- OLS is a special case of GLS. When the OLS assumptions hold, use OLS. When they do not -- and with spatial or time-series data, they often do not -- GLS is the natural generalization.
