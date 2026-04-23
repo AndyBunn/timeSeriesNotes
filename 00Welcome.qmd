@@ -1,4 +1,4 @@
-## Why Time Series
+# Why Time Series
 
 Most environmental data are time series data. Temperature records. Streamflow. Tree rings. Species abundance counts. CO~2~ measured at Mauna Loa. All of it indexed to time, all of it carrying a signature of the processes that generated it.
 
@@ -8,7 +8,7 @@ It also matters for getting the statistics right. Temporal dependence -- the fac
 
 And beyond the bookkeeping, temporal structure is information. A seasonal cycle tells you something about the drivers of a system. A long-term trend tells you something has changed. Lagged correlations between two series can reveal how one system influences another. The goal of this course is to help you extract that information, work with it honestly, and communicate what it means.
 
-# Welcome
+## This Is Not a Textbook
 
 These are the course notes and not a textbook. They are more like a field guide written by someone who has gotten lost in these woods before and wants to help you find your way through.
 
